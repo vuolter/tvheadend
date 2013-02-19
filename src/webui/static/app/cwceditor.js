@@ -1,5 +1,5 @@
 tvheadend.cwceditor = function() {
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -42,7 +42,7 @@ tvheadend.cwceditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
@@ -52,7 +52,7 @@ tvheadend.cwceditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
@@ -62,7 +62,7 @@ tvheadend.cwceditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
@@ -72,7 +72,7 @@ tvheadend.cwceditor = function() {
 			setMetaAttr(metadata, record);
 			return '<span class="tvh-grid-unset">Hidden</span>';
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
@@ -83,7 +83,7 @@ tvheadend.cwceditor = function() {
 			setMetaAttr(metadata, record);
 			return '<span class="tvh-grid-unset">Hidden</span>';
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, emmColumn, emmexColumn, {
@@ -94,7 +94,7 @@ tvheadend.cwceditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new fm.TextField()
+		editor : new Ext.form.TextField()
 	} ]});
 
 	var rec = Ext.data.Record.create([ 'enabled', 'connected', 'hostname',

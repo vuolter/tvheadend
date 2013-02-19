@@ -1,5 +1,5 @@
 tvheadend.capmteditor = function() {
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -36,7 +36,7 @@ tvheadend.capmteditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
@@ -46,7 +46,7 @@ tvheadend.capmteditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, oscamColumn, {
@@ -57,7 +57,7 @@ tvheadend.capmteditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new fm.TextField()
+		editor : new Ext.form.TextField()
 	} ]});
 
 	var rec = Ext.data.Record.create([ 'enabled', 'connected', 'camdfilename',

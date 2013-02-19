@@ -14,7 +14,7 @@ tvheadend.iptv = function(adapterId) {
 	  autoLoad : false
   });
 
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -53,7 +53,7 @@ tvheadend.iptv = function(adapterId) {
 				return value ? value
 					: '<span class="tvh-grid-unset">Unmapped</span>';
 			},
-			editor : new fm.ComboBox({
+			editor : new Ext.form.ComboBox({
 				store : tvheadend.channels,
 				allowBlank : true,
 				typeAhead : true,
@@ -71,7 +71,7 @@ tvheadend.iptv = function(adapterId) {
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value : '<span class="tvh-grid-unset">Unset</span>';
 			},
-			editor : new fm.TextField({
+			editor : new Ext.form.TextField({
 				allowBlank : false
 			})
 		},
@@ -82,7 +82,7 @@ tvheadend.iptv = function(adapterId) {
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value : '<span class="tvh-grid-unset">Unset</span>';
 			},
-			editor : new fm.TextField({
+			editor : new Ext.form.TextField({
 				allowBlank : false
 			})
 		},
@@ -90,7 +90,7 @@ tvheadend.iptv = function(adapterId) {
 			header : "UDP Port",
 			dataIndex : 'port',
 			width : 60,
-			editor : new fm.NumberField({
+			editor : new Ext.form.NumberField({
 				minValue : 1,
 				maxValue : 65535
 			})
@@ -106,7 +106,7 @@ tvheadend.iptv = function(adapterId) {
 			width : 100,
 			dataIndex : 'stype',
 			hidden : true,
-			editor : new fm.ComboBox({
+			editor : new Ext.form.ComboBox({
 				valueField : 'val',
 				displayField : 'str',
 				forceSelection : false,

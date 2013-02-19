@@ -101,7 +101,7 @@ tvheadend.mergeChannel = function(chan) {
  *
  */
 tvheadend.chconf = function() {
-	var fm = Ext.form;
+	
 
 	var actions = new Ext.ux.grid.RowActions({
 		header : '',
@@ -130,7 +130,7 @@ tvheadend.chconf = function() {
 			}
 		},
 
-		editor : new fm.NumberField({
+		editor : new Ext.form.NumberField({
 			minValue : 0,
 			maxValue : 9999
 		})
@@ -139,7 +139,7 @@ tvheadend.chconf = function() {
 		dataIndex : 'name',
     sortable: true,
 		width : 150,
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
@@ -196,7 +196,7 @@ tvheadend.chconf = function() {
 		header : "Icon (full URL)",
 		dataIndex : 'ch_icon',
 		width : 200,
-		editor : new fm.TextField()
+		editor : new Ext.form.TextField()
 	}, {
 		header : "DVR Pre-Start",
 		dataIndex : 'epg_pre_start',
@@ -211,7 +211,7 @@ tvheadend.chconf = function() {
 			}
 		},
 
-		editor : new fm.NumberField({
+		editor : new Ext.form.NumberField({
 			minValue : 0,
 			maxValue : 1440
 		})
@@ -228,7 +228,7 @@ tvheadend.chconf = function() {
 			}
 		},
 
-		editor : new fm.NumberField({
+		editor : new Ext.form.NumberField({
 			minValue : 0,
 			maxValue : 1440
 		})
