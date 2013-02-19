@@ -71,7 +71,7 @@ tvheadend.acleditor = function() {
 		'dvrallcfg', 'admin', 'webui', 'username', 'prefix', 'password',
 		'comment' ]);
 
-	return new tvheadend.tableEditor('Access control', 'accesscontrol', cm,
+	return new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', cm,
 		UserRecord, [ enabledColumn, streamingColumn, dvrColumn, dvrallcfgColumn,
 			webuiColumn, adminColumn ], null, 'config_access.html', 'group');
 }

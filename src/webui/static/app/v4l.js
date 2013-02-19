@@ -273,6 +273,7 @@ tvheadend.v4l_services = function(adapterId) {
 	});
 
 	var grid = new Ext.grid.EditorGridPanel({
+		id : "v4lGrid",
 		stripeRows : true,
 		title : 'Services',
 		plugins : [ enabledColumn ],

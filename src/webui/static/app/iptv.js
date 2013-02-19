@@ -272,6 +272,7 @@ tvheadend.iptv = function(adapterId) {
 	});
 
 	var grid = new Ext.grid.EditorGridPanel({
+		id : "iptvGrid",
 		stripeRows : true,
 		title : 'IPTV',
 		iconCls : 'iptv',
