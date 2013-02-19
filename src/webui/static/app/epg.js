@@ -209,6 +209,8 @@ tvheadend.epg = function() {
 		}, {
 			name : 'channelid'
 		}, {
+			name : 'number'
+		}, {
 			name : 'title'
 		}, {
 			name : 'subtitle'
@@ -321,6 +323,13 @@ tvheadend.epg = function() {
 		header : "Channel",
 		dataIndex : 'channel',
 		renderer : renderText
+	}, {
+		width : 55,
+		id : 'number',
+		header : "Ch. #",
+		dataIndex : 'number',
+		renderer : renderText,
+		hidden : true
 	}, {
 		width : 250,
 		id : 'contenttype',
