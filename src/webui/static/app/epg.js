@@ -433,6 +433,7 @@ tvheadend.epg = function() {
 	});
 
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
+		id : "epgGrid",
 		enableDragDrop : false,
 		cm : epgCm,
 		plugins : [ actions ],

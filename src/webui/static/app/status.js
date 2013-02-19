@@ -118,15 +118,16 @@ tvheadend.status_subs = function() {
 	} ]);
 
 	var grid = new Ext.grid.GridPanel({
-                border: false,
+		id : "subscriptionsGrid",
+		border: false,
 		loadMask : true,
 		stripeRows : true,
 		disableSelection : true,
-		title : 'Active subscriptions',
+		title : 'Subscriptions',
 		iconCls : 'eye',
 		store : tvheadend.store.subscriptions,
 		cm : subsCm,
-                flex: 1,
+		flex: 1,
 		stateful : true,
 		stateId : this.id,
 		view : tvheadend.BufferView
@@ -191,7 +192,8 @@ tvheadend.status_adapters = function() {
         }, signal]);
 
 	var grid = new Ext.grid.GridPanel({
-                border: false,
+		id : "adaptersGrid",
+		border: false,
 		loadMask : true,
 		stripeRows : true,
 		disableSelection : true,
@@ -199,7 +201,7 @@ tvheadend.status_adapters = function() {
 		iconCls : 'hardware',
 		store : tvheadend.store.adapters,
 		cm : cm,
-                flex: 1,
+		flex: 1,
 		stateful : true,
 		stateId : this.id,
 		view : tvheadend.BufferView

@@ -250,6 +250,7 @@ tvheadend.epggrab = function() {
 		} ]);
 
 	var externalGrid = new Ext.grid.EditorGridPanel({
+		id : "externalGrid",
 		store : externalModuleStore,
 		cm : externalColumnModel,
 		sm : externalSelectionModel,
@@ -297,6 +298,7 @@ tvheadend.epggrab = function() {
 	} ]);
 
 	var otaGrid = new Ext.grid.EditorGridPanel({
+		id : "otaGrid",
 		store : otaModuleStore,
 		cm : otaColumnModel,
 		sm : otaSelectionModel,

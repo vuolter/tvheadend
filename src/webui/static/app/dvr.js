@@ -149,7 +149,7 @@ tvheadend.dvrDetails = function(entry) {
 /**
  *
  */
-tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
+tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 
 	var actions = new Ext.ux.grid.RowActions({
 		header : '',
@@ -378,6 +378,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 
 
 	var grid = new Ext.grid.GridPanel({
+		id : id,
 		loadMask : true,
 		stripeRows : true,
 		disableSelection : true,
@@ -583,7 +584,7 @@ tvheadend.autoreceditor = function() {
 				})
 			} ]});
 
-	return new tvheadend.tableEditor('Automatic Recorder', 'autorec', cm,
+	return new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', cm,
 		tvheadend.autorecRecord, [ enabledColumn ], tvheadend.store.autorec,
 		'autorec.html', 'wand');
 }
@@ -709,9 +710,9 @@ tvheadend.dvr = function() {
 		title : 'Digital Video Recorder',
 		iconCls : 'drive',
 		items : [ 
-		          new tvheadend.dvrschedule('Upcoming recordings', 'clock', tvheadend.store.dvrUpcoming),
-		          new tvheadend.dvrschedule('Finished recordings', 'television', tvheadend.store.dvrFinished),
-		          new tvheadend.dvrschedule('Failed recordings', 'exclamation', tvheadend.store.dvrFailed),
+		          new tvheadend.dvrschedule('dvrupcomingGrid', 'Upcoming recordings', 'clock', tvheadend.dvrStoreUpcoming),
+		          new tvheadend.dvrschedule('dvrfinishedGrid', 'Finished recordings', 'television', tvheadend.dvrStoreFinished),
+		          new tvheadend.dvrschedule('dvrfailedGrid', 'Failed recordings', 'exclamation', tvheadend.dvrStoreFailed),
 		          new tvheadend.autoreceditor
 		        ]
 	});

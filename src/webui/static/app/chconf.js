@@ -348,6 +348,7 @@ tvheadend.chconf = function() {
 	});
 
 	var grid = new Ext.grid.EditorGridPanel({
+		id : "channelsGrid",
 		stripeRows : true,
 		title : 'Channels',
 		iconCls : 'television',

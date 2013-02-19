@@ -45,7 +45,7 @@ tvheadend.cteditor = function() {
 	var ChannelTagRecord = Ext.data.Record.create([ 'enabled', 'name',
 		'internal', 'icon', 'comment', 'titledIcon' ]);
 
-	return new tvheadend.tableEditor('Channel Tags', 'channeltags', cm,
+	return new tvheadend.tableEditor('ctagGrid', 'Channel Tags', 'channeltags', cm,
 		ChannelTagRecord, [ enabledColumn, internalColumn, titledIconColumn ],
 		null, 'config_tags.html', 'tags');
 }

@@ -1,4 +1,4 @@
-tvheadend.tableEditor = function(title, dtable, cm, rec, plugins, store,
+tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 	helpContent, icon) {
 
 	if (store == null) {
@@ -147,6 +147,7 @@ tvheadend.tableEditor = function(title, dtable, cm, rec, plugins, store,
 	});
 
 	var grid = new Ext.grid.EditorGridPanel({
+		id : id,
 		title : title,
 		iconCls : icon,
 		plugins : plugins,
