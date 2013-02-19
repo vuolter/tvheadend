@@ -910,6 +910,7 @@ extjs_epg(http_connection_t *hc, const char *remain, void *opaque)
 
     htsmsg_add_str(m, "channel", ch->ch_name);
     htsmsg_add_u32(m, "channelid", ch->ch_id);
+    htsmsg_add_u32(m, "number", ch->ch_number);
     if(ch->ch_icon != NULL)
       htsmsg_add_imageurl(m, "chicon", "imagecache/%d", ch->ch_icon);
 
