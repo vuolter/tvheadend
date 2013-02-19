@@ -334,7 +334,7 @@ tvheadend.epggrab = function() {
 		}
 	});
 
-	var confpanel = new Ext.FormPanel({
+	var panel = new Ext.FormPanel({
 		title : 'EPG Grabber',
 		iconCls : 'xml',
 		border : false,
@@ -376,7 +376,7 @@ tvheadend.epggrab = function() {
 		delay.delay(100);
 	});
 
-	confpanel.on('render', function() {
+	panel.on('render', function() {
 
 		/* Hack to get display working */
 		delay = new Ext.util.DelayedTask(function() {
@@ -387,13 +387,13 @@ tvheadend.epggrab = function() {
 		});
 		delay.delay(100);
 
-		confpanel.getForm().load({
+		panel.getForm().load({
 			url : 'epggrab',
 			params : {
 				op : 'loadSettings'
 			},
 			success : function(form, action) {
-				confpanel.enable();
+				panel.enable();
 			}
 		});
 	});
@@ -407,7 +407,7 @@ tvheadend.epggrab = function() {
 			});
 		});
 		mods = Ext.util.JSON.encode(mods);
-		confpanel.getForm().submit({
+		panel.getForm().submit({
 			url : 'epggrab',
 			params : {
 				op : 'saveSettings',
@@ -423,5 +423,5 @@ tvheadend.epggrab = function() {
 		});
 	}
 
-	return confpanel;
+	return panel;
 }

@@ -377,7 +377,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 	}
 	;
 
-	var panel = new Ext.grid.GridPanel({
+	var grid = new Ext.grid.GridPanel({
 		loadMask : true,
 		stripeRows : true,
 		disableSelection : true,
@@ -407,11 +407,11 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 		view : tvheadend.BufferView
 	});
 
-	panel.on('rowclick', rowclicked);
+	grid.on('rowclick', rowclicked);
 	function rowclicked(grid, index) {
 		new tvheadend.dvrDetails(grid.getStore().getAt(index).data);
 	}
-	return panel;
+	return grid;
 }
 
 /**
@@ -747,7 +747,7 @@ tvheadend.dvrsettings = function() {
 		disabled : true
 	});
 
-	var confpanel = new Ext.FormPanel({
+	var panel = new Ext.FormPanel({
 		title : 'Digital Video Recorder',
 		iconCls : 'drive',
 		border : false,
@@ -838,14 +838,14 @@ tvheadend.dvrsettings = function() {
 	});
 
 	function loadConfig() {
-		confpanel.getForm().load({
+		panel.getForm().load({
 			url : 'dvr',
 			params : {
 				'op' : 'loadSettings',
 				'config_name' : confcombo.getValue()
 			},
 			success : function(form, action) {
-				confpanel.enable();
+				panel.enable();
 			}
 		});
 	}
@@ -856,13 +856,13 @@ tvheadend.dvrsettings = function() {
 		loadConfig();
 	});
 
-	confpanel.on('render', function() {
+	panel.on('render', function() {
 		loadConfig();
 	});
 
 	function saveChanges() {
 		var config_name = confcombo.getValue();
-		confpanel.getForm().submit({
+		panel.getForm().submit({
 			url : 'dvr',
 			params : {
 				'op' : 'saveSettings',
@@ -889,7 +889,7 @@ tvheadend.dvrsettings = function() {
 
 	function deleteAction(btn) {
 		if (btn == 'yes') {
-			confpanel.getForm().submit({
+			panel.getForm().submit({
 				url : 'dvr',
 				params : {
 					'op' : 'deleteSettings',
@@ -907,5 +907,5 @@ tvheadend.dvrsettings = function() {
 		}
 	}
 
-	return confpanel;
+	return panel;
 }

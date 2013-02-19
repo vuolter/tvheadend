@@ -94,7 +94,7 @@ tvheadend.timeshift = function() {
     }
   });
 
-  var confpanel = new Ext.FormPanel({
+  var panel = new Ext.FormPanel({
     title : 'Timeshift',
     iconCls : 'clock',
     border : false,
@@ -119,14 +119,14 @@ tvheadend.timeshift = function() {
    * Load/Save
    * ***************************************************************/
 
-  confpanel.on('render', function() {
-    confpanel.getForm().load({
+  panel.on('render', function() {
+    panel.getForm().load({
       url: 'timeshift',
       params: {
         'op': 'loadSettings'
       },
       success: function() {
-        confpanel.enable();
+        panel.enable();
         timeshiftMaxPeriod.setDisabled(timeshiftUnlPeriod.getValue());
         timeshiftMaxSize.setDisabled(timeshiftUnlSize.getValue());
       }
@@ -134,7 +134,7 @@ tvheadend.timeshift = function() {
   });
 
   function saveChanges() {
-    confpanel.getForm().submit({
+    panel.getForm().submit({
       url : 'timeshift',
       params : {
         op : 'saveSettings',
@@ -148,5 +148,5 @@ tvheadend.timeshift = function() {
     });
   }
 
-  return confpanel;
+  return panel;
 }

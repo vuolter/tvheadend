@@ -117,7 +117,7 @@ tvheadend.status_subs = function() {
 		renderer: renderBw
 	} ]);
 
-	var subs = new Ext.grid.GridPanel({
+	var grid = new Ext.grid.GridPanel({
                 border: false,
 		loadMask : true,
 		stripeRows : true,
@@ -129,7 +129,7 @@ tvheadend.status_subs = function() {
                 flex: 1,
 		view : tvheadend.BufferView
 	});
-        return subs;
+        return grid;
 }
 
 
@@ -188,7 +188,7 @@ tvheadend.status_adapters = function() {
                 }
         }, signal]);
 
-	var panel = new Ext.grid.GridPanel({
+	var grid = new Ext.grid.GridPanel({
                 border: false,
 		loadMask : true,
 		stripeRows : true,
@@ -200,7 +200,7 @@ tvheadend.status_adapters = function() {
                 flex: 1,
 		view : tvheadend.BufferView
 	});
-        return panel;
+        return grid;
 }
 
 tvheadend.status = function() {

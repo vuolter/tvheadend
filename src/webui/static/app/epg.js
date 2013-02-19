@@ -432,7 +432,7 @@ tvheadend.epg = function() {
 		}
 	});
 
-	var panel = new Ext.ux.grid.livegrid.GridPanel({
+	var grid = new Ext.ux.grid.livegrid.GridPanel({
 		enableDragDrop : false,
 		cm : epgCm,
 		plugins : [ actions ],
@@ -483,7 +483,7 @@ tvheadend.epg = function() {
 		})
 	});
 
-	panel.on('rowclick', rowclicked);
+	grid.on('rowclick', rowclicked);
 
 	function rowclicked(grid, index) {
 		new tvheadend.epgDetails(grid.getStore().getAt(index).data);
@@ -526,5 +526,5 @@ tvheadend.epg = function() {
 		});
 	}
 
-	return panel;
+	return grid;
 }
