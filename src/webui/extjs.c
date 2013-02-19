@@ -119,7 +119,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   /**
    * Create a namespace for our app
    */
-  extjs_exec(hq, "Ext.namespace('tvheadend');");
+  extjs_exec(hq, "Ext.namespace('tvheadend.data');");
 
   /**
    * Load all components
