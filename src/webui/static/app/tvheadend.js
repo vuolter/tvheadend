@@ -393,7 +393,12 @@ tvheadend.app = function() {
 	return {
 
 		// public methods
-		init : function() {			
+		init : function() {
+		
+			//if HTML5 localStorage is supported by browser use it for storage panels state, else submit error into log
+			window.localStorage ? Ext.state.Manager.setProvider(new Ext.ux.state.LocalStorage({ namePrefix : 'tvh-' }))
+								: tvhlog(LOG_NOTICE, "webui", "HTML5 localStorage not supported by browser");
+			
 			tvheadend.header = new Ext.Panel({
 				header : true,
 				border : false,

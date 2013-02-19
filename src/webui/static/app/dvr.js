@@ -386,6 +386,8 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 		store : dvrStore,
 		cm : dvrCm,
 		plugins : [ actions ],
+		stateful : true,
+		stateId : this.id,
 		tbar : [ {
 			tooltip : 'Schedule a new recording session on the server.',
 			iconCls : 'add',

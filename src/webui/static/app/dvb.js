@@ -368,6 +368,8 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		clicksToEdit : 2,
 		cm : cm,
 		selModel : selModel,
+		stateful : true,
+		stateId : this.id,
 		tbar : [ delBtn, copyBtn, '-', saveBtn, rejectBtn, '-', {
 			text : 'Add mux(es) manually...',
 			iconCls : 'add',
@@ -687,6 +689,8 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		clicksToEdit : 2,
 		cm : cm,
 		selModel : selModel,
+		stateful : true,
+		stateId : this.id,
 		tbar : [ saveBtn, rejectBtn, '-', mapBtn ],
 		view : tvheadend.BufferView
 	});

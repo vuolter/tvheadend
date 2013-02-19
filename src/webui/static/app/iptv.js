@@ -280,6 +280,8 @@ tvheadend.iptv = function(adapterId) {
 		clicksToEdit : 2,
 		cm : cm,
 		selModel : selModel,
+		stateful : true,
+		stateId : this.id,
 		tbar : [
 			{
 				tooltip : 'Create a new entry on the server. '
