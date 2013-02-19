@@ -304,7 +304,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 				valueField : 'chid',
 				mode : 'remote',
 				triggerAction : 'all',
-				store : tvheadend.store.channels
+				store : tvheadend.store.channels2
 			}), new Ext.form.DateField({
 				allowBlank : false,
 				fieldLabel : 'Date',
@@ -451,7 +451,7 @@ tvheadend.autoreceditor = function() {
 				editor : new Ext.form.ComboBox({
 					loadingText : 'Loading...',
 					displayField : 'name',
-					store : tvheadend.store.channels,
+					store : tvheadend.store.channels2,
 					mode : 'local',
 					editable : false,
 					triggerAction : 'all',
@@ -470,7 +470,7 @@ tvheadend.autoreceditor = function() {
 				dataIndex : 'tag',
 				editor : new Ext.form.ComboBox({
 					displayField : 'name',
-					store : tvheadend.store.channelTags,
+					store : tvheadend.store.channelTags2,
 					mode : 'local',
 					editable : false,
 					triggerAction : 'all',

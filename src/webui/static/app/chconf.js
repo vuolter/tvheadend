@@ -7,12 +7,28 @@ tvheadend.store.channelTags = new Ext.data.JsonStore({
 	fields : [ 'identifier', 'name' ],
 	id : 'identifier',
 	url : 'channeltags',
-	baseParams : {
-		op : 'listTags'
+	baseParams : { op : 'listTags' },
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
 	}
 });
 
-tvheadend.store.channelTags.setDefaultSort('name', 'ASC');
+tvheadend.store.channelTags2 = new Ext.data.JsonStore({
+	root : 'entries',
+	fields : [ 'identifier', 'name' ],
+	id : 'identifier',
+	url : 'channeltags',
+	baseParams : { op : 'listTags' },
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	}
+});
+
+tvheadend.store.channelTags.on('update', function() {
+	tvheadend.store.channelTags2.reload();
+});
 
 tvheadend.comet.on('channeltags', function(m) {
 	if (m.reload != null) tvheadend.store.channelTags.reload();
@@ -28,16 +44,28 @@ tvheadend.channelrec = new Ext.data.Record.create(
 tvheadend.store.channels = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
-	fields : tvheadend.channelrec,
-	id : 'chid',
+	fields : tvh.channelrec,
+	url : "channels",
+	baseParams : { op : 'list' },
 	sortInfo : {
 		field : 'number',
-		direction : "ASC"
-	},
-	url : "channels",
-	baseParams : {
-		op : 'list'
+		direction : 'ASC'
 	}
+});
+
+tvheadend.store.channels2 = new Ext.data.JsonStore({
+	root : 'entries',
+	fields : tvh.channelrec,
+	url : "channels",
+	baseParams : { op : 'list' },
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	}
+});
+
+tvheadend.store.channels.on('update', function() {
+	tvheadend.store.channels2.reload();
 });
 
 tvheadend.comet.on('channels', function(m) {
@@ -66,7 +94,7 @@ tvheadend.mergeChannel = function(chan) {
 		labelWidth : 110,
 		defaultType : 'textfield',
 		items : [ new Ext.form.ComboBox({
-			store : tvheadend.store.channels,
+			store : tvheadend.store.channels2,
 			fieldLabel : 'Target channel',
 			name : 'targetchannel',
 			hiddenName : 'targetID',
