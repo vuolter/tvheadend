@@ -356,6 +356,8 @@ tvheadend.chconf = function() {
 		clicksToEdit : 2,
 		cm : cm,
 		selModel : selModel,
+		stateful : true,
+		stateId : this.id,
 		tbar : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
 			text : 'Help',
 			handler : function() {

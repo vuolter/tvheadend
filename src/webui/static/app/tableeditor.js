@@ -155,6 +155,8 @@ tvheadend.tableEditor = function(title, dtable, cm, rec, plugins, store,
 		cm : cm,
 		selModel : selModel,
 		stripeRows : true,
+		stateful : true,
+		stateId : this.id,
 		tbar : [
 			{
 				tooltip : 'Create a new entry on the server. '

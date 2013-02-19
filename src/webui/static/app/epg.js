@@ -441,6 +441,8 @@ tvheadend.epg = function() {
 		store : epgStore,
 		selModel : new Ext.ux.grid.livegrid.RowSelectionModel(),
 		view : epgView,
+		stateful : true,
+		stateId : this.id,
 		tbar : [
 			epgFilterTitle,
 			'-',

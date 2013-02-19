@@ -127,6 +127,8 @@ tvheadend.status_subs = function() {
 		store : tvheadend.store.subscriptions,
 		cm : subsCm,
                 flex: 1,
+		stateful : true,
+		stateId : this.id,
 		view : tvheadend.BufferView
 	});
         return grid;
@@ -198,6 +200,8 @@ tvheadend.status_adapters = function() {
 		store : tvheadend.store.adapters,
 		cm : cm,
                 flex: 1,
+		stateful : true,
+		stateId : this.id,
 		view : tvheadend.BufferView
 	});
         return grid;

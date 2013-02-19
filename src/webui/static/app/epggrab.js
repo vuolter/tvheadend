@@ -256,6 +256,8 @@ tvheadend.epggrab = function() {
 		width : 600,
 		height : 150,
 		frame : false,
+		stateful : true,
+		stateId : this.id,
 		viewConfig : {
 			forceFit : true
 		},
@@ -301,6 +303,8 @@ tvheadend.epggrab = function() {
 		width : 600,
 		height : 150,
 		frame : false,
+		stateful : true,
+		stateId : this.id,
 		viewConfig : {
 			forceFit : true
 		},
