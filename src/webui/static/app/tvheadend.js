@@ -395,7 +395,7 @@ tvheadend.app = function() {
 				header : true,
 				border : false,
 				region : 'north',
-				iconCls : 'tvhlogo'
+				iconCls : 'htslogo'
 			});
 			
 			Ext.TaskMgr.start({
