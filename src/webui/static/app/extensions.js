@@ -244,182 +244,56 @@ Ext.ux.grid.BufferView = Ext.extend(Ext.grid.GridView, {
 });
 
 
-/*
- * Ext JS Library 2.1
- * Copyright(c) 2006-2008, Ext JS, LLC.
- * licensing@extjs.com
- * 
- * http://extjs.com/license
- */
-
 /**
  * CheckedColumn
  */
-Ext.grid.CheckColumn = function(config){
-    Ext.apply(this, config);
-    if(!this.id){
-        this.id = Ext.id();
-    }
-    this.renderer = this.renderer.createDelegate(this);
+ 
+Ext.ns('Ext.ux.grid');
+
+Ext.ux.grid.CheckColumn = function(config){
+	this.addEvents({
+		click : true
+	});
+	Ext.ux.grid.CheckColumn.superclass.constructor.call(this);
+
+	Ext.apply(this, config, {
+		init : function(grid){
+			this.grid = grid;
+			this.grid.on('render', function(){
+				var view = this.grid.getView();
+				view.mainBody.on('mousedown', this.onMouseDown, this);
+			}, this);
+		},
+
+		onMouseDown : function(e, t){
+			if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
+				e.stopEvent();
+				var index = this.grid.getView().findRowIndex(t);
+				var record = this.grid.store.getAt(index);
+				record.set(this.dataIndex, !record.data[this.dataIndex]);
+				this.fireEvent('click', this, e, record);
+			}
+		},
+
+		renderer : function(v, p, record){
+			p.css += ' x-grid3-check-col-td';
+			return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'"> </div>';
+		}
+	});
+
+	if(!this.id){
+		this.id = Ext.id();
+	}
+	this.renderer = this.renderer.createDelegate(this);
 };
 
-Ext.grid.CheckColumn.prototype ={
-    init : function(grid){
-        this.grid = grid;
-        this.grid.on('render', function(){
-            var view = this.grid.getView();
-            view.mainBody.on('mousedown', this.onMouseDown, this);
-        }, this);
-    },
+// register ptype
+Ext.preg('checkcolumn', Ext.ux.grid.CheckColumn);
 
-    onMouseDown : function(e, t){
-        if(t.className && t.className.indexOf('x-grid3-cc-'+this.id) != -1){
-            e.stopEvent();
-            var index = this.grid.getView().findRowIndex(t);
-            var record = this.grid.store.getAt(index);
-            record.set(this.dataIndex, !record.data[this.dataIndex]);
-        }
-    },
+// backwards compat
+Ext.grid.CheckColumn = Ext.ux.grid.CheckColumn;
 
-    renderer : function(v, p, record){
-        p.css += ' x-grid3-check-col-td'; 
-        return '<div class="x-grid3-check-col'+(v?'-on':'')+' x-grid3-cc-'+this.id+'">&#160;</div>';
-    }
-};
-
-
-/**
- * Rowexpander
- */
-Ext.grid.RowExpander = function(config){
-    Ext.apply(this, config);
-
-    this.addEvents({
-        beforeexpand : true,
-        expand: true,
-        beforecollapse: true,
-        collapse: true
-    });
-
-    Ext.grid.RowExpander.superclass.constructor.call(this);
-
-    if(this.tpl){
-        if(typeof this.tpl == 'string'){
-            this.tpl = new Ext.Template(this.tpl);
-        }
-        this.tpl.compile();
-    }
-
-    this.state = {};
-    this.bodyContent = {};
-};
-
-Ext.extend(Ext.grid.RowExpander, Ext.util.Observable, {
-    header: "",
-    width: 20,
-    sortable: false,
-    fixed:true,
-    menuDisabled:true,
-    dataIndex: '',
-    id: 'expander',
-    lazyRender : true,
-    enableCaching: true,
-
-    getRowClass : function(record, rowIndex, p, ds){
-        p.cols = p.cols-1;
-        var content = this.bodyContent[record.id];
-        if(!content && !this.lazyRender){
-            content = this.getBodyContent(record, rowIndex);
-        }
-        if(content){
-            p.body = content;
-        }
-        return this.state[record.id] ? 'x-grid3-row-expanded' : 'x-grid3-row-collapsed';
-    },
-
-    init : function(grid){
-        this.grid = grid;
-
-        var view = grid.getView();
-        view.getRowClass = this.getRowClass.createDelegate(this);
-
-        view.enableRowBody = true;
-
-        grid.on('render', function(){
-            view.mainBody.on('mousedown', this.onMouseDown, this);
-        }, this);
-    },
-
-    getBodyContent : function(record, index){
-        if(!this.enableCaching){
-            return this.tpl.apply(record.data);
-        }
-        var content = this.bodyContent[record.id];
-        if(!content){
-            content = this.tpl.apply(record.data);
-            this.bodyContent[record.id] = content;
-        }
-        return content;
-    },
-
-    onMouseDown : function(e, t){
-        if(t.className == 'x-grid3-row-expander'){
-            e.stopEvent();
-            var row = e.getTarget('.x-grid3-row');
-            this.toggleRow(row);
-        }
-    },
-
-    renderer : function(v, p, record){
-        p.cellAttr = 'rowspan="2"';
-        return '<div class="x-grid3-row-expander">&#160;</div>';
-    },
-
-    beforeExpand : function(record, body, rowIndex){
-        if(this.fireEvent('beforeexpand', this, record, body, rowIndex) !== false){
-            if(this.tpl && this.lazyRender){
-                body.innerHTML = this.getBodyContent(record, rowIndex);
-            }
-            return true;
-        }else{
-            return false;
-        }
-    },
-
-    toggleRow : function(row){
-        if(typeof row == 'number'){
-            row = this.grid.view.getRow(row);
-        }
-        this[Ext.fly(row).hasClass('x-grid3-row-collapsed') ? 'expandRow' : 'collapseRow'](row);
-    },
-
-    expandRow : function(row){
-        if(typeof row == 'number'){
-            row = this.grid.view.getRow(row);
-        }
-        var record = this.grid.store.getAt(row.rowIndex);
-        var body = Ext.DomQuery.selectNode('tr:nth(2) div.x-grid3-row-body', row);
-        if(this.beforeExpand(record, body, row.rowIndex)){
-            this.state[record.id] = true;
-            Ext.fly(row).replaceClass('x-grid3-row-collapsed', 'x-grid3-row-expanded');
-            this.fireEvent('expand', this, record, body, row.rowIndex);
-        }
-    },
-
-    collapseRow : function(row){
-        if(typeof row == 'number'){
-            row = this.grid.view.getRow(row);
-        }
-        var record = this.grid.store.getAt(row.rowIndex);
-        var body = Ext.fly(row).child('tr:nth(1) div.x-grid3-row-body', true);
-        if(this.fireEvent('beforecollapse', this, record, body, row.rowIndex) !== false){
-            this.state[record.id] = false;
-            Ext.fly(row).replaceClass('x-grid3-row-expanded', 'x-grid3-row-collapsed');
-            this.fireEvent('collapse', this, record, body, row.rowIndex);
-        }
-    }
-});
-
+Ext.extend(Ext.grid.CheckColumn, Ext.util.Observable);
 
 
 /*
@@ -743,7 +617,6 @@ Ext.ux.Multiselect = Ext.extend(Ext.form.Field,  {
 Ext.reg("multiselect", Ext.ux.Multiselect);
 
 
-
 /**
  * Ext.ux.grid.ProgressColumn - Ext.ux.grid.ProgressColumn is a grid plugin that
  * shows a progress bar for a number between 0 and 100 to indicate some sort of
@@ -753,8 +626,8 @@ Ext.reg("multiselect", Ext.ux.Multiselect);
  *
  * @author Benjamin Runnels <kraven@kraven.org>
  * @copyright (c) 2008, by Benjamin Runnels
- * @date 06 June 2008
- * @version 1.1
+ * @date 08 June 2009
+ * @version 1.2
  *
  * @license Ext.ux.grid.ProgressColumn is licensed under the terms of the Open
  *          Source LGPL 3.0 license. Commercial use is permitted to the extent
@@ -767,7 +640,8 @@ Ext.reg("multiselect", Ext.ux.Multiselect);
 
 Ext.namespace('Ext.ux.grid');
 
-Ext.ux.grid.ProgressColumn = function(config) {
+Ext.ux.grid.ProgressColumn = function(config)
+{
   Ext.apply(this, config);
   this.renderer = this.renderer.createDelegate(this);
   this.addEvents('action');
@@ -776,9 +650,11 @@ Ext.ux.grid.ProgressColumn = function(config) {
 
 Ext.extend(Ext.ux.grid.ProgressColumn, Ext.util.Observable, {
   /**
-   * @cfg {String} colored determines whether use special progression coloring
-   *      or the standard Ext.ProgressBar coloring for the bar (defaults to
-   *      false)
+   * @cfg {Integer} upper limit for full progress indicator (defaults to 100)
+   */
+  ceiling : 100,
+  /**
+   * @cfg {String} symbol appended after the numeric value (defaults to %)
    */
   textPst : '%',
   /**
@@ -793,57 +669,70 @@ Ext.extend(Ext.ux.grid.ProgressColumn, Ext.util.Observable, {
    */
   actionEvent : 'dblclick',
 
-  init : function(grid) {
+  init : function(grid)
+  {
     this.grid = grid;
     this.view = grid.getView();
 
-    if (this.editor && grid.isEditor) {
+    if(this.editor && grid.isEditor){
       var cfg = {
         scope : this
       };
       cfg[this.actionEvent] = this.onClick;
-      grid.afterRender = grid.afterRender.createSequence(function() {
-        this.view.mainBody.on(cfg);
-      }, this);
+      grid.afterRender = grid.afterRender.createSequence(function()
+          {
+            this.view.mainBody.on(cfg);
+          }, this);
     }
   },
 
-  onClick : function(e, target) {
+  onClick : function(e, target)
+  {
     var rowIndex = e.getTarget('.x-grid3-row').rowIndex;
     var colIndex = this.view.findCellIndex(target.parentNode.parentNode);
 
     var t = e.getTarget('.x-progress-text');
-    if (t) {
+    if(t){
       this.grid.startEditing(rowIndex, colIndex);
     }
   },
 
-  renderer : function(v, p, record) {
-    var style = '';
-    var textClass = (v < 55) ? 'x-progress-text-back' : 'x-progress-text-front' + (Ext.isIE6 ? '-ie6' : '');
-
-    //ugly hack to deal with IE6 issue
-    var text = String.format('</div><div class="x-progress-text {0}" style="width:100%;" id="{1}">{2}</div></div>',
-      textClass, Ext.id(), v + this.textPst
-    );
-    text = (v<96) ? text.substring(0, text.length - 6) : text.substr(6);
-
-    if (this.colored == true) {
-      if (v <= 100 && v > 66)
-        style = '-green';
-      if (v < 67 && v > 33)
-        style = '-orange';
-      if (v < 34)
-        style = '-red';
+  getStyle : function(v)
+  {
+    if(this.colored === true){
+      if(v <= this.ceiling && v > (this.ceiling * 0.67)) return '-green';
+      if(v < (this.ceiling * 0.67) && v > (this.ceiling * 0.33)) return '-orange';
+      if(v < (this.ceiling * 0.33)) return '-red';
     }
+    return '';
+  },
 
-    p.css += ' x-grid3-progresscol';
-    return String.format(
-      '<div class="x-progress-wrap"><div class="x-progress-inner"><div class="x-progress-bar{0}" style="width:{1}%;">{2}</div>' +
-      '</div>', style, v, text
+  getText : function(v)
+  {
+    var textClass = (v < (this.ceiling / 2)) ? 'x-progress-text-back' : 'x-progress-text-front'
+        + (Ext.isIE6 ? '-ie6' : '');
+
+    // ugly hack to deal with IE6 issue
+    var text = String.format('</div><div class="x-progress-text {0}" style="width:100%;" id="{1}">{2}</div></div>',
+        textClass, Ext.id(), v + this.textPst
     );
+
+    return (v < (this.ceiling / 1.05)) ? text.substring(0, text.length - 6) : text.substr(6);
+  },
+
+  renderer : function(v, p, record)
+  {
+    p.css += ' x-grid3-progresscol';
+
+    return String
+        .format(
+            '<div class="x-progress-wrap"><div class="x-progress-inner"><div class="x-progress-bar{0}" style="width:{1}%;">{2}</div></div>',
+            this.getStyle(v), (v / this.ceiling) * 100, this.getText(v)
+        );
   }
 });
+Ext.reg('progresscolumn', Ext.ux.grid.ProgressColumn);
+
 
 //vim: ts=4:sw=4:nu:fdc=4:nospell
 /*global Ext */
@@ -1358,289 +1247,4 @@ Ext.extend(Ext.ux.grid.RowActions, Ext.util.Observable, {
 // registre xtype
 Ext.reg('rowactions', Ext.ux.grid.RowActions);
 
-// eof
-
-
-
-/**
- * Ext.ux.form.LovCombo, List of Values Combo
- *
- * @author    Ing. Jozef Sakáloš
- * @copyright (c) 2008, by Ing. Jozef Sakáloš
- * @date      16. April 2008
- * @version   $Id: Ext.ux.form.LovCombo.js 285 2008-06-06 09:22:20Z jozo $
- *
- * @license Ext.ux.form.LovCombo.js is licensed under the terms of the Open Source
- * LGPL 3.0 license. Commercial use is permitted to the extent that the 
- * code/component(s) do NOT become part of another Open Source or Commercially
- * licensed development library or toolkit without explicit permission.
- * 
- * License details: http://www.gnu.org/licenses/lgpl.html
- */
- 
-/*global Ext */
-
-// add RegExp.escape if it has not been already added
-if('function' !== typeof RegExp.escape) {
-	RegExp.escape = function(s) {
-		if('string' !== typeof s) {
-			return s;
-		}
-		// Note: if pasting from forum, precede ]/\ with backslash manually
-		return s.replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
-	}; // eo function escape
-}
-
-// create namespace
-Ext.ns('Ext.ux.form');
- 
-/**
- *
- * @class Ext.ux.form.LovCombo
- * @extends Ext.form.ComboBox
- */
-Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
-
-	// {{{
-    // configuration options
-	/**
-	 * @cfg {String} checkField name of field used to store checked state.
-	 * It is automatically added to existing fields.
-	 * Change it only if it collides with your normal field.
-	 */
-	 checkField:'checked'
-
-	/**
-	 * @cfg {String} separator separator to use between values and texts
-	 */
-    ,separator:','
-
-	/**
-	 * @cfg {String/Array} tpl Template for items. 
-	 * Change it only if you know what you are doing.
-	 */
-	// }}}
-    // {{{
-    ,initComponent:function() {
-        
-		// template with checkbox
-		if(!this.tpl) {
-			this.tpl = 
-				 '<tpl for=".">'
-				+'<div class="x-combo-list-item">'
-				+'<img src="' + Ext.BLANK_IMAGE_URL + '" '
-				+'class="ux-lovcombo-icon ux-lovcombo-icon-'
-				+'{[values.' + this.checkField + '?"checked":"unchecked"' + ']}">'
-				+'<div class="ux-lovcombo-item-text">{' + (this.displayField || 'text' )+ '}</div>'
-				+'</div>'
-				+'</tpl>'
-			;
-		}
- 
-        // call parent
-        Ext.ux.form.LovCombo.superclass.initComponent.apply(this, arguments);
-
-		// install internal event handlers
-		this.on({
-			 scope:this
-			,beforequery:this.onBeforeQuery
-			,blur:this.onRealBlur
-		});
-
-		// remove selection from input field
-		this.onLoad = this.onLoad.createSequence(function() {
-			if(this.el) {
-				var v = this.el.dom.value;
-				this.el.dom.value = '';
-				this.el.dom.value = v;
-			}
-		});
- 
-    } // e/o function initComponent
-    // }}}
-	// {{{
-	/**
-	 * Disables default tab key bahavior
-	 * @private
-	 */
-	,initEvents:function() {
-		Ext.ux.form.LovCombo.superclass.initEvents.apply(this, arguments);
-
-		// disable default tab handling - does no good
-		this.keyNav.tab = false;
-
-	} // eo function initEvents
-	// }}}
-	// {{{
-	/**
-	 * clears value
-	 */
-	,clearValue:function() {
-		this.value = '';
-		this.setRawValue(this.value);
-		this.store.clearFilter();
-		this.store.each(function(r) {
-			r.set(this.checkField, false);
-		}, this);
-		if(this.hiddenField) {
-			this.hiddenField.value = '';
-		}
-		this.applyEmptyText();
-	} // eo function clearValue
-	// }}}
-	// {{{
-	/**
-	 * @return {String} separator (plus space) separated list of selected displayFields
-	 * @private
-	 */
-	,getCheckedDisplay:function() {
-		var re = new RegExp(this.separator, "g");
-		return this.getCheckedValue(this.displayField).replace(re, this.separator + ' ');
-	} // eo function getCheckedDisplay
-	// }}}
-	// {{{
-	/**
-	 * @return {String} separator separated list of selected valueFields
-	 * @private
-	 */
-	,getCheckedValue:function(field) {
-		field = field || this.valueField;
-		var c = [];
-
-		// store may be filtered so get all records
-		var snapshot = this.store.snapshot || this.store.data;
-
-		snapshot.each(function(r) {
-			if(r.get(this.checkField)) {
-				c.push(r.get(field));
-			}
-		}, this);
-
-		return c.join(this.separator);
-	} // eo function getCheckedValue
-	// }}}
-	// {{{
-	/**
-	 * beforequery event handler - handles multiple selections
-	 * @param {Object} qe query event
-	 * @private
-	 */
-	,onBeforeQuery:function(qe) {
-		qe.query = qe.query.replace(new RegExp(this.getCheckedDisplay() + '[ ' + this.separator + ']*'), '');
-	} // eo function onBeforeQuery
-	// }}}
-	// {{{
-	/**
-	 * blur event handler - runs only when real blur event is fired
-	 */
-	,onRealBlur:function() {
-		this.list.hide();
-		var rv = this.getRawValue();
-		var rva = rv.split(new RegExp(RegExp.escape(this.separator) + ' *'));
-		var va = [];
-		var snapshot = this.store.snapshot || this.store.data;
-
-		// iterate through raw values and records and check/uncheck items
-		Ext.each(rva, function(v) {
-			snapshot.each(function(r) {
-				if(v === r.get(this.displayField)) {
-					va.push(r.get(this.valueField));
-				}
-			}, this);
-		}, this);
-		this.setValue(va.join(this.separator));
-		this.store.clearFilter();
-	} // eo function onRealBlur
-	// }}}
-	// {{{
-	/**
-	 * Combo's onSelect override
-	 * @private
-	 * @param {Ext.data.Record} record record that has been selected in the list
-	 * @param {Number} index index of selected (clicked) record
-	 */
-	,onSelect:function(record, index) {
-        if(this.fireEvent('beforeselect', this, record, index) !== false){
-
-			// toggle checked field
-			record.set(this.checkField, !record.get(this.checkField));
-
-			// display full list
-			if(this.store.isFiltered()) {
-				this.doQuery(this.allQuery);
-			}
-
-			// set (update) value and fire event
-			this.setValue(this.getCheckedValue());
-            this.fireEvent('select', this, record, index);
-        }
-	} // eo function onSelect
-	// }}}
-	// {{{
-	/**
-	 * Sets the value of the LovCombo
-	 * @param {Mixed} v value
-	 */
-	,setValue:function(v) {
-		if(v) {
-			v = '' + v;
-			if(this.valueField) {
-				this.store.clearFilter();
-				this.store.each(function(r) {
-					var checked = !(!v.match(
-						 '(^|' + this.separator + ')' + RegExp.escape(r.get(this.valueField))
-						+'(' + this.separator + '|$)'))
-					;
-
-					r.set(this.checkField, checked);
-				}, this);
-				this.value = this.getCheckedValue();
-				this.setRawValue(this.getCheckedDisplay());
-				if(this.hiddenField) {
-					this.hiddenField.value = this.value;
-				}
-			}
-			else {
-				this.value = v;
-				this.setRawValue(v);
-				if(this.hiddenField) {
-					this.hiddenField.value = v;
-				}
-			}
-			if(this.el) {
-				this.el.removeClass(this.emptyClass);
-			}
-		}
-		else {
-			this.clearValue();
-		}
-	} // eo function setValue
-	// }}}
-	// {{{
-	/**
-	 * Selects all items
-	 */
-	,selectAll:function() {
-        this.store.each(function(record){
-            // toggle checked field
-            record.set(this.checkField, true);
-        }, this);
-
-        //display full list
-        this.doQuery(this.allQuery);
-        this.setValue(this.getCheckedValue());
-    } // eo full selectAll
-	// }}}
-	// {{{
-	/**
-	 * Deselects all items. Synonym for clearValue
-	 */
-    ,deselectAll:function() {
-		this.clearValue();
-    } // eo full deselectAll 
-	// }}}
-
-}); // eo extend
- 
-// register xtype
-Ext.reg('lovcombo', Ext.ux.form.LovCombo); 
+// eof 

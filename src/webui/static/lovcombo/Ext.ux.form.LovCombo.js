@@ -1,3 +1,4 @@
+// vim: ts=4:sw=4:nu:fdc=4:nospell
 /**
  * Ext.ux.form.LovCombo, List of Values Combo
  *
@@ -50,11 +51,6 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
 	 * @cfg {String} separator separator to use between values and texts
 	 */
     ,separator:','
-
-  /**
-   * Mask out this function it breaks the component in 3.4
-   */
-    ,assertValue: Ext.emptyFn
 
 	/**
 	 * @cfg {String/Array} tpl Template for items. 
@@ -285,3 +281,5 @@ Ext.ux.form.LovCombo = Ext.extend(Ext.form.ComboBox, {
  
 // register xtype
 Ext.reg('lovcombo', Ext.ux.form.LovCombo); 
+ 
+// eof

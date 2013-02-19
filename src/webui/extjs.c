@@ -112,7 +112,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
    */
   extjs_load(hq, "static/app/extensions.js");
   extjs_load(hq, "static/livegrid/livegrid-all.js");
-  extjs_load(hq, "static/lovcombo/lovcombo-all.js");
+  extjs_load(hq, "static/lovcombo/Ext.ux.form.LovCombo.js");
   extjs_load(hq, "static/multiselect/multiselect.js");
   extjs_load(hq, "static/multiselect/ddview.js");
 
