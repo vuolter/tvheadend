@@ -1,4 +1,4 @@
-tvheadend.weekdays = new Ext.data.SimpleStore({
+tvheadend.store.weekdays = new Ext.data.SimpleStore({
 	fields : [ 'identifier', 'name' ],
 	id : 0,
 	data : [ [ '1', 'Mon' ], [ '2', 'Tue' ], [ '3', 'Wed' ], [ '4', 'Thu' ],
@@ -6,7 +6,7 @@ tvheadend.weekdays = new Ext.data.SimpleStore({
 });
 
 //This should be loaded from tvheadend
-tvheadend.dvrprio = new Ext.data.SimpleStore({
+tvheadend.store.dvrprio = new Ext.data.SimpleStore({
 	fields : [ 'identifier', 'name' ],
 	id : 0,
 	data : [ [ 'important', 'Important' ], [ 'high', 'High' ],
@@ -16,7 +16,7 @@ tvheadend.dvrprio = new Ext.data.SimpleStore({
 
 
 //For the container configuration
-tvheadend.containers = new Ext.data.JsonStore({
+tvheadend.store.containers = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
 	fields : [ 'name', 'description' ],
@@ -31,7 +31,7 @@ tvheadend.containers = new Ext.data.JsonStore({
 /**
  * Configuration names
  */
-tvheadend.configNames = new Ext.data.JsonStore({
+tvheadend.store.configNames = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
 	fields : [ 'identifier', 'name' ],
@@ -42,10 +42,10 @@ tvheadend.configNames = new Ext.data.JsonStore({
 	}
 });
 
-tvheadend.configNames.setDefaultSort('name', 'ASC');
+tvheadend.store.configNames.setDefaultSort('name', 'ASC');
 
 tvheadend.comet.on('dvrconfig', function(m) {
-	if (m.reload != null) tvheadend.configNames.reload();
+	if (m.reload != null) tvheadend.store.configNames.reload();
 });
 
 /**
@@ -190,7 +190,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 	}
 
 	function renderPri(value) {
-		return tvheadend.dvrprio.getById(value).data.name;
+		return tvheadend.store.dvrprio.getById(value).data.name;
 	}
 
 	var dvrCm = new Ext.grid.ColumnModel([ actions, {
@@ -304,7 +304,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 				valueField : 'chid',
 				mode : 'remote',
 				triggerAction : 'all',
-				store : tvheadend.channels
+				store : tvheadend.store.channels
 			}), new Ext.form.DateField({
 				allowBlank : false,
 				fieldLabel : 'Date',
@@ -322,7 +322,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 				increment : 10,
 				format : 'H:i'
 			}), new Ext.form.ComboBox({
-				store : tvheadend.dvrprio,
+				store : tvheadend.store.dvrprio,
 				value : "normal",
 				triggerAction : 'all',
 				mode : 'local',
@@ -335,7 +335,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 				fieldLabel : 'Title',
 				name : 'title'
 			}, new Ext.form.ComboBox({
-				store : tvheadend.configNames,
+				store : tvheadend.store.configNames,
 				triggerAction : 'all',
 				mode : 'local',
 				fieldLabel : 'DVR Configuration',
@@ -363,7 +363,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 		});
 		win.show();
 		new Ext.form.ComboBox({
-			store : tvheadend.configNames,
+			store : tvheadend.store.configNames,
 			triggerAction : 'all',
 			mode : 'local',
 			fieldLabel : 'DVR Configuration',
@@ -448,7 +448,7 @@ tvheadend.autoreceditor = function() {
 				editor : new Ext.form.ComboBox({
 					loadingText : 'Loading...',
 					displayField : 'name',
-					store : tvheadend.channels,
+					store : tvheadend.store.channels,
 					mode : 'local',
 					editable : false,
 					triggerAction : 'all',
@@ -467,7 +467,7 @@ tvheadend.autoreceditor = function() {
 				dataIndex : 'tag',
 				editor : new Ext.form.ComboBox({
 					displayField : 'name',
-					store : tvheadend.channelTags,
+					store : tvheadend.store.channelTags,
 					mode : 'local',
 					editable : false,
 					triggerAction : 'all',
@@ -483,7 +483,7 @@ tvheadend.autoreceditor = function() {
 				editor : new Ext.form.ComboBox({
 					valueField : 'code',
 					displayField : 'name',
-					store : tvheadend.ContentGroupStore,
+					store : tvheadend.store.contentGroup,
 					mode : 'local',
 					editable : false,
 					triggerAction : 'all',
@@ -501,13 +501,13 @@ tvheadend.autoreceditor = function() {
 					ret = [];
 					tags = value.split(',');
 					for ( var i = 0; i < tags.length; i++) {
-						var tag = tvheadend.weekdays.getById(tags[i]);
+						var tag = tvheadend.store.weekdays.getById(tags[i]);
 						if (typeof tag !== 'undefined') ret.push(tag.data.name);
 					}
 					return ret.join(', ');
 				},
 				editor : new Ext.ux.form.LovCombo({
-					store : tvheadend.weekdays,
+					store : tvheadend.store.weekdays,
 					mode : 'local',
 					valueField : 'identifier',
 					displayField : 'name'
@@ -537,10 +537,10 @@ tvheadend.autoreceditor = function() {
 				dataIndex : 'pri',
 				width : 100,
 				renderer : function(value, metadata, record, row, col, store) {
-					return tvheadend.dvrprio.getById(value).data.name;
+					return tvheadend.store.dvrprio.getById(value).data.name;
 				},
 				editor : new Ext.form.ComboBox({
-					store : tvheadend.dvrprio,
+					store : tvheadend.store.dvrprio,
 					triggerAction : 'all',
 					mode : 'local',
 					valueField : 'identifier',
@@ -558,7 +558,7 @@ tvheadend.autoreceditor = function() {
 					}
 				},
 				editor : new Ext.form.ComboBox({
-					store : tvheadend.configNames,
+					store : tvheadend.store.configNames,
 					triggerAction : 'all',
 					mode : 'local',
 					valueField : 'identifier',
@@ -582,7 +582,7 @@ tvheadend.autoreceditor = function() {
 			} ]});
 
 	return new tvheadend.tableEditor('Automatic Recorder', 'autorec', cm,
-		tvheadend.autorecRecord, [ enabledColumn ], tvheadend.autorecStore,
+		tvheadend.autorecRecord, [ enabledColumn ], tvheadend.store.autorec,
 		'autorec.html', 'wand');
 }
 /**
@@ -639,12 +639,12 @@ tvheadend.dvr = function() {
 		remoteSort : true
 	    });
 	}
-	tvheadend.dvrStoreUpcoming = datastoreBuilder('dvrlist_upcoming');
-	tvheadend.dvrStoreFinished = datastoreBuilder('dvrlist_finished');
-	tvheadend.dvrStoreFailed = datastoreBuilder('dvrlist_failed');
-        tvheadend.dvrStores = [tvheadend.dvrStoreUpcoming,
-	                       tvheadend.dvrStoreFinished,
-	                       tvheadend.dvrStoreFailed];
+	tvheadend.store.dvrUpcoming = datastoreBuilder('dvrlist_upcoming');
+	tvheadend.store.dvrFinished = datastoreBuilder('dvrlist_finished');
+	tvheadend.store.dvrFailed = datastoreBuilder('dvrlist_failed');
+        tvheadend.dvrStores = [tvheadend.store.dvrUpcoming,
+	                       tvheadend.store.dvrFinished,
+	                       tvheadend.store.dvrFailed];
 
 
 	function updateDvrStore(store, r, m) {
@@ -671,7 +671,7 @@ tvheadend.dvr = function() {
 		if (m.updateEntry != null) {
 			for (var i = 0; i < tvheadend.dvrStores.length; i++) {
 				var store = tvheadend.dvrStores[i];
-				r = tvheadend.dvrStoreUpcoming.getById(m.id);
+				r = tvheadend.store.dvrUpcoming.getById(m.id);
 				if (typeof r !== 'undefined') {
 					updateDvrStore(store, r, m);
 					return;
@@ -685,7 +685,7 @@ tvheadend.dvr = function() {
 		'serieslink', 'channel', 'tag', 'creator', 'contenttype', 'comment',
 		'weekdays', 'pri', 'approx_time', 'config_name' ]);
 
-	tvheadend.autorecStore = new Ext.data.JsonStore({
+	tvheadend.store.autorec = new Ext.data.JsonStore({
 		root : 'entries',
 		fields : tvheadend.autorecRecord,
 		url : "tablemgr",
@@ -698,7 +698,7 @@ tvheadend.dvr = function() {
 	});
 
 	tvheadend.comet.on('autorec', function(m) {
-		if (m.reload != null) tvheadend.autorecStore.reload();
+		if (m.reload != null) tvheadend.store.autorec.reload();
 	});
 
 	var panel = new Ext.TabPanel({
@@ -707,9 +707,9 @@ tvheadend.dvr = function() {
 		title : 'Digital Video Recorder',
 		iconCls : 'drive',
 		items : [ 
-		          new tvheadend.dvrschedule('Upcoming recordings', 'clock', tvheadend.dvrStoreUpcoming),
-		          new tvheadend.dvrschedule('Finished recordings', 'television', tvheadend.dvrStoreFinished),
-		          new tvheadend.dvrschedule('Failed recordings', 'exclamation', tvheadend.dvrStoreFailed),
+		          new tvheadend.dvrschedule('Upcoming recordings', 'clock', tvheadend.store.dvrUpcoming),
+		          new tvheadend.dvrschedule('Finished recordings', 'television', tvheadend.store.dvrFinished),
+		          new tvheadend.dvrschedule('Failed recordings', 'exclamation', tvheadend.store.dvrFailed),
 		          new tvheadend.autoreceditor
 		        ]
 	});
@@ -729,7 +729,7 @@ tvheadend.dvrsettings = function() {
 		'episodeInTitle', 'cleanTitle', 'tagFiles', 'commSkip' ]);
 
 	var confcombo = new Ext.form.ComboBox({
-		store : tvheadend.configNames,
+		store : tvheadend.store.configNames,
 		triggerAction : 'all',
 		mode : 'local',
 		displayField : 'name',
@@ -764,7 +764,7 @@ tvheadend.dvrsettings = function() {
 			fieldLabel : 'Recording system path',
 			name : 'storage'
 		}, new Ext.form.ComboBox({
-			store : tvheadend.containers,
+			store : tvheadend.store.containers,
 			fieldLabel : 'Media container',
 			triggerAction : 'all',
 			displayField : 'description',

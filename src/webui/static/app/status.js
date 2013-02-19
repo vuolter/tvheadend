@@ -3,7 +3,7 @@
  */
 tvheadend.status_subs = function() {
 
-	tvheadend.subsStore = new Ext.data.JsonStore({
+	tvheadend.store.subscriptions = new Ext.data.JsonStore({
 		root : 'entries',
 		totalProperty : 'totalCount',
 		fields : [ {
@@ -38,12 +38,12 @@ tvheadend.status_subs = function() {
 
 	tvheadend.comet.on('subscriptions', function(m) {
 
-		if (m.reload != null) tvheadend.subsStore.reload();
+		if (m.reload != null) tvheadend.store.subscriptions.reload();
 
 		if (m.updateEntry != null) {
-			r = tvheadend.subsStore.getById(m.id)
+			r = tvheadend.store.subscriptions.getById(m.id)
 			if (typeof r === 'undefined') {
-				tvheadend.subsStore.reload();
+				tvheadend.store.subscriptions.reload();
 				return;
 			}
 
@@ -53,8 +53,8 @@ tvheadend.status_subs = function() {
 			r.data.errors   = m.errors;
 			r.data.bw       = m.bw
 
-			tvheadend.subsStore.afterEdit(r);
-			tvheadend.subsStore.fireEvent('updated', tvheadend.subsStore, r,
+			tvheadend.store.subscriptions.afterEdit(r);
+			tvheadend.store.subscriptions.fireEvent('updated', tvheadend.store.subscriptions, r,
 				Ext.data.Record.COMMIT);
 		}
 	});
@@ -124,7 +124,7 @@ tvheadend.status_subs = function() {
 		disableSelection : true,
 		title : 'Active subscriptions',
 		iconCls : 'eye',
-		store : tvheadend.subsStore,
+		store : tvheadend.store.subscriptions,
 		cm : subsCm,
                 flex: 1,
 		view : tvheadend.BufferView
@@ -195,7 +195,7 @@ tvheadend.status_adapters = function() {
 		disableSelection : true,
 		title : 'Adapters',
 		iconCls : 'hardware',
-		store : tvheadend.tvAdapterStore,
+		store : tvheadend.store.adapters,
 		cm : cm,
                 flex: 1,
 		view : tvheadend.BufferView

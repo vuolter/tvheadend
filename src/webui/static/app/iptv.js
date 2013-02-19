@@ -54,7 +54,7 @@ tvheadend.iptv = function(adapterId) {
 					: '<span class="tvh-grid-unset">Unmapped</span>';
 			},
 			editor : new Ext.form.ComboBox({
-				store : tvheadend.channels,
+				store : tvheadend.store.channels,
 				allowBlank : true,
 				typeAhead : true,
 				minChars : 2,

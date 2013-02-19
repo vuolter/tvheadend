@@ -1,4 +1,4 @@
-tvheadend.brands = new Ext.data.JsonStore({
+tvheadend.store.brands = new Ext.data.JsonStore({
 	root : 'entries',
 	fields : [ 'uri', 'title' ],
 	autoLoad : true,
@@ -9,7 +9,7 @@ tvheadend.brands = new Ext.data.JsonStore({
 });
 //WIBNI: might want this store to periodically update
 
-tvheadend.ContentGroupStore = new Ext.data.JsonStore({
+tvheadend.store.contentGroup = new Ext.data.JsonStore({
 	root : 'entries',
 	fields : [ 'name', 'code' ],
 	autoLoad : true,
@@ -18,14 +18,14 @@ tvheadend.ContentGroupStore = new Ext.data.JsonStore({
 
 tvheadend.contentGroupLookupName = function(code) {
 	ret = "";
-	tvheadend.ContentGroupStore.each(function(r) {
+	tvheadend.store.contentGroup.each(function(r) {
 		if (r.data.code == code) ret = r.data.name;
 		else if (ret == "" && r.data.code == (code & 0xF0)) ret = r.data.name;
 	});
 	return ret;
 }
 
-tvheadend.ContentGroupStore.setDefaultSort('code', 'ASC');
+tvheadend.store.contentGroup.setDefaultSort('code', 'ASC');
 
 tvheadend.epgDetails = function(event) {
 
@@ -62,7 +62,7 @@ tvheadend.epgDetails = function(event) {
 	content += '<div id="altbcast"></div>';
 
 	var confcombo = new Ext.form.ComboBox({
-		store : tvheadend.configNames,
+		store : tvheadend.store.configNames,
 		triggerAction : 'all',
 		mode : 'local',
 		valueField : 'identifier',
@@ -344,7 +344,7 @@ tvheadend.epg = function() {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.channels,
+		store : tvheadend.store.channels,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -357,7 +357,7 @@ tvheadend.epg = function() {
 	var epgFilterChannelTags = new Ext.form.ComboBox({
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.channelTags,
+		store : tvheadend.store.channelTags,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -371,7 +371,7 @@ tvheadend.epg = function() {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.ContentGroupStore,
+		store : tvheadend.store.contentGroup,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,

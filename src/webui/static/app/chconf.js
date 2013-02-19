@@ -1,7 +1,7 @@
 /**
  * Channel tags
  */
-tvheadend.channelTags = new Ext.data.JsonStore({
+tvheadend.store.channelTags = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
 	fields : [ 'identifier', 'name' ],
@@ -12,10 +12,10 @@ tvheadend.channelTags = new Ext.data.JsonStore({
 	}
 });
 
-tvheadend.channelTags.setDefaultSort('name', 'ASC');
+tvheadend.store.channelTags.setDefaultSort('name', 'ASC');
 
 tvheadend.comet.on('channeltags', function(m) {
-	if (m.reload != null) tvheadend.channelTags.reload();
+	if (m.reload != null) tvheadend.store.channelTags.reload();
 });
 
 /**
@@ -25,7 +25,7 @@ tvheadend.channelrec = new Ext.data.Record.create(
 	[ 'name', 'chid', 'epggrabsrc', 'tags', 'ch_icon', 'epg_pre_start',
 		'epg_post_end', 'number' ]);
 
-tvheadend.channels = new Ext.data.JsonStore({
+tvheadend.store.channels = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
 	fields : tvheadend.channelrec,
@@ -41,7 +41,7 @@ tvheadend.channels = new Ext.data.JsonStore({
 });
 
 tvheadend.comet.on('channels', function(m) {
-	if (m.reload != null) tvheadend.channels.reload();
+	if (m.reload != null) tvheadend.store.channels.reload();
 });
 
 /**
@@ -66,7 +66,7 @@ tvheadend.mergeChannel = function(chan) {
 		labelWidth : 110,
 		defaultType : 'textfield',
 		items : [ new Ext.form.ComboBox({
-			store : tvheadend.channels,
+			store : tvheadend.store.channels,
 			fieldLabel : 'Target channel',
 			name : 'targetchannel',
 			hiddenName : 'targetID',
@@ -157,7 +157,7 @@ tvheadend.chconf = function() {
 		width : 150,
 		editor : new Ext.ux.form.LovCombo({
 			loadingText : 'Loading...',
-			store : tvheadend.epggrabChannels,
+			store : tvheadend.store.epggrabChannels,
 			allowBlank : true,
 			typeAhead : true,
 			minChars : 2,
@@ -179,7 +179,7 @@ tvheadend.chconf = function() {
 			ret = [];
 			tags = value.split(',');
 			for ( var i = 0; i < tags.length; i++) {
-				var tag = tvheadend.channelTags.getById(tags[i]);
+				var tag = tvheadend.store.channelTags.getById(tags[i]);
 				if (typeof tag !== 'undefined') {
 					ret.push(tag.data.name);
 				}
@@ -187,7 +187,7 @@ tvheadend.chconf = function() {
 			return ret.join(', ');
 		},
 		editor : new Ext.ux.form.LovCombo({
-			store : tvheadend.channelTags,
+			store : tvheadend.store.channelTags,
 			mode : 'local',
 			valueField : 'identifier',
 			displayField : 'name'
@@ -283,7 +283,7 @@ tvheadend.chconf = function() {
 	}
 
 	function saveChanges() {
-		var mr = tvheadend.channels.getModifiedRecords();
+		var mr = tvheadend.store.channels.getModifiedRecords();
 		var out = new Array();
 		for ( var x = 0; x < mr.length; x++) {
 			v = mr[x].getChanges();
@@ -298,7 +298,7 @@ tvheadend.chconf = function() {
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
-				tvheadend.channels.commitChanges();
+				tvheadend.store.channels.commitChanges();
 			},
 			failure : function(response, options) {
 				Ext.MessageBox.alert('Message', response.statusText);
@@ -342,7 +342,7 @@ tvheadend.chconf = function() {
 		iconCls : 'undo',
 		text : "Revert changes",
 		handler : function() {
-			tvheadend.channels.rejectChanges();
+			tvheadend.store.channels.rejectChanges();
 		},
 		disabled : true
 	});
@@ -351,7 +351,7 @@ tvheadend.chconf = function() {
 		stripeRows : true,
 		title : 'Channels',
 		iconCls : 'television',
-		store : tvheadend.channels,
+		store : tvheadend.store.channels,
 		plugins : [ actions ],
 		clicksToEdit : 2,
 		cm : cm,
@@ -365,13 +365,13 @@ tvheadend.chconf = function() {
 		view : tvheadend.BufferView
 	});
 
-	tvheadend.channels.on('update', function(s, r, o) {
+	tvheadend.store.channels.on('update', function(s, r, o) {
 		d = s.getModifiedRecords().length == 0
 		saveBtn.setDisabled(d);
 		rejectBtn.setDisabled(d);
 	});
 
-	tvheadend.channelTags.on('load', function(s, r, o) {
+	tvheadend.store.channelTags.on('load', function(s, r, o) {
 		if (grid.rendered) grid.getView().refresh();
 	});
 

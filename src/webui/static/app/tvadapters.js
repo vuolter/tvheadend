@@ -1,7 +1,7 @@
 /**
  * Datastore for adapters
  */
-tvheadend.tvAdapterStore = new Ext.data.JsonStore({
+tvheadend.store.adapters = new Ext.data.JsonStore({
 	root : 'entries',
 	id : 'identifier',
 	fields : [ 'identifier', 'type', 'name', 'path', 'devicename',
@@ -12,25 +12,25 @@ tvheadend.tvAdapterStore = new Ext.data.JsonStore({
 });
 
 tvheadend.comet.on('tvAdapter', function(m) {
-	idx = tvheadend.tvAdapterStore.find('identifier', m.identifier);
+	idx = tvheadend.store.adapters.find('identifier', m.identifier);
 	if (idx == -1) 
 		return;
-	r = tvheadend.tvAdapterStore.getAt(idx);
+	r = tvheadend.store.adapters.getAt(idx);
 	r.beginEdit();
 	for (key in m)
 		r.set(key, m[key]);
 	r.endEdit();
-	tvheadend.tvAdapterStore.commitChanges();
+	tvheadend.store.adapters.commitChanges();
 });
 
 tvheadend.tvadapters = function() {
-  tvheadend.tvAdapterStore.load();
+  tvheadend.store.adapters.load();
 
 	var adapterSelection = new Ext.form.ComboBox({
 		loadingText : 'Loading...',
 		width : 300,
 		displayField : 'name',
-		store : tvheadend.tvAdapterStore,
+		store : tvheadend.store.adapters,
 		mode : 'remote',
 		editable : false,
 		triggerAction : 'all',
