@@ -242,7 +242,7 @@ tvheadend.VLC = function(url) {
 	});
 
 	win.show();
-};
+}
 
 /**
  * This function creates top level tabs based on access so users without 
@@ -453,6 +453,6 @@ tvheadend.app = function() {
 			Ext.QuickTips.init();
 		}
 
-	};
+	}
 }(); // end of app
 

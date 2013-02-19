@@ -422,7 +422,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
  *
  */
 tvheadend.autoreceditor = function() {
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -438,7 +438,7 @@ tvheadend.autoreceditor = function() {
 			{
 				header : "Title (Regexp)",
 				dataIndex : 'title',
-				editor : new fm.TextField({
+				editor : new Ext.form.TextField({
 					allowBlank : true
 				})
 			},
@@ -539,7 +539,7 @@ tvheadend.autoreceditor = function() {
 				renderer : function(value, metadata, record, row, col, store) {
 					return tvheadend.dvrprio.getById(value).data.name;
 				},
-				editor : new fm.ComboBox({
+				editor : new Ext.form.ComboBox({
 					store : tvheadend.dvrprio,
 					triggerAction : 'all',
 					mode : 'local',
@@ -570,13 +570,13 @@ tvheadend.autoreceditor = function() {
 			}, {
 				header : "Created by",
 				dataIndex : 'creator',
-				editor : new fm.TextField({
+				editor : new Ext.form.TextField({
 					allowBlank : false
 				})
 			}, {
 				header : "Comment",
 				dataIndex : 'comment',
-				editor : new fm.TextField({
+				editor : new Ext.form.TextField({
 					allowBlank : false
 				})
 			} ]});

@@ -1,5 +1,5 @@
 tvheadend.acleditor = function() {
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -42,7 +42,7 @@ tvheadend.acleditor = function() {
   columns : [ enabledColumn, {
 		header : "Username",
 		dataIndex : 'username',
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
@@ -51,20 +51,20 @@ tvheadend.acleditor = function() {
 		renderer : function(value, metadata, record, row, col, store) {
 			return '<span class="tvh-grid-unset">Hidden</span>';
 		},
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
 		header : "Prefix",
 		dataIndex : 'prefix',
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, streamingColumn, dvrColumn, dvrallcfgColumn, webuiColumn, adminColumn, {
 		header : "Comment",
 		dataIndex : 'comment',
 		width : 400,
-		editor : new fm.TextField({})
+		editor : new Ext.form.TextField({})
 	} ]});
 
 	var UserRecord = Ext.data.Record.create([ 'enabled', 'streaming', 'dvr',

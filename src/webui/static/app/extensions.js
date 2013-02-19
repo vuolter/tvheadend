@@ -87,7 +87,7 @@ Ext.ux.grid.BufferView = Ext.extend(Ext.grid.GridView, {
 		return {
 			first: Math.max(start, 0),
 			last: Math.min(start + count + 2, this.ds.getCount()-1)
-		};
+		}
 	},
 
 	doRender : function(cs, rs, ds, startRow, colCount, stripe, onlyBody){
@@ -285,7 +285,7 @@ Ext.ux.grid.CheckColumn = function(config){
 		this.id = Ext.id();
 	}
 	this.renderer = this.renderer.createDelegate(this);
-};
+}
 
 // register ptype
 Ext.preg('checkcolumn', Ext.ux.grid.CheckColumn);
@@ -493,7 +493,7 @@ Ext.ux.Multiselect = Ext.extend(Ext.form.Field,  {
         }, this);
         
         this.hiddenName = this.name;
-        var hiddenTag={tag: "input", type: "hidden", value: "", name:this.name};
+        var hiddenTag={tag: "input", type: "hidden", value: "", name:this.name}
         if (this.isFormField) { 
             this.hiddenField = this.el.createChild(hiddenTag);
         } else {
@@ -646,7 +646,7 @@ Ext.ux.grid.ProgressColumn = function(config)
   this.renderer = this.renderer.createDelegate(this);
   this.addEvents('action');
   Ext.ux.grid.ProgressColumn.superclass.constructor.call(this);
-};
+}
 
 Ext.extend(Ext.ux.grid.ProgressColumn, Ext.util.Observable, {
   /**
@@ -677,7 +677,7 @@ Ext.extend(Ext.ux.grid.ProgressColumn, Ext.util.Observable, {
     if(this.editor && grid.isEditor){
       var cfg = {
         scope : this
-      };
+      }
       cfg[this.actionEvent] = this.onClick;
       grid.afterRender = grid.afterRender.createSequence(function()
           {
@@ -790,7 +790,7 @@ if('function' !== typeof RegExp.escape) {
 		}
 		// Note: if pasting from forum, precede ]/\ with backslash manually
 		return s.replace(/([.*+?\^=!:${}()|\[\]\/\\])/g, '\\$1');
-	}; // eo function escape
+	} // eo function escape
 }
 
 /**
@@ -846,7 +846,7 @@ Ext.ux.grid.RowActions = function(config) {
 
 	// call parent
 	Ext.ux.grid.RowActions.superclass.constructor.call(this);
-};
+}
 
 Ext.extend(Ext.ux.grid.RowActions, Ext.util.Observable, {
 
@@ -1063,7 +1063,7 @@ Ext.extend(Ext.ux.grid.RowActions, Ext.util.Observable, {
 
 		// body click handler
 		var view = grid.getView();
-		var cfg = {scope:this};
+		var cfg = {scope:this}
 		cfg[this.actionEvent] = this.onClick;
 		grid.afterRender = grid.afterRender.createSequence(function() {
 			view.mainBody.on(cfg);
@@ -1114,7 +1114,7 @@ Ext.extend(Ext.ux.grid.RowActions, Ext.util.Observable, {
 	 * @return {Object} data to apply to template
 	 */
 	,getData:function(value, cell, record, row, col, store) {
-		return record.data || {};
+		return record.data || {}
 	} // eo function getData
 	// }}}
 	// {{{
@@ -1132,7 +1132,7 @@ Ext.extend(Ext.ux.grid.RowActions, Ext.util.Observable, {
 		Ext.each(actions, function(a, i) {
 			// save callback
 			if(a.iconCls && 'function' === typeof (a.callback || a.cb)) {
-				this.callbacks = this.callbacks || {};
+				this.callbacks = this.callbacks || {}
 				this.callbacks[a.iconCls] = a.callback || a.cb;
 			}
 
@@ -1147,7 +1147,7 @@ Ext.extend(Ext.ux.grid.RowActions, Ext.util.Observable, {
 					: (a.hide ? ('display' === this.hideMode ? 'display:none' :'visibility:hidden;') : '')
 				,align:a.align || 'right'
 				,style:a.style ? a.style : ''
-			};
+			}
 			acts.push(o);
 
 		}, this); // eo actions loop

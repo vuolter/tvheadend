@@ -5,7 +5,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
 
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -180,12 +180,12 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 				var mparams = {
 					entries : Ext.encode(selectedKeys),
 					satconf : satconf
-				};
+				}
 			}
 			else {
 				var mparams = {
 					entries : Ext.encode(selectedKeys)
-				};
+				}
 			}
 
 			Ext.Ajax.request({
@@ -256,7 +256,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 						satConf.clearValue();
 						targetSatConfStore.baseParams = {
 							adapter : combo.value
-						};
+						}
 						targetSatConfStore.load();
 						satConf.focus();
 						satConf.expand();
@@ -388,7 +388,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
  
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -447,7 +447,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 				return value ? value
 					: '<span class="tvh-grid-unset">Unmapped</span>';
 			},
-			editor : new fm.ComboBox({
+			editor : new Ext.form.ComboBox({
 				store : tvheadend.channels,
 				allowBlank : true,
 				typeAhead : true,
@@ -466,7 +466,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 				return value ? value
 					: '<span class="tvh-grid-unset">auto</span>';
 			},
-			editor : new fm.ComboBox({
+			editor : new Ext.form.ComboBox({
 				mode : 'local',
 				store : new Ext.data.SimpleStore({
 					fields : [ 'key', 'value' ],
@@ -556,7 +556,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header: "Preferred CA pid",
 			dataIndex: 'prefcapid',
 			width: 50,
-			editor: new fm.TextField({allowBlank: true})
+			editor: new Ext.form.TextField({allowBlank: true})
 		}, {
 			header : "PMT PID",
 			dataIndex : 'pmt',
@@ -1406,7 +1406,7 @@ tvheadend.dvb_dummy = function(title) {
  *
  */
 tvheadend.dvb_satconf = function(adapterId, lnbStore) {
-	var fm = Ext.form;
+	
 
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
@@ -1414,13 +1414,13 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		header : "Name",
 		dataIndex : 'name',
 		width : 200,
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
 		header : "Switchport",
 		dataIndex : 'port',
-		editor : new fm.NumberField({
+		editor : new Ext.form.NumberField({
 			minValue : 0,
 			maxValue : 63
 		})
@@ -1428,7 +1428,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		header : "LNB type",
 		dataIndex : 'lnb',
 		width : 200,
-		editor : new fm.ComboBox({
+		editor : new Ext.form.ComboBox({
 			store : lnbStore,
 			editable : false,
 			allowBlank : false,
@@ -1442,7 +1442,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		header : "Comment",
 		dataIndex : 'comment',
 		width : 400,
-		editor : new fm.TextField()
+		editor : new Ext.form.TextField()
 	} ]});
 
 	var rec = Ext.data.Record.create([ 'name', 'port', 'comment', 'lnb' ]);

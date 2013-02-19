@@ -105,7 +105,7 @@ tvheadend.v4l_adapter_general = function(adapterData) {
  */
 tvheadend.v4l_services = function(adapterId) {
 
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -123,7 +123,7 @@ tvheadend.v4l_services = function(adapterId) {
 		renderer : function(value, metadata, record, row, col, store) {
 			return value ? value : '<span class="tvh-grid-unset">Unmapped</span>';
 		},
-		editor : new fm.ComboBox({
+		editor : new Ext.form.ComboBox({
 			store : tvheadend.channels,
 			allowBlank : true,
 			typeAhead : true,
@@ -137,7 +137,7 @@ tvheadend.v4l_services = function(adapterId) {
 		header : "Frequency",
 		dataIndex : 'frequency',
 		width : 60,
-		editor : new fm.NumberField({
+		editor : new Ext.form.NumberField({
 			minValue : 10000,
 			maxValue : 1000000000
 		})

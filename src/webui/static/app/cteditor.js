@@ -1,5 +1,5 @@
 tvheadend.cteditor = function() {
-	var fm = Ext.form;
+	
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -27,19 +27,19 @@ tvheadend.cteditor = function() {
   columns : [ enabledColumn, {
 		header : "Name",
 		dataIndex : 'name',
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, internalColumn, {
 		header : "Icon (full URL)",
 		dataIndex : 'icon',
 		width : 400,
-		editor : new fm.TextField({})
+		editor : new Ext.form.TextField({})
 	}, titledIconColumn, {
 		header : "Comment",
 		dataIndex : 'comment',
 		width : 400,
-		editor : new fm.TextField({})
+		editor : new Ext.form.TextField({})
 	} ]});
 
 	var ChannelTagRecord = Ext.data.Record.create([ 'enabled', 'name',
