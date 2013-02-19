@@ -279,9 +279,6 @@ tvheadend.iptv = function(adapterId) {
 		store : store,
 		clicksToEdit : 2,
 		cm : cm,
-		viewConfig : {
-			forceFit : true
-		},
 		selModel : selModel,
 		tbar : [
 			{
@@ -297,7 +294,8 @@ tvheadend.iptv = function(adapterId) {
 				handler : function() {
 					new tvheadend.help('IPTV', 'config_iptv.html');
 				}
-			} ]
+			} ],
+		view : tvheadend.BufferView
 	});
 
 	store.on('update', function(s, r, o) {

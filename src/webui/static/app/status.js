@@ -127,9 +127,7 @@ tvheadend.status_subs = function() {
 		store : tvheadend.subsStore,
 		cm : subsCm,
                 flex: 1,
-		viewConfig : {
-			forceFit : true
-		}
+		view : tvheadend.BufferView
 	});
         return subs;
 }
@@ -200,9 +198,7 @@ tvheadend.status_adapters = function() {
 		store : tvheadend.tvAdapterStore,
 		cm : cm,
                 flex: 1,
-		viewConfig : {
-			forceFit : true
-		}
+		view : tvheadend.BufferView
 	});
         return panel;
 }

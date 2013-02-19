@@ -279,9 +279,6 @@ tvheadend.v4l_services = function(adapterId) {
 		store : store,
 		clicksToEdit : 2,
 		cm : cm,
-		viewConfig : {
-			forceFit : true
-		},
 		selModel : selModel,
 		tbar : [
 			{
@@ -291,7 +288,8 @@ tvheadend.v4l_services = function(adapterId) {
 				iconCls : 'add',
 				text : 'Add service',
 				handler : addRecord
-			}, '-', delButton, '-', saveBtn, rejectBtn ]
+			}, '-', delButton, '-', saveBtn, rejectBtn ],
+		view : tvheadend.BufferView
 	});
 
 	store.on('update', function(s, r, o) {

@@ -5,6 +5,12 @@ tvheadend.conf_dvbin   = null;
 tvheadend.conf_tsdvr   = null;
 tvheadend.conf_csa     = null;
 
+tvheadend.BufferView = new Ext.ux.grid.BufferView({
+	forceFit : true,
+	scrollDelay : false,
+	rowHeight : 29
+});
+	
 /**
  * Displays a help popup window
  */
