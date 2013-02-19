@@ -344,7 +344,7 @@ tvheadend.epg = function() {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.store.channels,
+		store : tvheadend.store.channels2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -357,7 +357,7 @@ tvheadend.epg = function() {
 	var epgFilterChannelTags = new Ext.form.ComboBox({
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.store.channelTags,
+		store : tvheadend.store.channelTags2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
