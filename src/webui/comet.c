@@ -140,10 +140,13 @@ comet_access_update(http_connection_t *hc, comet_mailbox_t *cmb)
 
   htsmsg_add_str(m, "notificationClass", "accessUpdate");
 
-  htsmsg_add_u32(m, "dvr",   !http_access_verify(hc, ACCESS_RECORDER));
-  htsmsg_add_u32(m, "admin", !http_access_verify(hc, ACCESS_ADMIN));
+  htsmsg_add_u32(m, "dvr",       !http_access_verify(hc, ACCESS_RECORDER));
+  htsmsg_add_u32(m, "admin",     !http_access_verify(hc, ACCESS_ADMIN));
+  htsmsg_add_u32(m, "streaming", !http_access_verify(hc, ACCESS_STREAMING));
+  htsmsg_add_u32(m, "dvrall",    !http_access_verify(hc, ACCESS_RECORDER_ALL));
+  htsmsg_add_u32(m, "webui",     !http_access_verify(hc, ACCESS_WEB_INTERFACE));
   
-  htsmsg_add_str(m, "username",  hc->hc_username ?: "admin" );
+  htsmsg_add_str(m, "username",  hc->hc_username ?: "admin");
 
   if(cmb->cmb_messages == NULL)
     cmb->cmb_messages = htsmsg_create_list();
