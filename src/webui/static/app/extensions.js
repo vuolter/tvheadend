@@ -1087,8 +1087,7 @@ Ext.extend(Ext.ux.grid.RowActions, Ext.util.Observable, {
 			});
 			view.groupTextTpl = 
 				 '<div class="ux-grow-action-text">' + view.groupTextTpl +'</div>' 
-				+this.processActions(this.groupActions, this.tplGroup).apply()
-			;
+				+ this.processActions(this.groupActions, this.tplGroup).apply();
 		}
 
 		// cancel click

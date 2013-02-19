@@ -64,7 +64,7 @@ tvheadend.cometPoller = function() {
 		}
 		cometRequest.delay(100);
 	}
-	;
+
 
 	cometRequest.delay(100);
 }

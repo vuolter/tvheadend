@@ -375,7 +375,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 			editable : false
 		})
 	}
-	;
+
 
 	var grid = new Ext.grid.GridPanel({
 		loadMask : true,

@@ -147,7 +147,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 				'Please select at least one item to delete');
 		}
 	}
-	;
+
 
 	function deleteRecord(btn) {
 		if (btn == 'yes') {
