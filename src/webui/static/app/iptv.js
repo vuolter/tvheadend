@@ -182,7 +182,7 @@ tvheadend.iptv = function(adapterId) {
 			}
 		})
 	}
-	;
+
 
 	function delSelected() {
 		var selectedKeys = grid.selModel.selections.keys;
@@ -195,7 +195,7 @@ tvheadend.iptv = function(adapterId) {
 				'Please select at least one item to delete');
 		}
 	}
-	;
+
 
 	function deleteRecord(btn) {
 		if (btn == 'yes') {

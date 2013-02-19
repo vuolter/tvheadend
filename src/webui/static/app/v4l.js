@@ -183,7 +183,7 @@ tvheadend.v4l_services = function(adapterId) {
 			}
 		})
 	}
-	;
+
 
 	function delSelected() {
 		var selectedKeys = grid.selModel.selections.keys;
@@ -196,7 +196,7 @@ tvheadend.v4l_services = function(adapterId) {
 				'Please select at least one item to delete');
 		}
 	}
-	;
+
 
 	function deleteRecord(btn) {
 		if (btn == 'yes') {

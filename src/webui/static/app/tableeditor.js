@@ -40,7 +40,7 @@ tvheadend.tableEditor = function(title, dtable, cm, rec, plugins, store,
 			}
 		})
 	}
-	;
+
 
 	function delSelected() {
 		var selectedKeys = grid.selModel.selections.keys;
@@ -53,7 +53,7 @@ tvheadend.tableEditor = function(title, dtable, cm, rec, plugins, store,
 				'Please select at least one item to delete');
 		}
 	}
-	;
+
 
 	function deleteRecord(btn) {
 		if (btn == 'yes') {
