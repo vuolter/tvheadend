@@ -394,15 +394,18 @@ tvheadend.app = function() {
 
 		// public methods
 		init : function() {			
-			var header = new Ext.Panel({
-				split: true,
-				region: 'north',
-				height : 45,
-				boxMaxHeight : 45,
-				boxMinHeight : 45,
-				border: false,
-        hidden: true,
-				html: '<div id="header"><h1>Tvheadend Web-Panel</h1></div>'
+			tvheadend.header = new Ext.Panel({
+				header : true,
+				border : false,
+				region : 'north',
+				iconCls : 'tvhlogo'
+			});
+			
+			Ext.TaskMgr.start({
+				run : function() {
+					tvheadend.header.setTitle('Welcome ' + '<span class="x-content-highlight">' + tvheadend.accessupdate.username + '</span>' + '<div style="float : right">' + new Date().format('l j F Y , H:i (P') + ' UTC) </div>');
+				},
+				interval : 1000
 			});
 			
 			tvheadend.rootTabPanel = new Ext.TabPanel({
@@ -425,7 +428,7 @@ tvheadend.app = function() {
 					collapsed : true,
 					title : 'System log',
 					margins : '0 0 0 0',
-					tools : [ {
+					tools : [ tvheadend.header, tvheadend.rootTabPanel, {
 						id : 'gear',
 						qtip : 'Enable debug output',
 						handler : function(event, toolEl, panel) {
@@ -437,7 +440,7 @@ tvheadend.app = function() {
 							});
 						}
 					} ]
-				}, tvheadend.rootTabPanel, header ]
+				} ]
 			});
 
 			tvheadend.comet.on('accessUpdate', accessUpdate);
