@@ -155,7 +155,7 @@ tvheadend.miscconf = function() {
 		}
 	});
 
-	var confpanel = new Ext.form.FormPanel({
+	var panel = new Ext.form.FormPanel({
 		title : 'General',
 		iconCls : 'wrench',
 		border : false,
@@ -176,20 +176,20 @@ tvheadend.miscconf = function() {
 	 * Load/Save
 	 * ***************************************************************/
 
-	confpanel.on('render', function() {
-		confpanel.getForm().load({
+	panel.on('render', function() {
+		panel.getForm().load({
 			url : 'config',
 			params : {
 				op : 'loadSettings'
 			},
 			success : function(form, action) {
-				confpanel.enable();
+				panel.enable();
 			}
 		});
 	});
 
 	function saveChanges() {
-		confpanel.getForm().submit({
+		panel.getForm().submit({
 			url : 'config',
 			params : {
 				op : 'saveSettings'
@@ -201,5 +201,5 @@ tvheadend.miscconf = function() {
 		});
 	}
 
-	return confpanel;
+	return panel;
 }
