@@ -448,7 +448,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 					: '<span class="tvh-grid-unset">Unmapped</span>';
 			},
 			editor : new Ext.form.ComboBox({
-				store : tvheadend.channels,
+				store : tvheadend.store.channels,
 				allowBlank : true,
 				typeAhead : true,
 				minChars : 2,
@@ -1377,7 +1377,7 @@ tvheadend.dvb_adapter_general = function(adapterData, satConfStore) {
 	/**
 	 * Subscribe and react on updates for this adapter
 	 */
-	tvheadend.tvAdapterStore.on('update', function(s, r, o) {
+	tvheadend.store.adapters.on('update', function(s, r, o) {
 		if (r.data.identifier != adapterId) return;
 		infoTemplate.overwrite(infoPanel.body, r.data);
 

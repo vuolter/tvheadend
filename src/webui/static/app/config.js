@@ -1,5 +1,5 @@
 // Store: config languages
-tvheadend.languages = new Ext.data.JsonStore({
+tvheadend.store.languages = new Ext.data.JsonStore({
     autoLoad:true,
     root:'entries',
     fields: ['identifier','name'],
@@ -11,7 +11,7 @@ tvheadend.languages = new Ext.data.JsonStore({
 });
 
 // Store: all languages
-tvheadend.config_languages = new Ext.data.JsonStore({
+tvheadend.store.configLanguages = new Ext.data.JsonStore({
     autoLoad:true,
     root:'entries',
     fields: ['identifier','name'],
@@ -22,12 +22,12 @@ tvheadend.config_languages = new Ext.data.JsonStore({
     }
 });
 
-tvheadend.languages.setDefaultSort('name', 'ASC');
+tvheadend.store.languages.setDefaultSort('name', 'ASC');
 
 tvheadend.comet.on('config', function(m) {
     if(m.reload != null) {
-        tvheadend.languages.reload();
-        tvheadend.config_languages.reload();
+        tvheadend.store.languages.reload();
+        tvheadend.store.configLanguages.reload();
     }
 });
 
@@ -64,8 +64,8 @@ tvheadend.miscconf = function() {
 
 	var language = new Ext.ux.ItemSelector({
 		name: 'language',
-		fromStore: tvheadend.languages,
-		toStore: tvheadend.config_languages,
+		fromStore: tvheadend.store.languages,
+		toStore: tvheadend.store.configLanguages,
 		fieldLabel: 'Default Language(s)',
 		dataFields:['identifier', 'name'],
 		msWidth: 190,

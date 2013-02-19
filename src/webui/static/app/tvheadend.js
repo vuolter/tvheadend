@@ -89,7 +89,7 @@ tvheadend.VLC = function(url) {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.channels,
+		store : tvheadend.store.channels,
 		mode : 'local',
 		editable : false,
 		triggerAction : 'all',
