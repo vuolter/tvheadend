@@ -386,9 +386,6 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 		store : dvrStore,
 		cm : dvrCm,
 		plugins : [ actions ],
-		viewConfig : {
-			forceFit : true
-		},
 		tbar : [ {
 			tooltip : 'Schedule a new recording session on the server.',
 			iconCls : 'add',
@@ -406,8 +403,8 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 			displayInfo : true,
 			displayMsg : 'Programs {0} - {1} of {2}',
 			emptyMsg : "No programs to display"
-		})
-
+		}),
+		view : tvheadend.BufferView
 	});
 
 	panel.on('rowclick', rowclicked);

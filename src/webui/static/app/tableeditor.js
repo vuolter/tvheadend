@@ -153,9 +153,6 @@ tvheadend.tableEditor = function(title, dtable, cm, rec, plugins, store,
 		store : store,
 		clicksToEdit : 2,
 		cm : cm,
-		viewConfig : {
-			forceFit : true
-		},
 		selModel : selModel,
 		stripeRows : true,
 		tbar : [
@@ -171,7 +168,8 @@ tvheadend.tableEditor = function(title, dtable, cm, rec, plugins, store,
 				handler : function() {
 					new tvheadend.help(title, helpContent);
 				}
-			} ]
+			} ],
+		view : tvheadend.BufferView
 	});
 	return grid;
 }

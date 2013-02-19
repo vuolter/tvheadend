@@ -355,16 +355,14 @@ tvheadend.chconf = function() {
 		plugins : [ actions ],
 		clicksToEdit : 2,
 		cm : cm,
-		viewConfig : {
-			forceFit : true
-		},
 		selModel : selModel,
 		tbar : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
 			text : 'Help',
 			handler : function() {
 				new tvheadend.help('Channels', 'config_channels.html');
 			}
-		} ]
+		} ],
+		view : tvheadend.BufferView
 	});
 
 	tvheadend.channels.on('update', function(s, r, o) {
