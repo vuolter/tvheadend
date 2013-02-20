@@ -490,12 +490,7 @@ tvheadend.epg = function() {
 				handler : function() {
 					new tvheadend.help('Electronic Program Guide', 'epg.html');
 				}
-			} ],
-
-		bbar : new Ext.ux.grid.livegrid.Toolbar({
-			view : epgView,
-			displayInfo : true
-		})
+			} ]
 	});
 
 	grid.on('rowclick', rowclicked);
