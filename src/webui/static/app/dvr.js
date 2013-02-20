@@ -376,7 +376,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		})
 	}
 
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
 			tooltip : 'Schedule a new recording session on the server.',
@@ -747,7 +747,7 @@ tvheadend.dvrsettings = function() {
 		disabled : true
 	});
 
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ confcombo, {
 			tooltip : 'Save changes made to dvr configuration below',

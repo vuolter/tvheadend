@@ -340,7 +340,7 @@ tvheadend.epggrab = function() {
 		}
 	});
 
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ saveButton, '->', helpButton ]
 	});

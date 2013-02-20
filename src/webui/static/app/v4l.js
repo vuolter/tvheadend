@@ -272,7 +272,7 @@ tvheadend.v4l_services = function(adapterId) {
 		singleSelect : false
 	});
 
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [
 			{

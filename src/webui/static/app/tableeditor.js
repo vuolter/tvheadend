@@ -146,7 +146,7 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		}
 	});
 
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
 			tooltip : 'Create a new entry on the server. '
