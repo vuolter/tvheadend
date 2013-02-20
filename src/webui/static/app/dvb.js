@@ -1408,19 +1408,6 @@ tvheadend.dvb_adapter_general = function(adapterData, satConfStore) {
 /**
  *
  */
-tvheadend.dvb_dummy = function(title) {
-	return new Ext.Panel({
-		layout : 'fit',
-		items : [ {
-			border : false
-		} ],
-		title : title
-	});
-}
-
-/**
- *
- */
 tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	
 
