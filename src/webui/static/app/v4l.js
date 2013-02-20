@@ -92,7 +92,7 @@ tvheadend.v4l_adapter_general = function(adapterData) {
 	/**
 	 * Subscribe and react on updates for this adapter
 	 */
-	tvheadend.store.adapters.on('update', function(s, r, o) {
+	tvheadend.data.adapters.on('update', function(s, r, o) {
 		if (r.data.identifier != adapterId) return;
 		infoTemplate.overwrite(infoPanel.body, r.data);
 	});
@@ -124,7 +124,7 @@ tvheadend.v4l_services = function(adapterId) {
 			return value ? value : '<span class="tvh-grid-unset">Unmapped</span>';
 		},
 		editor : new Ext.form.ComboBox({
-			store : tvheadend.store.channels2,
+			store : tvheadend.data.channels2,
 			allowBlank : true,
 			typeAhead : true,
 			minChars : 2,

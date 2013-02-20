@@ -3,7 +3,7 @@
  */
 tvheadend.status_subs = function() {
 
-	tvheadend.store.subscriptions = new Ext.data.JsonStore({
+	tvheadend.data.subscriptions = new Ext.data.JsonStore({
 		root : 'entries',
 		totalProperty : 'totalCount',
 		fields : [ {
@@ -38,12 +38,12 @@ tvheadend.status_subs = function() {
 
 	tvheadend.comet.on('subscriptions', function(m) {
 
-		if (m.reload != null) tvheadend.store.subscriptions.reload();
+		if (m.reload != null) tvheadend.data.subscriptions.reload();
 
 		if (m.updateEntry != null) {
-			r = tvheadend.store.subscriptions.getById(m.id)
+			r = tvheadend.data.subscriptions.getById(m.id)
 			if (typeof r === 'undefined') {
-				tvheadend.store.subscriptions.reload();
+				tvheadend.data.subscriptions.reload();
 				return;
 			}
 
@@ -53,8 +53,8 @@ tvheadend.status_subs = function() {
 			r.data.errors   = m.errors;
 			r.data.bw       = m.bw
 
-			tvheadend.store.subscriptions.afterEdit(r);
-			tvheadend.store.subscriptions.fireEvent('updated', tvheadend.store.subscriptions, r,
+			tvheadend.data.subscriptions.afterEdit(r);
+			tvheadend.data.subscriptions.fireEvent('updated', tvheadend.data.subscriptions, r,
 				Ext.data.Record.COMMIT);
 		}
 	});
@@ -125,7 +125,7 @@ tvheadend.status_subs = function() {
 		disableSelection : true,
 		title : 'Subscriptions',
 		iconCls : 'eye',
-		store : tvheadend.store.subscriptions,
+		store : tvheadend.data.subscriptions,
 		cm : subsCm,
 		flex: 1,
 		stateful : true,
@@ -199,7 +199,7 @@ tvheadend.status_adapters = function() {
 		disableSelection : true,
 		title : 'Adapters',
 		iconCls : 'hardware',
-		store : tvheadend.store.adapters,
+		store : tvheadend.data.adapters,
 		cm : cm,
 		flex: 1,
 		stateful : true,

@@ -1,5 +1,5 @@
 // Store: config languages
-tvheadend.store.languages = new Ext.data.JsonStore({
+tvheadend.data.languages = new Ext.data.JsonStore({
     autoLoad:true,
     root:'entries',
     fields: ['identifier','name'],
@@ -11,7 +11,7 @@ tvheadend.store.languages = new Ext.data.JsonStore({
 });
 
 // Store: all languages
-tvheadend.store.configLanguages = new Ext.data.JsonStore({
+tvheadend.data.configLanguages = new Ext.data.JsonStore({
     autoLoad:true,
     root:'entries',
     fields: ['identifier','name'],
@@ -22,12 +22,12 @@ tvheadend.store.configLanguages = new Ext.data.JsonStore({
     }
 });
 
-tvheadend.store.languages.setDefaultSort('name', 'ASC');
+tvheadend.data.languages.setDefaultSort('name', 'ASC');
 
 tvheadend.comet.on('config', function(m) {
     if(m.reload != null) {
-        tvheadend.store.languages.reload();
-        tvheadend.store.configLanguages.reload();
+        tvheadend.data.languages.reload();
+        tvheadend.data.configLanguages.reload();
     }
 });
 
@@ -64,8 +64,8 @@ tvheadend.miscconf = function() {
 
 	var language = new Ext.ux.ItemSelector({
 		name: 'language',
-		fromStore: tvheadend.store.languages,
-		toStore: tvheadend.store.configLanguages,
+		fromStore: tvheadend.data.languages,
+		toStore: tvheadend.data.configLanguages,
 		fieldLabel: 'Default Language(s)',
 		dataFields:['identifier', 'name'],
 		msWidth: 190,
@@ -127,7 +127,7 @@ tvheadend.miscconf = function() {
   });
 
   var imagecachePanel = new Ext.form.FieldSet({
-	hidden : tvh.capabilities.indexOf('imagecache') == -1,
+	hidden : tvheadend.capabilities.indexOf('imagecache') == -1,
     title: 'Image Caching',
     width: 700,
     autoHeight: true,
