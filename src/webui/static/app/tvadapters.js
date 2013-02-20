@@ -47,18 +47,22 @@ tvheadend.tvadapters = function() {
 			border : false
 		} ]
 	});
-
-	var panel = new Ext.Panel({
-		title : 'TV Adapters',
-		iconCls : 'hardware',
-		layout : 'fit',
-		tbar : [ adapterSelection, '->', {
+	
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ adapterSelection, '->', {
 			text : 'Help',
 			handler : function() {
 				new tvheadend.help('DVB', 'config_dvb.html');
 			}
-		} ],
-
+		} ]
+	});
+	
+	var panel = new Ext.Panel({
+		title : 'TV Adapters',
+		iconCls : 'hardware',
+		layout : 'fit',
+		tbar : tbar,
 		items : [ dummyadapter ]
 	});
 

@@ -154,6 +154,11 @@ tvheadend.miscconf = function() {
 		}
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveButton, '->', helpButton ]
+	});
+	
 	var panel = new Ext.form.FormPanel({
 		title : 'General',
 		iconCls : 'wrench',
@@ -168,7 +173,7 @@ tvheadend.miscconf = function() {
 		autoHeight : true,
 		items : [ language, dvbscanPath,
               imagecachePanel, tvhtimePanel ],
-		tbar : [ saveButton, '->', helpButton ]
+		tbar : tbar
 	});
 
 	/* ****************************************************************

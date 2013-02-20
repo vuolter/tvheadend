@@ -481,43 +481,46 @@ tvheadend.epg = function() {
 		nearLimit : 100
 	});
 
-	var tbar = [
-		epgFilterTitle,
-		'-',
-		epgFilterChannels,
-		'-',
-		epgFilterChannelTags,
-		'-',
-		epgFilterContentGroup,
-		'-',
-		{
-			text : 'Reset',
-			handler : epgQueryClear
-		},
-		'->',
-		{
-			text : 'Watch TV',
-			iconCls : 'eye',
-			handler : function() {
-				new tvheadend.VLC();
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [
+			epgFilterTitle,
+			'-',
+			epgFilterChannels,
+			'-',
+			epgFilterChannelTags,
+			'-',
+			epgFilterContentGroup,
+			'-',
+			{
+				text : 'Reset',
+				handler : epgQueryClear
+			},
+			'->',
+			{
+				text : 'Watch TV',
+				iconCls : 'eye',
+				handler : function() {
+					new tvheadend.VLC();
+				}
+			},
+			'-',
+			{
+				disabled : !tvheadend.accessupdate.dvr,
+				text : 'Create AutoRec',
+				iconCls : 'wand',
+				tooltip : 'Create an automatic recording entry that will '
+						+ 'record all future programmes that matches '
+						+ 'the current query.',
+				handler : createAutoRec
+			}, '-', {
+				text : 'Help',
+				handler : function() {
+					new tvheadend.help('Electronic Program Guide', 'epg.html');
+				}
 			}
-		},
-		'-',
-		{
-			disabled : !tvheadend.accessupdate.dvr,
-			text : 'Create AutoRec',
-			iconCls : 'wand',
-			tooltip : 'Create an automatic recording entry that will '
-				+ 'record all future programmes that matches '
-				+ 'the current query.',
-			handler : createAutoRec
-		}, '-', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('Electronic Program Guide', 'epg.html');
-			}
-		}
-	];
+		]
+	});
 	
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
 		enableColumnMove : false,

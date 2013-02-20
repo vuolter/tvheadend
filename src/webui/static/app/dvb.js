@@ -360,6 +360,17 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ delBtn, copyBtn, '-', saveBtn, rejectBtn, '-', {
+			text : 'Add mux(es) manually...',
+			iconCls : 'add',
+			handler : function() {
+				tvheadend.addMuxManually(adapterData, satConfStore)
+			}
+		} ]
+	});
+	
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "multiplexesGrid",
 		stripeRows : true,
@@ -371,13 +382,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		selModel : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : [ delBtn, copyBtn, '-', saveBtn, rejectBtn, '-', {
-			text : 'Add mux(es) manually...',
-			iconCls : 'add',
-			handler : function() {
-				tvheadend.addMuxManually(adapterData, satConfStore)
-			}
-		} ],
+		tbar : tbar,
 		view : tvheadend.BufferView
 	});
 
@@ -682,6 +687,11 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		mapBtn.setDisabled(s.getCount() == 0);
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveBtn, rejectBtn, '-', mapBtn ]
+	});
+	
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "servicesGrid",
 		stripeRows : true,
@@ -693,7 +703,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		selModel : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : [ saveBtn, rejectBtn, '-', mapBtn ],
+		tbar : tbar,
 		view : tvheadend.BufferView
 	});
 	return grid;

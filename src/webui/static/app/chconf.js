@@ -373,6 +373,16 @@ tvheadend.chconf = function() {
 		disabled : true
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
+			text : 'Help',
+			handler : function() {
+				new tvheadend.help('Channels', 'config_channels.html');
+			}
+		} ]
+	});
+	
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "channelsGrid",
 		stripeRows : true,
@@ -385,12 +395,7 @@ tvheadend.chconf = function() {
 		selModel : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('Channels', 'config_channels.html');
-			}
-		} ],
+		tbar : tbar,
 		view : tvheadend.BufferView
 	});
 	
