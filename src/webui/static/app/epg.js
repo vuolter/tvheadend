@@ -185,8 +185,7 @@ tvheadend.epgDetails = function(event) {
 }
 
 tvheadend.epg = function() {
-	var xg = Ext.grid;
-
+	
 	var actions = new Ext.ux.grid.RowActions({
 		header : '',
 		width : 20,
@@ -245,103 +244,143 @@ tvheadend.epg = function() {
 		var now = new Date;
 		var start = record.get('start');
 
-		if (now.getTime() > start.getTime()) {
-			meta.attr = 'style="font-weight:bold;"';
+		if(now.getTime() >= start.getTime()) 
+			meta.attr = 'style="font-weight : bold;"';
+	}
+	
+	function renderDay(value, meta, record, rowIndex, colIndex, store){
+        setMetaAttr(meta, record);
+		
+		var start = record.get('start');
+		var now = new Date();
+		var tomorrow = new Date().add(Date.DAY, 2).clearTime();
+		var today = new Date().add(Date.DAY, 1).clearTime();
+
+		if(start >= tomorrow) {
+			if(start.getMonth() == now.getMonth())
+				value = start.format('D j');
+			else
+				value = start.format('D j (M)');
 		}
-	}
+		else if(start >= today)
+			value = 'Tomorrow';
+		else if(start > now)
+			value = 'Today';
+		else
+			value = '<img class="x-icon-airing" src="static/icons/transmit_orange.png" />' + 'Now';
 
-	function renderDate(value, meta, record, rowIndex, colIndex, store) {
+		return value;
+    }
+	
+    function renderTime(value, meta, record, rowIndex, colIndex, store){
+        setMetaAttr(meta, record);
+		return new Date(value).format('H:i');
+    }
+
+	function renderDuration(value, meta, record, rowIndex, colIndex, store){
 		setMetaAttr(meta, record);
 
-		var dt = new Date(value);
-		return dt.format('l H:i');
-	}
+		var value = Math.floor(value / 60);
 
-	function renderDuration(value, meta, record, rowIndex, colIndex, store) {
-		setMetaAttr(meta, record);
-
-		value = Math.floor(value / 60);
-
-		if (value >= 60) {
+		if(value >= 60) {
 			var min = value % 60;
-			var hours = Math.floor(value / 60);
-
-			if (min == 0) {
-				return hours + ' hrs';
-			}
-			return hours + ' hrs, ' + min + ' min';
+			var hrs = Math.floor(value / 60)
+			
+			return hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
 		}
-		else {
+		else 
 			return value + ' min';
-		}
-	}
+    }
 
 	function renderText(value, meta, record, rowIndex, colIndex, store) {
 		setMetaAttr(meta, record);
-
-		return value;
+		return value ? value
+					 : '<span class="tvh-grid-gray">Unknown</span>';
 	}
 
-	var epgCm = new Ext.grid.ColumnModel([ actions, {
-		width : 250,
-		id : 'title',
-		header : "Title",
-		dataIndex : 'title',
-		renderer : renderText
-	}, {
-		width : 250,
-		id : 'subtitle',
-		header : "SubTitle",
-		dataIndex : 'subtitle',
-		renderer : renderText
-	}, {
-		width : 100,
-		id : 'episode',
-		header : "Episode",
-		dataIndex : 'episode',
-		renderer : renderText
-	}, {
-		width : 100,
-		id : 'start',
-		header : "Start",
-		dataIndex : 'start',
-		renderer : renderDate
-	}, {
-		width : 100,
-		hidden : true,
-		id : 'end',
-		header : "End",
-		dataIndex : 'end',
-		renderer : renderDate
-	}, {
-		width : 100,
-		id : 'duration',
-		header : "Duration",
-		dataIndex : 'duration',
-		renderer : renderDuration
-	}, {
-		width : 250,
-		id : 'channel',
-		header : "Channel",
-		dataIndex : 'channel',
-		renderer : renderText
-	}, {
-		width : 55,
-		id : 'number',
-		header : "Ch. #",
-		dataIndex : 'number',
-		renderer : renderText,
-		hidden : true
-	}, {
-		width : 250,
-		id : 'contenttype',
-		header : "Content Type",
-		dataIndex : 'contenttype',
-		renderer : function(v) {
-			return tvheadend.contentGroupLookupName(v);
-		}
-	} ]);
-
+	var epgCm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ 
+			actions,
+			{
+				width : 85,
+				id : 'day',
+				header : "Airing",
+				dataIndex : 'day',
+				renderer : renderDay,
+				hideable : false
+			}, {
+				width : 85,
+				id : 'start',
+				header : "Start",
+				dataIndex : 'start',
+				renderer : renderTime,
+				hideable : false
+			}, {
+				width : 85,
+				id : 'end',
+				header : "End",
+				dataIndex : 'end',
+				renderer : renderTime,
+				hideable : false
+			}, {
+				width : 150,
+				id : 'channel',
+				header : "Channel",
+				dataIndex : 'channel',
+				renderer : renderText,
+			}, {
+				width : 55,
+				id : 'number',
+				header : "Ch. #",
+				dataIndex : 'number',
+				renderer : renderText,
+				hidden : true
+			}, {
+				width : 400,
+				id : 'title',
+				header : "Title",
+				dataIndex : 'title',
+				renderer : renderText,
+				hideable : false
+			}, {
+				width : 300,
+				id : 'subtitle',
+				header : "Subtitle",
+				dataIndex : 'subtitle',
+				renderer : renderText
+			}, {
+				width : 85,
+				id : 'episode',
+				header : "Episode",
+				dataIndex : 'episode',
+				renderer : renderText
+			}, {
+				width : 400,
+				id : 'description',
+				header : "Description",
+				dataIndex : 'description',
+				renderer : renderText,
+				hidden : true
+			}, {
+				width : 150,
+				id : 'contenttype',
+				header : "Genre",
+				dataIndex : 'contenttype',
+				renderer : function(value, metadata, record, row, col, store) {
+					setMetaAttr(metadata, record);
+					return tvheadend.contentGroupLookupName(value);
+				}
+			}, {
+				width : 100,
+				id : 'duration',
+				header : "Duration",
+				dataIndex : 'duration',
+				renderer : renderDuration
+			}
+		]
+	});
+	
 	// Title search box
 
 	var epgFilterTitle = new Ext.form.TextField({
@@ -437,60 +476,63 @@ tvheadend.epg = function() {
 	});
 
 	var epgView = new Ext.ux.grid.livegrid.GridView({
-		nearLimit : 100,
-		loadMask : {
-			msg : 'Buffering. Please wait...'
-		}
+		forceFit : true,
+		loadMask : { msg : 'Buffering. Please wait...' },
+		nearLimit : 100
 	});
 
+	var tbar = [
+		epgFilterTitle,
+		'-',
+		epgFilterChannels,
+		'-',
+		epgFilterChannelTags,
+		'-',
+		epgFilterContentGroup,
+		'-',
+		{
+			text : 'Reset',
+			handler : epgQueryClear
+		},
+		'->',
+		{
+			text : 'Watch TV',
+			iconCls : 'eye',
+			handler : function() {
+				new tvheadend.VLC();
+			}
+		},
+		'-',
+		{
+			disabled : !tvheadend.accessupdate.dvr,
+			text : 'Create AutoRec',
+			iconCls : 'wand',
+			tooltip : 'Create an automatic recording entry that will '
+				+ 'record all future programmes that matches '
+				+ 'the current query.',
+			handler : createAutoRec
+		}, '-', {
+			text : 'Help',
+			handler : function() {
+				new tvheadend.help('Electronic Program Guide', 'epg.html');
+			}
+		}
+	];
+	
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
+		enableColumnMove : false,
 		id : "epgGrid",
-		enableDragDrop : false,
 		cm : epgCm,
-		plugins : [ actions ],
-		title : 'Electronic Program Guide',
 		iconCls : 'newspaper',
-		store : epgStore,
+		plugins : [ actions ],
 		selModel : new Ext.ux.grid.livegrid.RowSelectionModel(),
-		view : epgView,
+		store : epgStore,
 		stateful : true,
 		stateId : this.id,
-		tbar : [
-			epgFilterTitle,
-			'-',
-			epgFilterChannels,
-			'-',
-			epgFilterChannelTags,
-			'-',
-			epgFilterContentGroup,
-			'-',
-			{
-				text : 'Reset',
-				handler : epgQueryClear
-			},
-			'->',
-			{
-				text : 'Watch TV',
-				iconCls : 'eye',
-				handler : function() {
-					new tvheadend.VLC();
-				}
-			},
-			'-',
-			{
-				disabled : !tvheadend.accessupdate.dvr,
-				text : 'Create AutoRec',
-				iconCls : 'wand',
-				tooltip : 'Create an automatic recording entry that will '
-					+ 'record all future programmes that matches '
-					+ 'the current query.',
-				handler : createAutoRec
-			}, '-', {
-				text : 'Help',
-				handler : function() {
-					new tvheadend.help('Electronic Program Guide', 'epg.html');
-				}
-			} ]
+		stripeRows : true,
+		tbar : tbar,
+		title : 'Electronic Program Guide',
+		view : epgView
 	});
 
 	grid.on('rowclick', rowclicked);
