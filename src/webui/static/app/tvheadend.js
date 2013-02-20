@@ -1,16 +1,39 @@
 tvheadend.accessupdate = null;
-tvheadend.capabilties  = null;
-tvheadend.conf_chepg   = null;
-tvheadend.conf_dvbin   = null;
-tvheadend.conf_tsdvr   = null;
-tvheadend.conf_csa     = null;
+tvheadend.capabilities  = null;
 
+/**
+ * BufferView
+ */
 tvheadend.BufferView = new Ext.ux.grid.BufferView({
 	forceFit : true,
 	scrollDelay : false,
 	rowHeight : 29
 });
-	
+
+/**
+ * Dummy maker
+ */
+tvheadend.dummy = function(title, icon) {
+	return new Ext.Panel({
+		title : title,
+		iconCls : icon,
+		items : { hidden : true },
+		disabled : true,
+		hidden : !title && !icon
+	});
+}
+
+/**
+ * Log writer
+ */
+tvheadend.log = function(msg, style) {
+	s = style ? '<div style="' + style + '">' : '<div>'
+
+	sl = Ext.get('systemlog');
+	e = Ext.DomHelper.append(sl, s + '<pre>' + msg + '</pre></div>');
+	e.scrollIntoView('systemlog', false);
+}
+
 /**
  * Displays a help popup window
  */
@@ -39,21 +62,6 @@ tvheadend.help = function(title, pagename) {
 		}
 	});
 }
-
-/*
- * General capabilities
- */
-Ext.Ajax.request({
-  url: 'capabilities',
-  success: function(d)
-  {
-    if (d && d.responseText)
-      tvheadend.capabilities = Ext.util.JSON.decode(d.responseText);
-    if (tvheadend.capabilities && tvheadend.accessupdate)
-      accessUpdate(tvheadend.accessUpdate);
-    
-  }
-});
 
 /**
  * Displays a mediaplayer using VLC plugin
@@ -245,219 +253,171 @@ tvheadend.VLC = function(url) {
 }
 
 /**
- * This function creates top level tabs based on access so users without 
- * access to subsystems won't see them.
- *
- * Obviosuly, access is verified in the server too.
+ * Main
  */
-function accessUpdate(o) {
-  tvheadend.accessUpdate = o;
-  if (!tvheadend.capabilities)
-    return;
-
-  if (o.dvr == true && tvheadend.dvrpanel == null) {
-    tvheadend.dvrpanel = new tvheadend.dvr;
-    tvheadend.rootTabPanel.add(tvheadend.dvrpanel);
-  }
-
-  if (o.admin == true && tvheadend.confpanel == null) {
-    var tabs1 = [
-      new tvheadend.miscconf,
-      new tvheadend.acleditor
-    ]
-    var tabs2;
-
-    /* DVB inputs */
-    tabs2 = [];
-    if (tvheadend.capabilities.indexOf('linuxdvb') != -1 ||
-        tvheadend.capabilities.indexOf('v4l')      != -1) {
-      tabs2.push(new tvheadend.tvadapters);
-    }
-    tabs2.push(new tvheadend.iptv);
-    tvheadend.conf_dvbin = new Ext.TabPanel({
-      activeTab: 0,
-      autoScroll: true,
-      title: 'DVB Inputs',
-      iconCls: 'hardware',
-      items : tabs2
-    });
-    tabs1.push(tvheadend.conf_dvbin);
-
-    /* Channel / EPG */
-    tvheadend.conf_chepg = new Ext.TabPanel({
-      activeTab: 0,
-      autoScroll: true,
-      title : 'Channel / EPG',
-      iconCls : 'television',
-      items : [
-        new tvheadend.chconf,
-        new tvheadend.cteditor,
-        new tvheadend.epggrab
-      ]
-    });
-    tabs1.push(tvheadend.conf_chepg);
-
-    /* DVR / Timeshift */
-    tabs2 = [ new tvheadend.dvrsettings ];
-    if (tvheadend.capabilities.indexOf('timeshift') != -1) {
-      tabs2.push(new tvheadend.timeshift)
-    }
-    tvheadend.conf_tsdvr = new Ext.TabPanel({
-      activeTab: 0,
-      autoScroll: true,
-      title: 'Recording',
-      iconCls: 'drive',
-      items : tabs2
-    });
-    tabs1.push(tvheadend.conf_tsdvr);
-
-    /* CSA */
-    if (tvheadend.capabilities.indexOf('cwc')      != -1) {
-      tvheadend.conf_csa = new Ext.TabPanel({
-        activeTab: 0,
-        autoScroll: true,
-        title: 'CSA',
-        iconCls: 'key',
-        items: [
-          new tvheadend.cwceditor,
-          new tvheadend.capmteditor
-        ]
-      });
-      tabs1.push(tvheadend.conf_csa);
-    }
-
-    tvheadend.confpanel = new Ext.TabPanel({
-      activeTab : 0,
-      autoScroll : true,
-      title : 'Configuration',
-      iconCls : 'wrench',
-      items : tabs1
-    });
-
-    tvheadend.rootTabPanel.add(tvheadend.confpanel);
-    tvheadend.confpanel.doLayout();
-  }
-
-  if (o.admin == true && tvheadend.statuspanel == null) {
-    tvheadend.statuspanel = new tvheadend.status;
-    tvheadend.rootTabPanel.add(tvheadend.statuspanel);
-  }
-
-  if (tvheadend.aboutPanel == null) {
-    tvheadend.aboutPanel = new Ext.Panel({
-      border : false,
-      layout : 'fit',
-      title : 'About',
-      iconCls : 'info',
-      autoLoad : 'about.html'
-    });
-    tvheadend.rootTabPanel.add(tvheadend.aboutPanel);
-  }
-
-  tvheadend.rootTabPanel.doLayout();
-}
-
-/**
- *
- */
-function setServerIpPort(o) {
-	tvheadend.serverIp = o.ip;
-	tvheadend.serverPort = o.port;
-}
-
-function makeRTSPprefix() {
-	return 'rtsp://' + tvheadend.serverIp + ':' + tvheadend.serverPort + '/';
-}
-
-/**
- *
- */
-tvheadend.log = function(msg, style) {
-	s = style ? '<div style="' + style + '">' : '<div>'
-
-	sl = Ext.get('systemlog');
-	e = Ext.DomHelper.append(sl, s + '<pre>' + msg + '</pre></div>');
-	e.scrollIntoView('systemlog');
-}
-
-/**
- *
- */
-//create application
 tvheadend.app = function() {
+	
+	Ext.Ajax.request({
+		url: 'capabilities',
+		success: function(d) {
+			tvheadend.capabilities = Ext.util.JSON.decode(d.responseText);
+		}
+	});
 
+	function accessUpdate(o) {
+		
+		if (tvheadend.accessupdate) {
+			tvheadend.accessupdate = o;
+			tvheadend.viewport.doLayout();
+			return;
+		}
+		
+		tvheadend.accessupdate = o;
+		
+		tvheadend.header = new Ext.Panel({
+			header : true,
+			border : false,
+			region : 'north',
+			iconCls : 'htslogo'
+		});
+		
+		Ext.TaskMgr.start({
+			run : function() {
+				tvheadend.header.setTitle('Welcome ' + '<span class="x-content-highlight">' + tvheadend.accessupdate.username + '</span>' + '<div style="float : right">' + new Date().format('l j F Y , H:i (P') + ' UTC) </div>');
+			},
+			interval : 1000
+		});
+		
+		//if HTML5 localStorage is supported by browser use it for storage panels state, else submit error into log
+		window.localStorage ? Ext.state.Manager.setProvider(new Ext.ux.state.LocalStorage({ namePrefix : 'tvh-' }))
+							: tvhlog(LOG_NOTICE, "webui", "HTML5 localStorage not supported by browser");
+		
+		tvheadend.epgPanel = new tvheadend.epg;
+		
+		if(tvheadend.accessupdate.dvr) {
+			tvheadend.dvrPanel = new tvheadend.dvr;
+			tvheadend.dvrsettingsPanel = new tvheadend.dvrsettings;
+		}
+		else
+			tvheadend.dvrPanel = tvheadend.dvrsettingsPanel = new tvheadend.dummy('Digital Video Recorder','drive');
+		
+		if(tvheadend.accessupdate.streaming)
+			tvheadend.channelsPanel = new tvheadend.chconf;
+		else
+			tvheadend.channelsPanel = new tvheadend.dummy('Channels','tv');
+		
+		if(tvheadend.accessupdate.admin) {			
+			tvheadend.miscconfPanel = new tvheadend.miscconf;
+			tvheadend.tvadaptersPanel = new tvheadend.tvadapters;
+			tvheadend.timeshiftPanel = new tvheadend.timeshift;
+			tvheadend.epggrabPanel = new tvheadend.epggrab;
+			tvheadend.ctagPanel = new tvheadend.cteditor;
+			tvheadend.iptvPanel = new tvheadend.iptv;
+			tvheadend.aclPanel = new tvheadend.acleditor;
+			tvheadend.cwcPanel = new tvheadend.cwceditor;
+			tvheadend.capmtPanel = new tvheadend.capmteditor;
+			
+			tvheadend.configPanel = new Ext.TabPanel({
+				activeTab : 0,
+				enableTabScroll : true,
+				title : 'Configuration',
+				iconCls : 'wrench-blue',
+				items : [ tvheadend.miscconfPanel, tvheadend.tvadaptersPanel, tvheadend.timeshiftPanel,
+						  tvheadend.epggrabPanel, tvheadend.dvrsettingsPanel, tvheadend.ctagPanel,
+						  tvheadend.iptvPanel, tvheadend.aclPanel, tvheadend.cwcPanel, tvheadend.capmtPanel ]
+			});
+			
+			tvheadend.statusPanel = new tvheadend.status;
+		}
+		else {
+			tvheadend.configPanel = new tvheadend.dummy('Configuration','wrench-blue');
+			tvheadend.statusPanel = new tvheadend.dummy('Status','bulb');
+		}
+	
+		tvheadend.aboutPanel = new Ext.Panel({
+			border : false,
+			layout : 'fit',
+			title : 'About',
+			iconCls : 'info',
+			autoLoad : 'about.html'
+		});
+		
+		tvheadend.tabsPanel = new Ext.TabPanel({
+			region : 'center',
+			activeTab : 0,
+			enableTabScroll : true,
+			items : [ tvheadend.epgPanel, tvheadend.dvrPanel, tvheadend.channelsPanel,
+					  tvheadend.configPanel, tvheadend.statusPanel, tvheadend.aboutPanel ]
+		});
+		
+		tvheadend.logPanel = new Ext.Panel({
+			region : 'south',
+			contentEl : 'systemlog',
+			autoScroll : true,
+			collapsible : true,
+			collapsed : true,
+			split : true,
+			height : 150,
+			minSize : 100,
+			maxSize : 630,
+			title : 'System log',
+			iconCls : 'cog',
+			margins : '0 0 0 0',
+			tools : [ {
+				id : 'gear',
+				qtip : 'Enable debug output',
+				handler : function(event, toolEl, panel){
+					Ext.Ajax.request({
+						url : 'comet/debug',
+						params : { boxid : tvheadend.boxid }
+					});
+				}
+			} ]
+		});
+		
+		tvheadend.viewport = new Ext.Viewport({
+			region : 'center',
+			layout : 'border',
+			bufferResize : 150,
+			items : [ tvheadend.header, 
+					  tvheadend.tabsPanel,
+					  tvheadend.logPanel ]
+		});
+			
+		tvheadend.comet.on('logmessage', function(m) {
+			tvheadend.log(m.logtxt);
+		});
+		
+	/*
+		Ext.apply(Ext.QuickTips.getQuickTip(), {
+			anchor : 'top',
+			anchorOffset : 85
+		});
+	*/
+		Ext.QuickTips.init();
+	}
+	
+	function setServerIpPort(o) {
+		tvheadend.accessupdate.ip = o.ip;
+		tvheadend.accessupdate.port = o.port;
+	}
+/*
+	function makeRTSPprefix() {
+		return 'rtsp : //' + tvheadend.serverIp + ' : ' + tvheadend.serverPort + '/';
+	}
+*/
 	// public space
 	return {
-
+		
 		// public methods
 		init : function() {
-		
-			//if HTML5 localStorage is supported by browser use it for storage panels state, else submit error into log
-			window.localStorage ? Ext.state.Manager.setProvider(new Ext.ux.state.LocalStorage({ namePrefix : 'tvh-' }))
-								: tvhlog(LOG_NOTICE, "webui", "HTML5 localStorage not supported by browser");
 			
-			tvheadend.header = new Ext.Panel({
-				header : true,
-				border : false,
-				region : 'north',
-				iconCls : 'htslogo'
+			tvheadend.comet.on({
+				'accessUpdate' : accessUpdate,
+				'setServerIpPort' : setServerIpPort
 			});
 			
-			Ext.TaskMgr.start({
-				run : function() {
-					tvheadend.header.setTitle('Welcome ' + '<span class="x-content-highlight">' + tvheadend.accessupdate.username + '</span>' + '<div style="float : right">' + new Date().format('l j F Y , H:i (P') + ' UTC) </div>');
-				},
-				interval : 1000
-			});
-			
-			tvheadend.rootTabPanel = new Ext.TabPanel({
-				region : 'center',
-				activeTab : 0,
-				items : [ new tvheadend.epg ]
-			});
-
-			var viewport = new Ext.Viewport({
-				layout : 'border',
-				items : [{
-					region : 'south',
-					contentEl : 'systemlog',
-					split : true,
-					autoScroll : true,
-					height : 150,
-					minSize : 100,
-					maxSize : 400,
-					collapsible : true,
-					collapsed : true,
-					title : 'System log',
-					margins : '0 0 0 0',
-					tools : [ tvheadend.header, tvheadend.rootTabPanel, {
-						id : 'gear',
-						qtip : 'Enable debug output',
-						handler : function(event, toolEl, panel) {
-							Ext.Ajax.request({
-								url : 'comet/debug',
-								params : {
-									boxid : tvheadend.boxid
-								}
-							});
-						}
-					} ]
-				} ]
-			});
-
-			tvheadend.comet.on('accessUpdate', accessUpdate);
-
-			tvheadend.comet.on('setServerIpPort', setServerIpPort);
-
-			tvheadend.comet.on('logmessage', function(m) {
-				tvheadend.log(m.logtxt);
-			});
-
 			new tvheadend.cometPoller;
-
-			Ext.QuickTips.init();
 		}
-
 	}
 }(); // end of app
-
