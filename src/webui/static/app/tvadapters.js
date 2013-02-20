@@ -24,7 +24,10 @@ tvheadend.comet.on('tvAdapter', function(m) {
 });
 
 tvheadend.tvadapters = function() {
-  tvheadend.store.adapters.load();
+	if(tvheadend.capabilities.indexOf('linuxdvb') == -1 && tvheadend.capabilities.indexOf('v4l') == -1)
+		return new tvheadend.dummy('TV Adapters','hardware');
+	
+	tvheadend.store.adapters.load();
 
 	var adapterSelection = new Ext.form.ComboBox({
 		loadingText : 'Loading...',

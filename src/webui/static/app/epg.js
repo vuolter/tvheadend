@@ -80,9 +80,11 @@ tvheadend.epgDetails = function(event) {
 		height : 300,
 		constrainHeader : true,
 		buttons : [ confcombo, new Ext.Button({
+			disabled : !tvheadend.accessupdate.dvr,
 			handler : recordEvent,
 			text : "Record program"
 		}), new Ext.Button({
+			disabled : !tvheadend.accessupdate.dvr,
 			handler : recordSeries,
 			text : event.serieslink ? "Record series" : "Autorec"
 		}) ],
@@ -476,6 +478,7 @@ tvheadend.epg = function() {
 			},
 			'-',
 			{
+				disabled : !tvheadend.accessupdate.dvr,
 				text : 'Create AutoRec',
 				iconCls : 'wand',
 				tooltip : 'Create an automatic recording entry that will '
