@@ -39,14 +39,6 @@ tvheadend.tvadapters = function() {
 		triggerAction : 'all',
 		emptyText : 'Select TV adapter...'
 	});
-
-	var dummyadapter = new Ext.Panel({
-		region : 'center',
-		layout : 'fit',
-		items : [ {
-			border : false
-		} ]
-	});
 	
 	var tbar = Ext.Toolbar({
 		enableOverflow : true,
@@ -63,7 +55,7 @@ tvheadend.tvadapters = function() {
 		iconCls : 'hardware',
 		layout : 'fit',
 		tbar : tbar,
-		items : [ dummyadapter ]
+		items : [ new tvheadend.dummy ]
 	});
 
 	adapterSelection.on('select', function(c, r) {
