@@ -481,7 +481,7 @@ tvheadend.epg = function() {
 		nearLimit : 100
 	});
 
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [
 			epgFilterTitle,

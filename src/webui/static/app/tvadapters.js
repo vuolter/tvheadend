@@ -40,7 +40,7 @@ tvheadend.tvadapters = function() {
 		emptyText : 'Select TV adapter...'
 	});
 	
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ adapterSelection, '->', {
 			text : 'Help',

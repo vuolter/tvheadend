@@ -373,7 +373,7 @@ tvheadend.chconf = function() {
 		disabled : true
 	});
 
-	var tbar = Ext.Toolbar({
+	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
 			text : 'Help',
