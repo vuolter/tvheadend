@@ -1,4 +1,4 @@
-tvheadend.store.brands = new Ext.data.JsonStore({
+tvheadend.data.brands = new Ext.data.JsonStore({
 	root : 'entries',
 	fields : [ 'uri', 'title' ],
 	autoLoad : true,
@@ -9,7 +9,7 @@ tvheadend.store.brands = new Ext.data.JsonStore({
 });
 //WIBNI: might want this store to periodically update
 
-tvheadend.store.contentGroup = new Ext.data.JsonStore({
+tvheadend.data.contentGroup = new Ext.data.JsonStore({
 	root : 'entries',
 	fields : [ 'name', 'code' ],
 	autoLoad : true,
@@ -18,14 +18,14 @@ tvheadend.store.contentGroup = new Ext.data.JsonStore({
 
 tvheadend.contentGroupLookupName = function(code) {
 	ret = "";
-	tvheadend.store.contentGroup.each(function(r) {
+	tvheadend.data.contentGroup.each(function(r) {
 		if (r.data.code == code) ret = r.data.name;
 		else if (ret == "" && r.data.code == (code & 0xF0)) ret = r.data.name;
 	});
 	return ret;
 }
 
-tvheadend.store.contentGroup.setDefaultSort('code', 'ASC');
+tvheadend.data.contentGroup.setDefaultSort('code', 'ASC');
 
 tvheadend.epgDetails = function(event) {
 
@@ -62,7 +62,7 @@ tvheadend.epgDetails = function(event) {
 	content += '<div id="altbcast"></div>';
 
 	var confcombo = new Ext.form.ComboBox({
-		store : tvheadend.store.configNames,
+		store : tvheadend.data.configNames,
 		triggerAction : 'all',
 		mode : 'local',
 		valueField : 'identifier',
@@ -355,7 +355,7 @@ tvheadend.epg = function() {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.store.channels2,
+		store : tvheadend.data.channels2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -368,7 +368,7 @@ tvheadend.epg = function() {
 	var epgFilterChannelTags = new Ext.form.ComboBox({
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.store.channelTags2,
+		store : tvheadend.data.channelTags2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -382,7 +382,7 @@ tvheadend.epg = function() {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.store.contentGroup,
+		store : tvheadend.data.contentGroup,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
