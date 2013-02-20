@@ -376,7 +376,21 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		})
 	}
 
-
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ {
+			tooltip : 'Schedule a new recording session on the server.',
+			iconCls : 'add',
+			text : 'Add entry',
+			handler : addEntry
+		}, '->', {
+			text : 'Help',
+			handler : function() {
+				new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
+			}
+		} ]
+	});
+	
 	var grid = new Ext.grid.GridPanel({
 		id : id,
 		loadMask : true,
@@ -389,17 +403,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		plugins : [ actions ],
 		stateful : true,
 		stateId : this.id,
-		tbar : [ {
-			tooltip : 'Schedule a new recording session on the server.',
-			iconCls : 'add',
-			text : 'Add entry',
-			handler : addEntry
-		}, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
-			}
-		} ],
+		tbar : tbar,
 		view : tvheadend.BufferView
 	});
 
@@ -743,6 +747,21 @@ tvheadend.dvrsettings = function() {
 		disabled : true
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ confcombo, {
+			tooltip : 'Save changes made to dvr configuration below',
+			iconCls : 'save',
+			text : "Save configuration",
+			handler : saveChanges
+		}, delButton, '->', {
+			text : 'Help',
+			handler : function() {
+				new tvheadend.help('DVR configuration', 'config_dvr.html');
+			}
+		} ]
+	});
+	
 	var panel = new Ext.FormPanel({
 		title : 'Digital Video Recorder',
 		iconCls : 'drive',
@@ -820,17 +839,7 @@ tvheadend.dvrsettings = function() {
 			fieldLabel : 'Post-processor command',
 			name : 'postproc'
 		} ],
-		tbar : [ confcombo, {
-			tooltip : 'Save changes made to dvr configuration below',
-			iconCls : 'save',
-			text : "Save configuration",
-			handler : saveChanges
-		}, delButton, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('DVR configuration', 'config_dvr.html');
-			}
-		} ]
+		tbar : tbar
 	});
 
 	function loadConfig() {

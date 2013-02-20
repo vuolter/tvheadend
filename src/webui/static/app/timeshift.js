@@ -95,7 +95,12 @@ tvheadend.timeshift = function() {
       new tvheadend.help('Timeshift Configuration', 'config_timeshift.html');
     }
   });
-
+  
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveButton, '->', helpButton ]
+	});
+	
   var panel = new Ext.FormPanel({
     title : 'Timeshift',
     iconCls : 'clock',
@@ -114,7 +119,7 @@ tvheadend.timeshift = function() {
       timeshiftMaxPeriod, timeshiftUnlPeriod,
       timeshiftMaxSize, timeshiftUnlSize
     ],
-    tbar : [ saveButton, '->', helpButton ]
+    tbar : tbar
   });
 
   /* ****************************************************************

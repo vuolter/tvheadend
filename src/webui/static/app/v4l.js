@@ -272,6 +272,20 @@ tvheadend.v4l_services = function(adapterId) {
 		singleSelect : false
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [
+			{
+				tooltip : 'Create a new entry on the server. '
+					+ 'The new entry is initially disabled so it must be enabled '
+					+ 'before it start taking effect.',
+				iconCls : 'add',
+				text : 'Add service',
+				handler : addRecord
+			}, '-', delButton, '-', saveBtn, rejectBtn
+		]
+	});
+	
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "v4lGrid",
 		stripeRows : true,
@@ -283,15 +297,7 @@ tvheadend.v4l_services = function(adapterId) {
 		selModel : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : [
-			{
-				tooltip : 'Create a new entry on the server. '
-					+ 'The new entry is initially disabled so it must be enabled '
-					+ 'before it start taking effect.',
-				iconCls : 'add',
-				text : 'Add service',
-				handler : addRecord
-			}, '-', delButton, '-', saveBtn, rejectBtn ],
+		tbar : tbar,
 		view : tvheadend.BufferView
 	});
 

@@ -271,6 +271,24 @@ tvheadend.iptv = function(adapterId) {
 		singleSelect : false
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ {
+			tooltip : 'Create a new entry on the server. '
+				+ 'The new entry is initially disabled so it must be enabled '
+				+ 'before it start taking effect.',
+			iconCls : 'add',
+			text : 'Add service',
+			handler : addRecord
+		}, '-', delButton, '-', saveBtn, rejectBtn, '->',
+		{
+			text : 'Help',
+			handler : function() {
+				new tvheadend.help('IPTV', 'config_iptv.html');
+			}
+		} ]
+	});
+	
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "iptvGrid",
 		stripeRows : true,
@@ -283,21 +301,7 @@ tvheadend.iptv = function(adapterId) {
 		selModel : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : [
-			{
-				tooltip : 'Create a new entry on the server. '
-					+ 'The new entry is initially disabled so it must be enabled '
-					+ 'before it start taking effect.',
-				iconCls : 'add',
-				text : 'Add service',
-				handler : addRecord
-			}, '-', delButton, '-', saveBtn, rejectBtn, '->',
-			{
-				text : 'Help',
-				handler : function() {
-					new tvheadend.help('IPTV', 'config_iptv.html');
-				}
-			} ],
+		tbar : tbar,
 		view : tvheadend.BufferView
 	});
 

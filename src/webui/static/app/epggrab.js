@@ -340,6 +340,11 @@ tvheadend.epggrab = function() {
 		}
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveButton, '->', helpButton ]
+	});
+	
 	var panel = new Ext.FormPanel({
 		title : 'EPG Grabber',
 		iconCls : 'xml',
@@ -353,7 +358,7 @@ tvheadend.epggrab = function() {
 		defaultType : 'textfield',
 		autoHeight : true,
 		items : [ simplePanel, internalPanel, otaPanel, externalPanel ],
-		tbar : [ saveButton, '->', helpButton ]
+		tbar : tbar
 	});
 
 	/* ****************************************************************

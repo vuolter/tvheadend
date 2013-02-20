@@ -146,6 +146,23 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		}
 	});
 
+	var tbar = Ext.Toolbar({
+		enableOverflow : true,
+		items : [ {
+			tooltip : 'Create a new entry on the server. '
+				+ 'The new entry is initially disabled so it must be enabled '
+				+ 'before it start taking effect.',
+			iconCls : 'add',
+			text : 'Add entry',
+			handler : addRecord
+		}, '-', delButton, '-', saveBtn, rejectBtn, '->', {
+			text : 'Help',
+			handler : function() {
+				new tvheadend.help(title, helpContent);
+			}
+		} ]
+	});
+	
 	var grid = new Ext.grid.EditorGridPanel({
 		id : id,
 		title : title,
@@ -158,20 +175,7 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		stripeRows : true,
 		stateful : true,
 		stateId : this.id,
-		tbar : [
-			{
-				tooltip : 'Create a new entry on the server. '
-					+ 'The new entry is initially disabled so it must be enabled '
-					+ 'before it start taking effect.',
-				iconCls : 'add',
-				text : 'Add entry',
-				handler : addRecord
-			}, '-', delButton, '-', saveBtn, rejectBtn, '->', {
-				text : 'Help',
-				handler : function() {
-					new tvheadend.help(title, helpContent);
-				}
-			} ],
+		tbar : tbar,
 		view : tvheadend.BufferView
 	});
 	return grid;
