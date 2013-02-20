@@ -400,13 +400,6 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 				new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
 			}
 		} ],
-		bbar : new Ext.PagingToolbar({
-			store : dvrStore,
-			pageSize : 20,
-			displayInfo : true,
-			displayMsg : 'Programs {0} - {1} of {2}',
-			emptyMsg : "No programs to display"
-		}),
 		view : tvheadend.BufferView
 	});
 
