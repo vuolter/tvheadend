@@ -136,6 +136,7 @@ tvheadend.chconf = function() {
 		dataIndex : 'actions',
 		width : 45,
 		actions : [ {
+			disabled : !tvheadend.accessupdate.admin,
 			iconCls : 'merge',
 			qtip : 'Merge this channel with another channel',
 			cb : function(grid, record, action, row, col) {
@@ -339,7 +340,8 @@ tvheadend.chconf = function() {
 	});
 
   var addBtn = new Ext.Toolbar.Button({
-    tooltop : 'Add a new channel',
+    disabled : !tvheadend.accessupdate.admin,
+	tooltop : 'Add a new channel',
     iconCls : 'add',
     text    : 'Add channel',
     handler : addRecord
@@ -351,10 +353,6 @@ tvheadend.chconf = function() {
 		text : 'Delete selected',
 		handler : delSelected,
 		disabled : true
-	});
-
-	selModel.on('selectionchange', function(s) {
-		delBtn.setDisabled(s.getCount() == 0);
 	});
 
 	var saveBtn = new Ext.Toolbar.Button({
@@ -395,13 +393,19 @@ tvheadend.chconf = function() {
 		} ],
 		view : tvheadend.BufferView
 	});
-
-	tvheadend.store.channels.on('update', function(s, r, o) {
-		d = s.getModifiedRecords().length == 0
-		saveBtn.setDisabled(d);
-		rejectBtn.setDisabled(d);
-	});
-
+	
+	if(tvheadend.accessupdate.admin) {
+		selModel.on('selectionchange', function(s) {
+			delBtn.setDisabled(s.getCount() == 0);
+		});
+		
+		tvheadend.store.channels.on('update', function(s, r, o) {
+			d = s.getModifiedRecords().length == 0
+			saveBtn.setDisabled(d);
+			rejectBtn.setDisabled(d);
+		});
+	}
+	
 	tvheadend.store.channelTags.on('load', function(s, r, o) {
 		if (grid.rendered) grid.getView().refresh();
 	});

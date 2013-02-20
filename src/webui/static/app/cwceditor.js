@@ -1,5 +1,6 @@
 tvheadend.cwceditor = function() {
-	
+	if(tvheadend.capabilities.indexOf('cwc') == -1)
+		return new tvheadend.dummy('Code Word Client','key');
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",

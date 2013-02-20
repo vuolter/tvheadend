@@ -1,5 +1,6 @@
 tvheadend.capmteditor = function() {
-	
+	if(tvheadend.capabilities.indexOf('cwc') == -1)
+		return new tvheadend.dummy('Capmt Connections','key');
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",

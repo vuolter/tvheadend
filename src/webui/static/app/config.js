@@ -127,6 +127,7 @@ tvheadend.miscconf = function() {
   });
 
   var imagecachePanel = new Ext.form.FieldSet({
+	hidden : tvh.capabilities.indexOf('imagecache') == -1,
     title: 'Image Caching',
     width: 700,
     autoHeight: true,
@@ -134,8 +135,6 @@ tvheadend.miscconf = function() {
     items : [ imagecacheEnabled, imagecacheOkPeriod, imagecacheFailPeriod,
               imagecacheIgnoreSSLCert ]
   });
-  if (tvheadend.capabilities.indexOf('imagecache') == -1)
-    imagecachePanel.hide();
 
 	/* ****************************************************************
 	 * Form

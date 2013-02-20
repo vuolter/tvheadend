@@ -1,5 +1,7 @@
 tvheadend.timeshift = function() {
-
+  if(tvheadend.capabilities.indexOf('timeshift') == -1)
+    return new tvheadend.dummy('Timeshift','clock');
+	
   /* ****************************************************************
    * Data
    * ***************************************************************/
