@@ -50,7 +50,7 @@ tvheadend.help = function(title, pagename) {
 			});
 
 			var win = new Ext.Window({
-				title : 'Help for ' + title,
+				title : 'Help for ' + '<span class="x-content-highlight">' + title + '</span>',
 				layout : 'fit',
 				width : 900,
 				height : 400,
