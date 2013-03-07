@@ -105,7 +105,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
                      tvheadend_webui_debug ? "-debug" : "",
                      tvheadend_webui_debug ? ""       : "-min");
   
-  extjs_exec(hq, "Ext.BLANK_IMAGE_URL = " "'"EXTJSPATH"/resources/images/default/s.gif';");
+  extjs_exec(hq, "Ext.BLANK_IMAGE_URL = " "'"EXTJSPATH"/resources/images/default/s.png';");
 
   /**
    * Load extjs extensions
