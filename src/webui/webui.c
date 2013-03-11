@@ -62,10 +62,25 @@ static int
 is_client_simple(http_connection_t *hc)
 {
   char *c;
-
+  static const char *ua_list[] = {
+    "Mobile",
+    "Windows CE",
+    "Pocket PC",
+    "Mazingo",
+    "T68",
+    "Syncalot",
+    "Blazer",
+    NULL
+  };
+  const char **ua;
+  
   if((c = http_arg_get(&hc->hc_args, "UA-OS")) != NULL) {
-    if(strstr(c, "Windows CE") || strstr(c, "Pocket PC"))
-      return 1;
+    ua = ua_list;
+    while (*ua) {
+	  if (strstr(c, *ua))
+	    return 1;
+	  ++ua;
+	}
   }
 
   if((c = http_arg_get(&hc->hc_args, "x-wap-profile")) != NULL) {
