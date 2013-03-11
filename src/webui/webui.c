@@ -74,7 +74,7 @@ is_client_simple(http_connection_t *hc)
   };
   const char **ua;
   
-  if((c = http_arg_get(&hc->hc_args, "UA-OS")) != NULL) {
+  if((c = http_arg_get(&hc->hc_args, "User-Agent")) != NULL) {
     ua = ua_list;
     while (*ua) {
 	  if (strstr(c, *ua))
