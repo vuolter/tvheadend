@@ -51,7 +51,7 @@
  *
  */
 static int
-is_client_simple(http_connection_t *hc)
+is_client_mobile(http_connection_t *hc)
 {
   char *c;
 
@@ -75,8 +75,8 @@ is_client_simple(http_connection_t *hc)
 static int
 page_root(http_connection_t *hc, const char *remain, void *opaque)
 {
-  if(is_client_simple(hc)) {
-    http_redirect(hc, "simple.html");
+  if(is_client_mobile(hc)) {
+    http_redirect(hc, "mobile/index.html");
   } else {
     http_redirect(hc, "extjs.html");
   }
