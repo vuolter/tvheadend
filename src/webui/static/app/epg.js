@@ -299,7 +299,7 @@ tvheadend.epg = function() {
 	}
 
 	var epgCm = new Ext.grid.ColumnModel({
-		defaults : { sortable : true },
+		defaults : { sortable : false },
 		columns : [ 
 			actions,
 			{
