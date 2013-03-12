@@ -241,7 +241,7 @@ tvheadend.iptv = function(adapterId) {
 		});
 	}
 
-	var delButton = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
 		text : 'Delete selected services',
@@ -280,7 +280,7 @@ tvheadend.iptv = function(adapterId) {
 			iconCls : 'add',
 			text : 'Add service',
 			handler : addRecord
-		}, '-', delButton, '-', saveBtn, rejectBtn, '->',
+		}, '-', delBtn, '-', saveBtn, rejectBtn, '->',
 		{
 			text : 'Help',
 			handler : function() {
@@ -312,7 +312,7 @@ tvheadend.iptv = function(adapterId) {
 	});
 
 	selModel.on('selectionchange', function(self) {
-		delButton.setDisabled(self.getCount() == 0);
+		delBtn.setDisabled(self.getCount() == 0);
 	});
 
 	return grid;

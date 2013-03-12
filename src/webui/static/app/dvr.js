@@ -84,7 +84,7 @@ tvheadend.dvrDetails = function(entry) {
 
 	switch (entry.schedstate) {
 		case 'scheduled':
-			win.addButton({
+			win.addBtn({
 				handler : cancelEvent,
 				text : "Remove from schedule"
 			});
@@ -92,14 +92,14 @@ tvheadend.dvrDetails = function(entry) {
 
 		case 'recording':
 		case 'recordingError':
-			win.addButton({
+			win.addBtn({
 				handler : cancelEvent,
 				text : "Abort recording"
 			});
 			break;
 		case 'completedError':
 		case 'completed':
-			win.addButton({
+			win.addBtn({
 				handler : deleteEvent,
 				text : "Delete recording"
 			});
@@ -739,7 +739,7 @@ tvheadend.dvrsettings = function() {
 		editable : true
 	});
 
-	var delButton = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete named configuration',
 		iconCls : 'remove',
 		text : "Delete configuration",
@@ -754,7 +754,7 @@ tvheadend.dvrsettings = function() {
 			iconCls : 'save',
 			text : "Save configuration",
 			handler : saveChanges
-		}, delButton, '->', {
+		}, delBtn, '->', {
 			text : 'Help',
 			handler : function() {
 				new tvheadend.help('DVR configuration', 'config_dvr.html');
@@ -856,8 +856,8 @@ tvheadend.dvrsettings = function() {
 	}
 
 	confcombo.on('select', function() {
-		if (confcombo.getValue() == '') delButton.disable();
-		else delButton.enable();
+		if (confcombo.getValue() == '') delBtn.disable();
+		else delBtn.enable();
 		loadConfig();
 	});
 

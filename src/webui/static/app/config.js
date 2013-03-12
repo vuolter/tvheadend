@@ -140,14 +140,14 @@ tvheadend.miscconf = function() {
 	 * Form
 	 * ***************************************************************/
 
-	var saveButton = new Ext.Button({
+	var saveBtn = new Ext.Button({
 		text : "Save configuration",
 		tooltip : 'Save changes made to configuration below',
 		iconCls : 'save',
 		handler : saveChanges
 	});
 
-	var helpButton = new Ext.Button({
+	var helpBtn = new Ext.Button({
 		text : 'Help',
 		handler : function() {
 			new tvheadend.help('General Configuration', 'config_misc.html');
@@ -156,7 +156,7 @@ tvheadend.miscconf = function() {
 
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
-		items : [ saveButton, '->', helpButton ]
+		items : [ saveBtn, '->', helpBtn ]
 	});
 	
 	var panel = new Ext.form.FormPanel({

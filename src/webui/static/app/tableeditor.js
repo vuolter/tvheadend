@@ -105,7 +105,7 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		singleSelect : false
 	});
 
-	var delButton = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
 		text : 'Delete selected',
@@ -139,10 +139,10 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 
 	selModel.on('selectionchange', function(self) {
 		if (self.getCount() > 0) {
-			delButton.enable();
+			delBtn.enable();
 		}
 		else {
-			delButton.disable();
+			delBtn.disable();
 		}
 	});
 
@@ -155,7 +155,7 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 			iconCls : 'add',
 			text : 'Add entry',
 			handler : addRecord
-		}, '-', delButton, '-', saveBtn, rejectBtn, '->', {
+		}, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
 			text : 'Help',
 			handler : function() {
 				new tvheadend.help(title, helpContent);
