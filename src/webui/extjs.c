@@ -115,6 +115,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   extjs_load(hq, "static/lovcombo/Ext.ux.form.LovCombo.js");
   extjs_load(hq, "static/multiselect/multiselect.js");
   extjs_load(hq, "static/multiselect/ddview.js");
+  extjs_load(hq, "static/gridsearch/Ext.ux.grid.Search.js");
 
   /**
    * Create a namespace for our app

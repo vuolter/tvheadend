@@ -114,6 +114,10 @@
 	background-image: url(../icons/htslogo.png) !important;
 }
 
+.magnifier{
+	background-image: url(../icons/magnifier.png) !important;
+}
+
 .add {
 	background-image: url(../icons/add.gif) !important;
 }
