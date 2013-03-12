@@ -130,7 +130,16 @@ tvheadend.mergeChannel = function(chan) {
  */
 tvheadend.chconf = function() {
 	
-
+	var search = new Ext.ux.grid.Search({
+		autoFocus : true,
+		iconCls : 'magnifier',
+		minChars : 3,
+		mode : 'local',
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
 	var actions = new Ext.ux.grid.RowActions({
 		header : '',
 		dataIndex : 'actions',
@@ -144,7 +153,7 @@ tvheadend.chconf = function() {
 			}
 		} ]
 	});
-
+	
 	var cm = new Ext.grid.ColumnModel([ {
 		header : "Number",
 		dataIndex : 'number',
@@ -389,7 +398,7 @@ tvheadend.chconf = function() {
 		title : 'Channels',
 		iconCls : 'television',
 		store : tvheadend.data.channels,
-		plugins : [ actions ],
+		plugins : [ search, actions ],
 		clicksToEdit : 2,
 		cm : cm,
 		selModel : selModel,
