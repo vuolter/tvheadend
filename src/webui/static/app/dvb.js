@@ -375,7 +375,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		id : "multiplexesGrid",
 		stripeRows : true,
 		title : 'Multiplexes',
-		plugins : [ enabledColumn, qualityColumn ],
+		plugins : [ tvheadend.Search, enabledColumn, qualityColumn ],
 		store : store,
 		clicksToEdit : 2,
 		cm : cm,
@@ -696,7 +696,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		id : "servicesGrid",
 		stripeRows : true,
 		title : 'Services',
-		plugins : [ enabledColumn, eitColumn, actions ],
+		plugins : [ tvheadend.Search, enabledColumn, eitColumn, actions ],
 		store : store,
 		clicksToEdit : 2,
 		cm : cm,
@@ -1451,7 +1451,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	var rec = Ext.data.Record.create([ 'name', 'port', 'comment', 'lnb' ]);
 
 	return new tvheadend.tableEditor('dvbsatconfGrid', 'Satellite config', 'dvbsatconf/'
-		+ adapterId, cm, rec, null, null, null);
+		+ adapterId, cm, tvheadend.Search, null, null, null);
 }
 
 /**

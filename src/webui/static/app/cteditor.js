@@ -46,6 +46,6 @@ tvheadend.cteditor = function() {
 		'internal', 'icon', 'comment', 'titledIcon' ]);
 
 	return new tvheadend.tableEditor('ctagGrid', 'Channel Tags', 'channeltags', cm,
-		ChannelTagRecord, [ enabledColumn, internalColumn, titledIconColumn ],
+		ChannelTagRecord, [ tvheadend.Search, enabledColumn, internalColumn, titledIconColumn ],
 		null, 'config_tags.html', 'tags');
 }
