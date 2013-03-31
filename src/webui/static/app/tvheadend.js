@@ -424,6 +424,22 @@ tvheadend.app = function() {
 		// public methods
 		init : function() {
 			
+			//load a extjs theme
+			new Ext.data.JsonStore({
+				url : 'config',
+				root : 'config',
+				fields : [ 'xtheme' ],
+				baseParams : { op : 'loadSettings' },
+				autoLoad : {
+					callback : function(rec, opts, succ){
+						var theme = rec[0].get('theme');
+						theme = '../static/extjs/resources/css/xtheme-' + str.replace(/\s/g, "").toLowerCase() + '.css';
+						Ext.util.CSS.swapStyleSheet('theme', theme);
+						this.destroy();
+					}
+				}
+			});
+			
 			tvheadend.comet.on({
 				'accessUpdate' : accessUpdate,
 				'setServerIpPort' : setServerIpPort

@@ -41,7 +41,7 @@ tvheadend.miscconf = function() {
        'imagecache_enabled', 'imagecache_ok_period',
        'imagecache_fail_period', 'imagecache_ignore_sslcert',
        'tvhtime_update_enabled', 'tvhtime_ntp_enabled',
-       'tvhtime_tolerance']);
+       'tvhtime_tolerance', 'xtheme' ]);
 
 	/* ****************************************************************
 	 * Form Fields
@@ -135,7 +135,35 @@ tvheadend.miscconf = function() {
     items : [ imagecacheEnabled, imagecacheOkPeriod, imagecacheFailPeriod,
               imagecacheIgnoreSSLCert ]
   });
-
+  
+	/*
+	 * Theme
+	 */
+	var theme = new Ext.form.ComboBox({
+		fieldLabel : 'Theme',
+		name : 'xtheme',
+		store : new Ext.data.ArrayStore({
+			fields : [ 'display', 'value' ],
+			data : [ 
+				 [ 'Blue', '../static/extjs/resources/css/xtheme-blue.css' ]
+				,[ 'Gray', '../static/extjs/resources/css/xtheme-gray.css' ]
+				//,[ 'Dark Orange', '../static/extjs/resources/css/xtheme-darkorange.css' ]
+			]
+		}),
+		mode : 'local',
+		triggerAction : 'all',
+		emptyText : 'Blue',
+		displayField : 'display',
+		valueField : 'value',
+		editable : false,
+		listeners : {
+			'select' : function(combo){ 
+				if(combo.isDirty())
+					Ext.util.CSS.swapStyleSheet('theme', combo.getValue());
+			}
+		}
+	});
+	
 	/* ****************************************************************
 	 * Form
 	 * ***************************************************************/
@@ -172,7 +200,7 @@ tvheadend.miscconf = function() {
 		defaultType : 'textfield',
 		autoHeight : true,
 		items : [ language, dvbscanPath,
-              imagecachePanel, tvhtimePanel ],
+              imagecachePanel, tvhtimePanel, theme ],
 		tbar : tbar
 	});
 
