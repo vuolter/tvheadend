@@ -26,11 +26,22 @@ static htsmsg_t *config;
 
 void config_init ( void )
 {
+  int save = 0;
+  uint32_t u32;
+  
   config = hts_settings_load("config");
   if (!config) {
     tvhlog(LOG_DEBUG, "config", "no configuration, loading defaults");
     config = htsmsg_create_map();
   }
+  
+  /* Defaults */
+  if (htsmsg_get_u32(config, "xtheme", &u32))
+    save |= config_set_xtheme("blue");
+
+  /* Save defaults */
+  if (save)
+    config_save();
 }
 
 void config_save ( void )
@@ -86,4 +97,14 @@ const char *config_get_muxconfpath ( void )
 int config_set_muxconfpath ( const char *path )
 {
   return _config_set_str("muxconfpath", path);
+}
+
+const char *config_get_xtheme ( void )
+{
+  return htsmsg_get_str(config, "theme");
+}
+
+int config_set_xtheme ( const char *path )
+{
+  return _config_set_str("theme", path);
 }

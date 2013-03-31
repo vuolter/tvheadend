@@ -98,7 +98,6 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext/ext-base%s.js\"></script>\n"
                      "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/xtheme-blue.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/livegrid/resources/css/ext-ux-livegrid.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/ext.css\">\n",
                      tvheadend_webui_debug ? "-debug" : "",
@@ -2020,6 +2019,8 @@ extjs_config(http_connection_t *hc, const char *remain, void *opaque)
       save |= config_set_muxconfpath(str);
     if ((str = http_arg_get(&hc->hc_req_args, "language")))
       save |= config_set_language(str);
+	if ((str = http_arg_get(&hc->hc_req_args, "xtheme")))
+      save |= config_set_xtheme(str);
     if (save)
       config_save();
 
