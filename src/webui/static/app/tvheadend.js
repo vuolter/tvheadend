@@ -11,6 +11,18 @@ tvheadend.BufferView = new Ext.ux.grid.BufferView({
 });
 
 /**
+ * GridSearch
+ */
+tvheadend.Search = new Ext.ux.grid.Search({
+	align : 'left',
+	iconCls : 'magnifier',
+	minChars : 3,
+	position : 'top',
+	searchText : '',
+	width : 250
+});
+	
+/**
  * Dummy maker
  */
 tvheadend.dummy = function(title, icon) {

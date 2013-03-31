@@ -72,6 +72,6 @@ tvheadend.acleditor = function() {
 		'comment' ]);
 
 	return new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', cm,
-		UserRecord, [ enabledColumn, streamingColumn, dvrColumn, dvrallcfgColumn,
+		UserRecord, [ tvheadend.Search, enabledColumn, streamingColumn, dvrColumn, dvrallcfgColumn,
 			webuiColumn, adminColumn ], null, 'config_access.html', 'group');
 }

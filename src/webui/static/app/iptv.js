@@ -294,7 +294,7 @@ tvheadend.iptv = function(adapterId) {
 		stripeRows : true,
 		title : 'IPTV',
 		iconCls : 'iptv',
-		plugins : [ enabledColumn, actions ],
+		plugins : [ tvheadend.Search, enabledColumn, actions ],
 		store : store,
 		clicksToEdit : 2,
 		cm : cm,

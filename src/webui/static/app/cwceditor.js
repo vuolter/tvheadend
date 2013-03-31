@@ -114,7 +114,7 @@ tvheadend.cwceditor = function() {
 	});
 
 	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', cm, rec, [
-		enabledColumn, emmColumn, emmexColumn ], store, 'config_cwc.html', 'key');
+		tvheadend.Search, enabledColumn, emmColumn, emmexColumn ], store, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {
 		var rec = store.getById(msg.id);
