@@ -17,12 +17,11 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 });
 
 tvheadend.contentGroupLookupName = function(code) {
-	ret = "";
-	tvheadend.data.contentGroup.each(function(r) {
-		if (r.data.code == code) ret = r.data.name;
-		else if (ret == "" && r.data.code == (code & 0xF0)) ret = r.data.name;
-	});
-	return ret;
+	var i = tvh.ContentGroupStore.find("code", (code & 0xF0));
+	var name = index != -1 ? tvh.contentGroupLookupName.getAt(index).get('name');
+						   : null;
+	return !name ? '<span class="tvh-grid-gray">Unknown</span>';
+				 : name;
 }
 
 tvheadend.data.contentGroup.setDefaultSort('code', 'ASC');
