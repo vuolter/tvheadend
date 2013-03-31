@@ -777,7 +777,7 @@ tvheadend.addMuxByLocation = function(adapterData, satConfStore) {
 	});
 
 	win = new Ext.Window({
-		title : 'Add muxes on ' + adapterData.name,
+		title : 'Add muxes on ' + '<span class="x-content-highlight">' + adapterData.name + '</span>',
 		layout : 'fit',
 		width : 500,
 		height : 500,

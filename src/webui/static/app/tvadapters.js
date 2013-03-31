@@ -98,7 +98,7 @@ tvheadend.showTransportDetails = function(data) {
 	}
 
 	win = new Ext.Window({
-		title : 'Service details for ' + data.title,
+		title : 'Service details for ' + '<span class="x-content-highlight">' + data.title + '</span>',
 		layout : 'fit',
 		width : 400,
 		height : 400,
