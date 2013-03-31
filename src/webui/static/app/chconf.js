@@ -113,7 +113,7 @@ tvheadend.mergeChannel = function(chan) {
 	});
 
 	win = new Ext.Window({
-		title : 'Merge channel ' + chan.name + ' into...',
+		title : 'Merge channel ' + '<span class="x-content-highlight">' + chan.name '</span>' + ' into...',
 		layout : 'fit',
 		width : 500,
 		height : 120,
