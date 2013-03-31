@@ -263,14 +263,21 @@ tvheadend.chconf = function() {
 	}, actions ]);
 
 	function delSelected() {
-		var selectedKeys = grid.selModel.selections.keys;
-		if (selectedKeys.length > 0) {
-			Ext.MessageBox.confirm('Message',
-				'Do you really want to delete selection?', deleteRecord);
-		}
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
-			Ext.MessageBox.alert('Message',
-				'Please select at least one item to delete');
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
 		}
 	}
 
