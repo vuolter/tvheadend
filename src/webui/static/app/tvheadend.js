@@ -117,25 +117,27 @@ tvheadend.VLC = function(url) {
 	});
 	
 	selectChannel.on('select', function(c, r) {
-		var streamurl = 'stream/channelid/' + r.data.chid;
-		var playlisturl = 'playlist/channelid/' + r.data.chid;
+		if(c.isDirty()) {
+			var streamurl = 'stream/channelid/' + r.data.chid;
+			var playlisturl = 'playlist/channelid/' + r.data.chid;
 
-		if (!vlc.dom.playlist || vlc.dom.playlist == 'undefined') {
-			var html = '<p>Embedded player could not be started. <br> You are probably missing VLC Mozilla plugin for your browser.</p>';
-			html += '<p><a href="' + playlisturl	+ '">M3U Playlist</a></p>';
-			html += '<p><a href="' + streamurl + '">Direct URL</a></p>';
-			missingPlugin.dom.innerHTML = html;
-			missingPluginPanel.show();
-			vlcPanel.hide();
-		}
-		else {
-			vlc.dom.playlist.stop();
-			vlc.dom.playlist.items.clear();
-			vlc.dom.playlist.add(streamurl);
-			vlc.dom.playlist.playItem(0);
-			vlc.dom.audio.volume = slider.getValue();
-			missingPluginPanel.hide();
-			vlcPanel.show();
+			if (!vlc.dom.playlist || vlc.dom.playlist == 'undefined') {
+				var html = '<p>Embedded player could not be started. <br> You are probably missing VLC Mozilla plugin for your browser.</p>';
+				html += '<p><a href="' + playlisturl	+ '">M3U Playlist</a></p>';
+				html += '<p><a href="' + streamurl + '">Direct URL</a></p>';
+				missingPlugin.dom.innerHTML = html;
+				missingPluginPanel.show();
+				vlcPanel.hide();
+			}
+			else {
+				vlc.dom.playlist.stop();
+				vlc.dom.playlist.items.clear();
+				vlc.dom.playlist.add(streamurl);
+				vlc.dom.playlist.playItem(0);
+				vlc.dom.audio.volume = slider.getValue();
+				missingPluginPanel.hide();
+				vlcPanel.show();
+			}
 		}
 	});
 

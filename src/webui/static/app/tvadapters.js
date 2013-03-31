@@ -61,14 +61,16 @@ tvheadend.tvadapters = function() {
 	});
 
 	adapterSelection.on('select', function(c, r) {
-		panel.removeAll(false);
+		if(c.isDirty()) {
+			panel.removeAll(false);
 
-		if (r.data.type == 'dvb') 
-			panel.add(new tvheadend.dvb_adapter(r.data));
-		else 
-			panel.add(new tvheadend.v4l_adapter(r.data));
+			if (r.data.type == 'dvb') 
+				panel.add(new tvheadend.dvb_adapter(r.data));
+			else 
+				panel.add(new tvheadend.v4l_adapter(r.data));
 
-		panel.doLayout();
+			panel.doLayout();
+		}
 	});
 
 	return panel;

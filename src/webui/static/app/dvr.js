@@ -859,10 +859,14 @@ tvheadend.dvrsettings = function() {
 		});
 	}
 
-	confcombo.on('select', function() {
-		if (confcombo.getValue() == '') delBtn.disable();
-		else delBtn.enable();
-		loadConfig();
+	confcombo.on('select', function(c) {
+		if(c.isDirty()) {
+			if(confcombo.getValue() == '')
+				delBtn.disable();
+			else
+				delBtn.enable();
+			loadConfig();
+		}
 	});
 
 	panel.on('render', function() {
