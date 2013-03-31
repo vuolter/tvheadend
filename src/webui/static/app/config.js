@@ -157,8 +157,8 @@ tvheadend.miscconf = function() {
 		valueField : 'value',
 		editable : false,
 		listeners : {
-			'select' : function(combo){ 
-				if(combo.isDirty())
+			'select' : function(c){ 
+				if(c.isDirty())
 					Ext.util.CSS.swapStyleSheet('theme', combo.getValue());
 			}
 		}

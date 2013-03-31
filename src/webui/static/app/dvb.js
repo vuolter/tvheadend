@@ -257,8 +257,8 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 			valueField : 'identifier',
 			emptyText : 'Select target adapter...',
 			listeners : {
-				'select' : function(combo, value) {
-					if (satConf) {
+				'select' : function(c, value) {
+					if (satConf && c.isDirty()) {
 						satConf.emptyText = 'Select satellite configuration...';
 						satConf.clearValue();
 						targetSatConfStore.baseParams = {
