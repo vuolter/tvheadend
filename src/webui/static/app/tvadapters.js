@@ -40,14 +40,16 @@ tvheadend.tvadapters = function() {
 		emptyText : 'Select TV adapter...'
 	});
 	
+	var helpBtn = new Ext.Button({
+		text : 'Help',
+		handler : function() {
+			new tvheadend.help('DVB', 'config_dvb.html');
+		}
+	});
+	
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
-		items : [ adapterSelection, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('DVB', 'config_dvb.html');
-			}
-		} ]
+		items : [ adapterSelection, '->', helpBtn ]
 	});
 	
 	var panel = new Ext.Panel({

@@ -375,7 +375,14 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 			editable : false
 		})
 	}
-
+	
+	var helpBtn = new Ext.Button({
+		text : 'Help',
+		handler : function() {
+			new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
+		}
+	});
+	
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
@@ -383,12 +390,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 			iconCls : 'add',
 			text : 'Add entry',
 			handler : addEntry
-		}, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
-			}
-		} ]
+		}, '->', helpBtn ]
 	});
 	
 	var grid = new Ext.grid.GridPanel({
@@ -747,6 +749,13 @@ tvheadend.dvrsettings = function() {
 		disabled : true
 	});
 
+	var helpBtn = new Ext.Button({
+		text : 'Help',
+		handler : function() {
+			new tvheadend.help('DVR configuration', 'config_dvr.html');
+		}
+	});
+	
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ confcombo, {
@@ -754,12 +763,7 @@ tvheadend.dvrsettings = function() {
 			iconCls : 'save',
 			text : "Save configuration",
 			handler : saveChanges
-		}, delBtn, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('DVR configuration', 'config_dvr.html');
-			}
-		} ]
+		}, delBtn, '->', helpBtn ]
 	});
 	
 	var panel = new Ext.FormPanel({

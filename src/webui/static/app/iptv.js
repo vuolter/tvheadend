@@ -271,6 +271,13 @@ tvheadend.iptv = function(adapterId) {
 		singleSelect : false
 	});
 
+	var helpBtn = new Ext.Button({
+		text : 'Help',
+		handler : function() {
+			new tvheadend.help('IPTV', 'config_iptv.html');
+		}
+	});
+	
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
@@ -280,13 +287,7 @@ tvheadend.iptv = function(adapterId) {
 			iconCls : 'add',
 			text : 'Add service',
 			handler : addRecord
-		}, '-', delBtn, '-', saveBtn, rejectBtn, '->',
-		{
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('IPTV', 'config_iptv.html');
-			}
-		} ]
+		}, '-', delBtn, '-', saveBtn, rejectBtn, '->', helpBtn ]
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({
