@@ -372,14 +372,16 @@ tvheadend.chconf = function() {
 		disabled : true
 	});
 
+	var helpBtn = new Ext.Button({
+		text : 'Help',
+		handler : function() {
+			new tvheadend.help('Channels', 'config_channels.html');
+		}
+	});
+	
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
-		items : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('Channels', 'config_channels.html');
-			}
-		} ]
+		items : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', helpBtn ]
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({

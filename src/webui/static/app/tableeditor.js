@@ -146,6 +146,13 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		}
 	});
 
+	var helpBtn = new Ext.Button({
+		text : 'Help',
+		handler : function() {
+			new tvheadend.help(title, helpContent);
+		}
+	});
+	
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
@@ -155,12 +162,7 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 			iconCls : 'add',
 			text : 'Add entry',
 			handler : addRecord
-		}, '-', delBtn, '-', saveBtn, rejectBtn, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help(title, helpContent);
-			}
-		} ]
+		}, '-', delBtn, '-', saveBtn, rejectBtn, '->', helpBtn ]
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({

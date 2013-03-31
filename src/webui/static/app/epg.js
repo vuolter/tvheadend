@@ -481,6 +481,13 @@ tvheadend.epg = function() {
 		nearLimit : 100
 	});
 
+	var helpBtn = new Ext.Button({
+		text : 'Help',
+		handler : function() {
+			new tvheadend.help('Electronic Program Guide', 'epg.html');
+		}
+	});
+	
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [
@@ -513,12 +520,7 @@ tvheadend.epg = function() {
 						+ 'record all future programmes that matches '
 						+ 'the current query.',
 				handler : createAutoRec
-			}, '-', {
-				text : 'Help',
-				handler : function() {
-					new tvheadend.help('Electronic Program Guide', 'epg.html');
-				}
-			}
+			}, '-', helpBtn
 		]
 	});
 	
