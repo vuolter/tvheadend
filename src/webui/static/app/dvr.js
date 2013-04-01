@@ -33,16 +33,16 @@ tvheadend.data.containers = new Ext.data.JsonStore({
  */
 tvheadend.data.configNames = new Ext.data.JsonStore({
 	autoLoad : true,
-	root : 'entries',
+	baseParams : { op : 'list' },
 	fields : [ 'identifier', 'name' ],
 	id : 'identifier',
+	root : 'entries',
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	},
 	url : 'confignames',
-	baseParams : {
-		op : 'list'
-	}
 });
-
-tvheadend.data.configNames.setDefaultSort('name', 'ASC');
 
 tvheadend.comet.on('dvrconfig', function(m) {
 	if (m.reload != null) tvheadend.data.configNames.reload();

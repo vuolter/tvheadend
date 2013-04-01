@@ -10,9 +10,18 @@ tvheadend.data.brands = new Ext.data.JsonStore({
 //WIBNI: might want this store to periodically update
 
 tvheadend.data.contentGroup = new Ext.data.JsonStore({
-	root : 'entries',
+	autoLoad : {
+		callback : function(rec, opts, succ) {
+			rec[0].data.name = "Unknown";
+			this.sort('name', 'ASC');
+		}
+	},
 	fields : [ 'name', 'code' ],
-	autoLoad : true,
+	root : 'entries',
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	},
 	url : 'ecglist'
 });
 
@@ -23,8 +32,6 @@ tvheadend.contentGroupLookupName = function(code) {
 	return !name ? '<span class="tvh-grid-gray">Unknown</span>';
 				 : name;
 }
-
-tvheadend.data.contentGroup.setDefaultSort('code', 'ASC');
 
 tvheadend.epgDetails = function(event) {
 
