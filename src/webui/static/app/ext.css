@@ -1,8 +1,36 @@
+/* START anchor tip */
+#content-anchor-tip ul {
+    float: left;
+    width: 200px;
+    list-style-type: disc;
+    margin-left: 15px;
+} 
+
+.ext-ie #content-anchor-tip ul {
+    margin: 0;
+    padding-left: 15px;
+} 
+
+#content-anchor-tip .thumb {
+    float: right;
+} 
+
+#content-anchor-tip .status-icon {
+    position: absolute;
+    top: 4px;
+    right: 50px;
+    padding: 0;
+    line-height: 0;
+} 
+
+#content-anchor-tip a:link, #content-anchor-tip a:visited {
+    color: #339;
+}
+/* END anchor tip */
 .x-tree-col {
 	float: left;
 	overflow: hidden;
 	padding: 0 1px;
-	zoom: 1;
 }
 
 .x-tree-col-text,.x-tree-hd-text {
@@ -16,10 +44,9 @@
 
 .x-tree-headers {
 	background: #f9f9f9
-		url(../extjs/resources/images/default/grid/grid3-hrow.gif) repeat-x 0
+		url(../extjs/resources/images/default/grid/grid3-hrow.png) repeat-x 0
 		bottom;
 	cursor: default;
-	zoom: 1;
 }
 
 .x-tree-hd {
@@ -31,16 +58,14 @@
 
 .ux-mselect {
 	overflow: auto;
-	background: white;
 	position: relative; /* for calculating scroll offsets */
-	zoom: 1;
 	overflow: auto;
 }
 
 .ux-mselect-item {
 	font: normal 12px tahoma, arial, helvetica, sans-serif;
 	padding: 2px;
-	border: 1px solid #fff;
+	border: 1px solid transparent;
 	white-space: nowrap;
 	cursor: pointer;
 }
@@ -58,55 +83,71 @@
 .x-view-drag-insert-below {
 	border-bottom: 1px dotted #3366cc;
 }
-
-.x-grid3-progresscol .x-grid3-cell-inner {
-	padding: 0px 0px 0px 5px;
+/* START Ext.ux.form.Spinner CSS code */
+.x-form-spinner-proxy{
+	/*background-color:#ff00cc !important;*/
 }
-
-.x-grid3-progresscol .x-progress-bar {
-	height: 16px;
+.x-form-field-wrap .x-form-spinner-trigger {
+    background:transparent url(../extjs/resources/images/default/form/Spinner/spinner.png) no-repeat 0 0 !important;
 }
-
-.x-grid3-progresscol .x-progress-inner {
-	height: 16px;
+.x-form-field-wrap .x-form-spinner-overup{
+    background-position:-17px 0 !important;
 }
-
-.x-grid3-progresscol .x-progress-text-front-ie6 {
-	padding: 2.5px 5px;
+.x-form-field-wrap .x-form-spinner-clickup{
+    background-position:-34px 0 !important;
 }
-
-.x-grid3-progresscol .x-progress-text-front {
-	padding: 2px 5px;
+.x-form-field-wrap .x-form-spinner-overdown{
+    background-position:-51px 0 !important;
 }
-
-.x-progress-bar-red,.x-progress-bar-orange,.x-progress-bar-green {
-	border-bottom: 1px solid #7fa9e4;
-	float: left;
-	height: 16px;
+.x-form-field-wrap .x-form-spinner-clickdown{
+    background-position:-68px 0 !important;
 }
-
-.x-progress-bar-red {
-	background: #ff0000 url(../icons/progress-bg-red.gif) repeat-x scroll
-		left center;
-	border-top: 1px solid #ecb7ad;
+.x-trigger-wrap-focus .x-form-spinner-trigger{
+    background-position:-85px 0 !important;
 }
-
-.x-progress-bar-orange {
-	background: #9cbfee url(../icons/progress-bg-orange.gif) repeat-x scroll
-		left center;
-	border-right: 1px solid #deab7e;
-	border-top: 1px solid #d7b290;
+.x-trigger-wrap-focus .x-form-spinner-overup{
+    background-position:-102px 0 !important;
 }
-
-.x-progress-bar-green {
-	background: #00ff00 url(../icons/progress-bg-green.gif) repeat-x scroll
-		left center;
-	border-right: 1px solid #5bd976;
-	border-top: 1px solid #79e18f;
+.x-trigger-wrap-focus .x-form-spinner-clickup{
+    background-position:-119px 0 !important;
 }
-
-.tvh-grid-unset {
+.x-trigger-wrap-focus .x-form-spinner-overdown{
+    background-position:-136px 0 !important;
+}
+.x-trigger-wrap-focus .x-form-spinner-clickdown{
+    background-position:-153px 0 !important;
+}
+.x-trigger-wrap-focus .x-form-trigger{
+    border-bottom: 1px solid #7eadd9;
+}
+.x-form-field-wrap .x-form-spinner-splitter {
+	line-height:1px !important;
+	font-size:1px !important;
+    background:transparent url(../extjs/resources/images/default/form/Spinner/spinner-split.png) no-repeat 0 0 !important;
+	position:absolute !important;
+	cursor: n-resize !important;
+}
+.x-trigger-wrap-focus .x-form-spinner-splitter{
+    background-position:-14px 0 !important;
+}
+/* END Ext.ux.form.Spinner CSS code */
+.tvh-grid-gray {
 	color: #888;
+	font-style: italic;
+}
+
+.tvh-grid-red {
+	color: #FF0000;
+	font-style: italic;
+}
+
+.tvh-grid-blue {
+	color: #0000FF;
+	font-style: italic;
+}
+
+.tvh-grid-green {
+	color: #04B404;
 	font-style: italic;
 }
 
@@ -114,28 +155,40 @@
 	background-image: url(../icons/htslogo.png) !important;
 }
 
-.magnifier{
-	background-image: url(../icons/magnifier.png) !important;
+.vlc {
+	background-image: url(../icons/vlc.png) !important;
+}
+
+.html5 {
+	background-image: url(../icons/html5.png) !important;
 }
 
 .add {
-	background-image: url(../icons/add.gif) !important;
+	background-image: url(../icons/add.png) !important;
 }
 
 .option {
-	background-image: url(../icons/plugin.gif) !important;
+	background-image: url(../icons/plugin.png) !important;
 }
 
 .remove {
-	background-image: url(../icons/delete.gif) !important;
+	background-image: url(../icons/delete.png) !important;
+}
+
+.cancel {
+	background-image: url(../icons/cancel.png) !important;
 }
 
 .save {
-	background-image: url(../icons/save.gif) !important;
+	background-image: url(../icons/save.png) !important;
 }
 
 .rec {
 	background-image: url(../icons/rec.png) !important;
+}
+
+.help {
+	background-image: url(../icons/help.png) !important;
 }
 
 .info {
@@ -146,12 +199,20 @@
 	background-image: url(../icons/undo.png) !important;
 }
 
+.refresh {
+	background-image: url(../icons/arrow_refresh.png) !important;
+}
+
+.magnifier {
+	background-image: url(../icons/magnifier.png) !important;
+}
+
 .key {
 	background-image: url(../icons/key.png) !important;
 }
 
-.tags {
-	background-image: url(../icons/tag_blue.png) !important;
+.tag {
+	background-image: url(../icons/tag_red.png) !important;
 }
 
 .xml {
@@ -174,16 +235,72 @@
 	background-image: url(../icons/television.png) !important;
 }
 
+.connect {
+	background-image: url(../icons/server_connect.png) !important;
+}
+
+.cog{
+	background-image: url(../icons/cog.png) !important;
+}
+
 .eye {
 	background-image: url(../icons/eye.png) !important;
+}
+
+.download {
+	background-image: url(../icons/drive_put.png) !important;
+}
+
+.color-swatch{
+	background-image: url(../icons/color_swatch.png) !important;
+}
+
+.control_start {
+	background-image: url(../icons/control_start.png) !important;
+}
+
+.control_start-active {
+	background-image: url(../icons/control_start_blue.png) !important;
+}
+
+.control_rewind {
+	background-image: url(../icons/control_rewind.png) !important;
+}
+
+.control_rewind-active {
+	background-image: url(../icons/control_rewind_blue.png) !important;
 }
 
 .control_play {
 	background-image: url(../icons/control_play.png) !important;
 }
 
+.control_play-active {
+	background-image: url(../icons/control_play_blue.png) !important;
+}
+
 .control_pause {
 	background-image: url(../icons/control_pause.png) !important;
+}
+
+.control_pause-active {
+	background-image: url(../icons/control_pause_blue.png) !important;
+}
+
+.control_fastforward {
+	background-image: url(../icons/control_fastforward.png) !important;
+}
+
+.control_fastforward-active {
+	background-image: url(../icons/control_fastforward_blue.png) !important;
+}
+
+.control_end {
+	background-image: url(../icons/control_end.png) !important;
+}
+
+.control_end-active {
+	background-image: url(../icons/control_end_blue.png) !important;
 }
 
 .control_stop {
@@ -194,12 +311,28 @@
 	background-image: url(../icons/sound.png) !important;
 }
 
+.control_mute {
+	background-image: url(../icons/sound_mute.png) !important;
+}
+
 .control_fullscreen {
 	background-image: url(../icons/arrow_out.png) !important;
 }
 
-.newspaper {
-	background-image: url(../icons/newspaper.png) !important;
+.bell {
+	background-image: url(../icons/bell.png) !important;
+}
+
+.transmit-blue {
+	background-image: url(../icons/transmit.png) !important;
+}
+
+.transmit-orange {
+	background-image: url(../icons/transmit_orange.png) !important;
+}
+
+.bulb {
+	background-image: url(../icons/lightbulb.png) !important;
 }
 
 .clock {
@@ -210,8 +343,12 @@
 	background-image: url(../icons/exclamation.png) !important;
 }
 
-.wrench {
+.wrench-blue {
 	background-image: url(../icons/wrench.png) !important;
+}
+
+.wrench-orange {
+	background-image: url(../icons/wrench_orange.png) !important;
 }
 
 .wand {
@@ -229,25 +366,45 @@
 .clone {
 	background-image: url(../icons/layers.png) !important;
 }
-
+/* START schedstate */
 .scheduled {
 	background-image: url(../icons/clock.png) !important;
 }
 
 .recordingError {
-	background-image: url(../icons/exclamation.png) !important;
+	background-image: url(../icons/error.png) !important;
+}
+
+.recording {
+	background-image: url(../icons/clock_red.png) !important;
+}
+
+.completedError {
+	background-image: url(../icons/cross.png) !important;
 }
 
 .completed {
 	background-image: url(../icons/tick.png) !important;
 }
 
-.completedError {
-	background-image: url(../icons/exclamation.png) !important;
+.timeError {
+	background-image: url(../icons/time_delete.png) !important;
 }
 
-.recording {
-	background-image: url(../icons/rec.png) !important;
+.unknownError {
+	background-image: url(../icons/exclamation.png) !important;
+}
+/* END schedstate */
+.cross {
+	background-image: url(../icons/cross.png) !important;
+}
+
+.tick {
+	background-image: url(../icons/tick.png) !important;
+}
+
+.error {
+	background-image: url(../icons/error.png) !important;
 }
 
 .x-smallhdr {
@@ -263,19 +420,15 @@
 
 .x-epg-subtitle {
 	margin: 5px;
-	font: normal 12px arial, tahoma, helvetica, sans-serif;
+	font: normal 10px arial, tahoma, helvetica, sans-serif;
 	font-weight: bold;
-}
-
-.x-epg-desc {
-	margin: 5px;
 }
 
 .x-epg-chicon {
 	float: right;
 	margin: 5px;
-	max-width: 132px;
-	max-height: 99px;
+	max-width: 100px;
+	max-height: 100px;
 }
 
 .x-epg-meta {
@@ -312,127 +465,17 @@
 }
 
 .about-title {
-	font-size: 24px;
+	font: normal 24px verdana;
 	font-weight: bold;
+	text-align: center;
 }
 
-/** vim: ts=4:sw=4:nu:fdc=4:nospell 
- *
- * Ext.ux.grid.RowActions.css 
- *
- * Style sheets for Grid RowActions Plugin
- *
- * @author   Ing. Jozef Sakáloš
- * @date     27. March 2008
- * @verson   $Id: Ext.ux.grid.RowActions.css 140 2008-04-06 01:24:10Z jozo $
- *
- * @license Ext.ux.grid.RowActions.css is licensed under the terms of
- * the Open Source LGPL 3.0 license.  Commercial use is permitted to the extent
- * that the code/component(s) do NOT become part of another Open Source or Commercially
- * licensed development library or toolkit without explicit permission.
- * 
- * License details: http://www.gnu.org/licenses/lgpl.html
- */
-
-/* styles for rows */
-.ux-row-action-cell .x-grid3-cell-inner {
-	padding: 1px 0 0 0;
+.x-form-field-center {
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.ux-row-action-item {
-	float: left;
-	min-width: 16px;
-	height: 16px;
-	background-repeat: no-repeat;
-	margin: 0 5px 0 0;
-	cursor: pointer;
-	overflow: hidden;
+.x-icon-airing {
+	float : left;
+	margin : 3 6 0 0;
 }
-
-.ext-ie .ux-row-action-item {
-	width: 16px;
-}
-
-.ext-ie .ux-row-action-text {
-	width: auto;
-}
-
-.ux-row-action-item span {
-	vertical-align: middle;
-	padding: 0 0 0 20px;
-	line-height: 18px;
-}
-
-.ext-ie .ux-row-action-item span {
-	width: auto;
-}
-
-/* styles for groups */
-.x-grid-group-hd div {
-	position: relative;
-	height: 16px;
-}
-
-.ux-grow-action-item {
-	min-width: 16px;
-	height: 16px;
-	background-repeat: no-repeat;
-	background-position: 0 50% ! important;
-	margin: 0 0 0 4px;
-	padding: 0 ! important;
-	cursor: pointer;
-	float: left;
-}
-
-.ext-ie .ux-grow-action-item {
-	width: 16px;
-}
-
-.ux-action-right {
-	float: right;
-	margin: 0 3px 0 2px;
-	padding: 0 ! important;
-}
-
-.ux-grow-action-text {
-	padding: 0 ! important;
-	margin: 0 ! important;
-	background: transparent none ! important;
-	float: left;
-}
-
-/** vim: ts=4:sw=4:nu:fdc=4:nospell
- *
- * Ext.ux.form.LovCombo CSS File
- *
- * @author    Ing.Jozef Sakáloš
- * @copyright (c) 2008, by Ing. Jozef Sakáloš
- * @date      5. April 2008
- * @version   $Id: Ext.ux.form.LovCombo.css 189 2008-04-16 21:01:06Z jozo $
- *
- * @license Ext.ux.form.LovCombo.css is licensed under the terms of the Open Source
- * LGPL 3.0 license. Commercial use is permitted to the extent that the 
- * code/component(s) do NOT become part of another Open Source or Commercially
- * licensed development library or toolkit without explicit permission.
- * 
- * License details: http://www.gnu.org/licenses/lgpl.html
- */
-.ux-lovcombo-icon {
-	width: 16px;
-	height: 16px;
-	float: left;
-	background-position: -1px -1px ! important;
-	background-repeat: no-repeat ! important;
-}
-
-.ux-lovcombo-icon-checked {
-	background: transparent
-		url(../extjs/resources/images/default/menu/checked.gif);
-}
-
-.ux-lovcombo-icon-unchecked {
-	background: transparent
-		url(../extjs/resources/images/default/menu/unchecked.gif);
-}
-
-/* eof */
