@@ -1,13 +1,15 @@
 // Store: config languages
 tvheadend.data.languages = new Ext.data.JsonStore({
-    autoLoad:true,
-    root:'entries',
-    fields: ['identifier','name'],
-    id: 'identifier',
-    url:'languages',
-    baseParams: {
-    	op: 'list'
-    }
+	autoLoad : true,
+	baseParams : { op : 'list' },
+	fields : ['identifier','name'],
+	id : 'identifier',
+	root : 'entries',
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	},
+	url : 'languages'
 });
 
 // Store: all languages
@@ -21,8 +23,6 @@ tvheadend.data.configLanguages = new Ext.data.JsonStore({
     	op: 'config'
     }
 });
-
-tvheadend.data.languages.setDefaultSort('name', 'ASC');
 
 tvheadend.comet.on('config', function(m) {
     if(m.reload != null) {
