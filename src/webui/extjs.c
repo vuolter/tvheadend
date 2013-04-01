@@ -132,11 +132,11 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
    * Load all components
    */
   extjs_load(hq, "static/app/comet.js");
-  extjs_load(hq, "static/app/tableeditor.js");
-  extjs_load(hq, "static/app/cteditor.js");
-  extjs_load(hq, "static/app/acleditor.js");
-  extjs_load(hq, "static/app/cwceditor.js");
-  extjs_load(hq, "static/app/capmteditor.js");
+  extjs_load(hq, "static/app/table.js");
+  extjs_load(hq, "static/app/ctag.js");
+  extjs_load(hq, "static/app/acl.js");
+  extjs_load(hq, "static/app/cwc.js");
+  extjs_load(hq, "static/app/capmt.js");
   extjs_load(hq, "static/app/tvadapters.js");
 #if ENABLE_LINUXDVB
   extjs_load(hq, "static/app/dvb.js");
@@ -148,7 +148,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
 #if ENABLE_TIMESHIFT
   extjs_load(hq, "static/app/timeshift.js");
 #endif
-  extjs_load(hq, "static/app/chconf.js");
+  extjs_load(hq, "static/app/channels.js");
   extjs_load(hq, "static/app/epg.js");
   extjs_load(hq, "static/app/dvr.js");
   extjs_load(hq, "static/app/epggrab.js");
