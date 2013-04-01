@@ -74,6 +74,10 @@ is_client_simple(http_connection_t *hc)
   };
   const char **ua;
   
+  if((c = http_arg_get(&hc->hc_args, "x-wap-profile")) != NULL) {
+    return 1;
+  }
+  
   if((c = http_arg_get(&hc->hc_args, "User-Agent")) != NULL) {
     ua = ua_list;
     while (*ua) {
@@ -82,10 +86,7 @@ is_client_simple(http_connection_t *hc)
 	  ++ua;
 	}
   }
-
-  if((c = http_arg_get(&hc->hc_args, "x-wap-profile")) != NULL) {
-    return 1;
-  }
+  
   return 0;
 }
 
