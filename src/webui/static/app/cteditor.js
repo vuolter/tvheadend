@@ -47,5 +47,5 @@ tvheadend.cteditor = function() {
 
 	return new tvheadend.tableEditor('ctagGrid', 'Channel Tags', 'channeltags', cm,
 		ChannelTagRecord, [ tvheadend.Search, enabledColumn, internalColumn, titledIconColumn ],
-		null, 'config_tags.html', 'tags');
+		null, 'config_tags.html', 'tag');
 }
