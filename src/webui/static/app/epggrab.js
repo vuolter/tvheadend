@@ -343,7 +343,7 @@ tvheadend.epggrab = function() {
 		items : [ saveBtn, '->', helpBtn ]
 	});
 	
-	var panel = new Ext.FormPanel({
+	var panel = new Ext.form.FormPanel({
 		title : 'EPG Grabber',
 		iconCls : 'xml',
 		border : false,

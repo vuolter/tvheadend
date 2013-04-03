@@ -101,7 +101,7 @@ tvheadend.timeshift = function() {
 		items : [ saveBtn, '->', helpBtn ]
 	});
 	
-  var panel = new Ext.FormPanel({
+  var panel = new Ext.form.FormPanel({
     title : 'Timeshift',
     iconCls : 'clock',
     border : false,

@@ -30,7 +30,7 @@ tvheadend.v4l_adapter_general = function(adapterData) {
 		name : 'logging'
 	}) ];
 
-	var confform = new Ext.FormPanel({
+	var confform = new Ext.form.FormPanel({
 		title : 'Adapter configuration',
 		columnWidth : .40,
 		frame : true,

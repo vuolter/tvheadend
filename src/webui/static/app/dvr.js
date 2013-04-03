@@ -287,7 +287,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 			});
 		}
 
-		var panel = new Ext.FormPanel({
+		var panel = new Ext.form.FormPanel({
 			frame : true,
 			border : true,
 			bodyStyle : 'padding:5px',
@@ -766,7 +766,7 @@ tvheadend.dvrsettings = function() {
 		}, delBtn, '->', helpBtn ]
 	});
 	
-	var panel = new Ext.FormPanel({
+	var panel = new Ext.form.FormPanel({
 		title : 'Digital Video Recorder',
 		iconCls : 'drive',
 		border : false,
