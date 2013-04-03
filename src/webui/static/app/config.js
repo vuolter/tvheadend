@@ -159,7 +159,7 @@ tvheadend.miscconf = function() {
 		listeners : {
 			'select' : function(c){ 
 				if(c.isDirty())
-					Ext.util.CSS.swapStyleSheet('theme', combo.getValue());
+					Ext.util.CSS.swapStyleSheet('theme', c.getValue());
 			}
 		}
 	});
@@ -176,10 +176,12 @@ tvheadend.miscconf = function() {
 	});
 
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('General Configuration', 'config_misc.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 
 	var tbar = new Ext.Toolbar({
@@ -189,7 +191,7 @@ tvheadend.miscconf = function() {
 	
 	var panel = new Ext.form.FormPanel({
 		title : 'General',
-		iconCls : 'wrench',
+		iconCls : 'wrench-orange',
 		border : false,
 		bodyStyle : 'padding:15px',
 		labelAlign : 'left',

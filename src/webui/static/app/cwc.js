@@ -2,6 +2,14 @@ tvheadend.cwceditor = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.dummy('Code Word Client','key');
 
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
 		dataIndex : 'enabled',
@@ -33,9 +41,11 @@ tvheadend.cwceditor = function() {
 		}
 	}
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
     defaultSortable: true,
-    columns : [ enabledColumn, {
+    columns : [ selModel, enabledColumn, {
 		header : "Hostname",
 		dataIndex : 'hostname',
 		width : 200,
@@ -113,8 +123,8 @@ tvheadend.cwceditor = function() {
 		}
 	});
 
-	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', cm, rec, [
-		tvheadend.Search, enabledColumn, emmColumn, emmexColumn ], store, 'config_cwc.html', 'key');
+	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', selModel, cm, rec, [
+		search, enabledColumn, emmColumn, emmexColumn ], store, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {
 		var rec = store.getById(msg.id);

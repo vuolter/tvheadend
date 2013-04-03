@@ -1,4 +1,4 @@
-tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
+tvheadend.tableEditor = function(id, title, dtable, selModel, cm, rec, plugins, store,
 	helpContent, icon) {
 
 	if (store == null) {
@@ -108,8 +108,6 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		});
 	}
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
-
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
@@ -152,10 +150,12 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 	});
 
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help(title, helpContent);
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 	
 	var tbar = new Ext.Toolbar({
@@ -176,10 +176,10 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		iconCls : icon,
 		plugins : plugins,
 		store : store,
-		clicksToEdit : 2,
 		cm : cm,
-		selModel : selModel,
+		sm : selModel,
 		stripeRows : true,
+		enableColumnMove : false,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,

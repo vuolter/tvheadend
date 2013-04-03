@@ -113,7 +113,7 @@ tvheadend.mergeChannel = function(chan) {
 	});
 
 	win = new Ext.Window({
-		title : 'Merge channel ' + '<span class="x-content-highlight">' + chan.name '</span>' + ' into...',
+		title : 'Merge channel ' + '<span class="x-content-highlight">' + chan.name + '</span>' + ' into...',
 		layout : 'fit',
 		width : 500,
 		height : 120,
@@ -129,6 +129,14 @@ tvheadend.mergeChannel = function(chan) {
  *
  */
 tvheadend.chconf = function() {
+	
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
 	
 	var actions = new Ext.ux.grid.RowActions({
 		dataIndex : 'actions',
@@ -152,9 +160,12 @@ tvheadend.chconf = function() {
 		hideable : false
 	});
 	
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
-		columns : [ 
+		columns : [
+			selModel,
 			{
 				header : "Number",
 				dataIndex : 'number',
@@ -333,8 +344,6 @@ tvheadend.chconf = function() {
 		});
 	}
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
-
   var addBtn = new Ext.Toolbar.Button({
     disabled : !tvheadend.accessupdate.admin,
 	tooltop : 'Add a new channel',
@@ -370,10 +379,12 @@ tvheadend.chconf = function() {
 	});
 
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('Channels', 'config_channels.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 	
 	var tbar = new Ext.Toolbar({
@@ -382,15 +393,14 @@ tvheadend.chconf = function() {
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({
-		clicksToEdit : 2,
 		cm : cm,
 		iconCls : 'television',
 		id : "channelsGrid",
 		enableColumnMove : false,
 		store : tvheadend.data.channels,
 		stripeRows : true,
-		plugins : [ tvheadend.Search, actions ],
-		selModel : selModel,
+		plugins : [ search, actions ],
+		sm : selModel,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,

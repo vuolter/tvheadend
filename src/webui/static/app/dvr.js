@@ -151,6 +151,14 @@ tvheadend.dvrDetails = function(entry) {
  */
 tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
 	var actions = new Ext.ux.grid.RowActions({
 		header : '',
 		dataIndex : 'actions',
@@ -193,7 +201,9 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		return tvheadend.data.dvrprio.getById(value).data.name;
 	}
 
-	var dvrCm = new Ext.grid.ColumnModel([ actions, {
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
+	var dvrCm = new Ext.grid.ColumnModel([ selModel, actions, {
 		width : 250,
 		id : 'title',
 		header : "Title",
@@ -377,10 +387,12 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 	}
 	
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 	
 	var tbar = new Ext.Toolbar({
@@ -394,18 +406,19 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 	});
 	
 	var grid = new Ext.grid.GridPanel({
+		cm : dvrCm,
+		enableColumnMove : false,
+		iconCls : iconCls,
 		id : id,
 		loadMask : true,
-		stripeRows : true,
-		disableSelection : true,
-		title : title,
-		iconCls : iconCls,
-		store : dvrStore,
-		cm : dvrCm,
-		plugins : [ tvheadend.Search, actions ],
+		plugins : [ search, actions ],
+		sm : selModel,
 		stateful : true,
 		stateId : this.id,
+		store : dvrStore,
+		stripeRows : true,
 		tbar : tbar,
+		title : title,
 		view : tvheadend.BufferView
 	});
 
@@ -425,18 +438,27 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
  */
 tvheadend.autoreceditor = function() {
 	
-
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
 		dataIndex : 'enabled',
 		width : 30
 	});
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns :
 		[
-			enabledColumn,
+			selModel, enabledColumn,
 			{
 				header : "Title (Regexp)",
 				dataIndex : 'title',
@@ -587,8 +609,8 @@ tvheadend.autoreceditor = function() {
 				})
 			} ]});
 
-	return new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', cm,
-		tvheadend.autorecRecord, [ tvheadend.Search, enabledColumn ], tvheadend.data.autorec,
+	return new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', selModel, cm,
+		tvheadend.autorecRecord, [ search, enabledColumn ], tvheadend.data.autorec,
 		'autorec.html', 'wand');
 }
 /**
@@ -710,14 +732,17 @@ tvheadend.dvr = function() {
 	var panel = new Ext.TabPanel({
 		activeTab : 0,
 		autoScroll : true,
-		title : 'Digital Video Recorder',
 		iconCls : 'drive',
+		id : 'DVRTab',		
 		items : [ 
-		          new tvheadend.dvrschedule('dvrupcomingGrid', 'Upcoming recordings', 'clock', tvheadend.dvrStoreUpcoming),
-		          new tvheadend.dvrschedule('dvrfinishedGrid', 'Finished recordings', 'television', tvheadend.dvrStoreFinished),
-		          new tvheadend.dvrschedule('dvrfailedGrid', 'Failed recordings', 'exclamation', tvheadend.dvrStoreFailed),
-		          new tvheadend.autoreceditor
-		        ]
+			new tvheadend.dvrschedule('dvrupcomingGrid', 'Upcoming recordings', 'clock', tvheadend.dvrStoreUpcoming),
+			new tvheadend.dvrschedule('dvrfinishedGrid', 'Finished recordings', 'television', tvheadend.dvrStoreFinished),
+			new tvheadend.dvrschedule('dvrfailedGrid', 'Failed recordings', 'exclamation', tvheadend.dvrStoreFailed),
+			new tvheadend.autoreceditor
+		],
+		stateful : true,
+		stateId : this.id,
+		title : 'Digital Video Recorder'
 	});
 	return panel;
 }
@@ -754,10 +779,12 @@ tvheadend.dvrsettings = function() {
 	});
 
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('DVR configuration', 'config_dvr.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 	
 	var tbar = new Ext.Toolbar({

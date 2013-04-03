@@ -105,18 +105,18 @@ tvheadend.v4l_adapter_general = function(adapterData) {
  */
 tvheadend.v4l_services = function(adapterId) {
 
-	
-
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
 		dataIndex : 'enabled',
 		width : 45
 	});
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns : [
-    enabledColumn, {
+    selModel, enabledColumn, {
 		header : "Channel name",
 		dataIndex : 'channelname',
 		width : 150,
@@ -275,8 +275,6 @@ tvheadend.v4l_services = function(adapterId) {
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
-
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [
@@ -294,12 +292,12 @@ tvheadend.v4l_services = function(adapterId) {
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "v4lGrid",
 		stripeRows : true,
+		enableColumnMove : false,
 		title : 'Services',
 		plugins : [ enabledColumn ],
 		store : store,
-		clicksToEdit : 2,
 		cm : cm,
-		selModel : selModel,
+		sm : selModel,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,

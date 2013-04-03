@@ -41,10 +41,12 @@ tvheadend.tvadapters = function() {
 	});
 	
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('DVB', 'config_dvb.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 	
 	var tbar = new Ext.Toolbar({

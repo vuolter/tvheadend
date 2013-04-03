@@ -101,10 +101,10 @@ int config_set_muxconfpath ( const char *path )
 
 const char *config_get_xtheme ( void )
 {
-  return htsmsg_get_str(config, "theme");
+  return htsmsg_get_str(config, "xtheme");
 }
 
 int config_set_xtheme ( const char *path )
 {
-  return _config_set_str("theme", path);
+  return _config_set_str("xtheme", path);
 }

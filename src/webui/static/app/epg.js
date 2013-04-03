@@ -26,10 +26,10 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 });
 
 tvheadend.contentGroupLookupName = function(code) {
-	var i = tvheadend.ContentGroupStore.find("code", (code & 0xF0));
-	var name = index != -1 ? tvheadend.contentGroupLookupName.getAt(index).get('name');
-						   : null;
-	return !name ? '<span class="tvh-grid-gray">Unknown</span>';
+	var index = tvheadend.ContentGroupStore.find("code", (code & 0xF0));
+	var name = index != -1 ? tvheadend.contentGroupLookupName.getAt(index).get('name')
+					   : null;
+	return !name ? '<span class="tvh-grid-gray">Unknown</span>'
 				 : name;
 }
 
@@ -193,12 +193,10 @@ tvheadend.epgDetails = function(event) {
 tvheadend.epg = function() {
 	
 	var actions = new Ext.ux.grid.RowActions({
-		header : '',
-		width : 20,
+		actions : { iconIndex : 'schedstate' },
 		dataIndex : 'actions',
-		actions : [ {
-			iconIndex : 'schedstate'
-		} ]
+		hideable : false,
+		width : 20
 	});
 
 	var epgStore = new Ext.ux.grid.livegrid.Store({
@@ -488,10 +486,12 @@ tvheadend.epg = function() {
 	});
 
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('Electronic Program Guide', 'epg.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 	
 	var tbar = new Ext.Toolbar({
@@ -534,9 +534,9 @@ tvheadend.epg = function() {
 		enableColumnMove : false,
 		id : "epgGrid",
 		cm : epgCm,
-		iconCls : 'newspaper',
+		iconCls : 'bell',
 		plugins : [ actions ],
-		selModel : new Ext.ux.grid.livegrid.RowSelectionModel(),
+		sm : new Ext.ux.grid.livegrid.RowSelectionModel(),
 		store : epgStore,
 		stateful : true,
 		stateId : this.id,
