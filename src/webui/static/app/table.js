@@ -113,7 +113,7 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
-		text : 'Delete selected',
+		text : 'Delete',
 		handler : delSelected,
 		disabled : true
 	});

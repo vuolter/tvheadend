@@ -329,7 +329,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected muxes',
 		iconCls : 'remove',
-		text : 'Delete selected...',
+		text : 'Delete',
 		handler : delSelected,
 		disabled : true
 	});

@@ -346,7 +346,7 @@ tvheadend.chconf = function() {
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected channels',
 		iconCls : 'remove',
-		text : 'Delete selected',
+		text : 'Delete',
 		handler : delSelected,
 		disabled : true
 	});
