@@ -252,7 +252,7 @@ tvheadend.v4l_services = function(adapterId) {
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
-		text : 'Delete selected services',
+		text : 'Delete',
 		handler : delSelected,
 		disabled : true
 	});
