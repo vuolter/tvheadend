@@ -86,7 +86,7 @@ tvheadend.mergeChannel = function(chan) {
 		});
 	}
 
-	var panel = new Ext.FormPanel({
+	var panel = new Ext.form.FormPanel({
 		frame : true,
 		border : true,
 		bodyStyle : 'padding:5px',
