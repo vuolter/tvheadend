@@ -108,9 +108,7 @@ tvheadend.tableEditor = function(id, title, dtable, cm, rec, plugins, store,
 		});
 	}
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected rows',

@@ -341,9 +341,7 @@ tvheadend.chconf = function() {
 		});
 	}
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 
   var addBtn = new Ext.Toolbar.Button({
     disabled : !tvheadend.accessupdate.admin,

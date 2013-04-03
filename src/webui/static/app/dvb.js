@@ -324,9 +324,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		});
 	}
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected muxes',
@@ -693,9 +691,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 
 	selModel.on('selectionchange', function(s) {
 		mapBtn.setDisabled(s.getCount() == 0);

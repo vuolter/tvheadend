@@ -275,9 +275,7 @@ tvheadend.v4l_services = function(adapterId) {
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 
 	var tbar = new Ext.Toolbar({
 		enableOverflow : true,
