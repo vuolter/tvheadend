@@ -107,6 +107,7 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'stype',
 			hidden : true,
 			editor : new Ext.form.ComboBox({
+				lazyRender : true,
 				valueField : 'val',
 				displayField : 'str',
 				forceSelection : false,

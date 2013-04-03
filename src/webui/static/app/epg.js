@@ -26,8 +26,8 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 });
 
 tvheadend.contentGroupLookupName = function(code) {
-	var i = tvh.ContentGroupStore.find("code", (code & 0xF0));
-	var name = index != -1 ? tvh.contentGroupLookupName.getAt(index).get('name');
+	var i = tvheadend.ContentGroupStore.find("code", (code & 0xF0));
+	var name = index != -1 ? tvheadend.contentGroupLookupName.getAt(index).get('name');
 						   : null;
 	return !name ? '<span class="tvh-grid-gray">Unknown</span>';
 				 : name;

@@ -448,6 +448,7 @@ tvheadend.autoreceditor = function() {
 				header : "Channel",
 				dataIndex : 'channel',
 				editor : new Ext.form.ComboBox({
+					lazyRender : true,
 					loadingText : 'Loading...',
 					displayField : 'name',
 					store : tvheadend.data.channels2,
@@ -468,6 +469,7 @@ tvheadend.autoreceditor = function() {
 				header : "Channel tag",
 				dataIndex : 'tag',
 				editor : new Ext.form.ComboBox({
+					lazyRender : true,
 					displayField : 'name',
 					store : tvheadend.data.channelTags2,
 					mode : 'local',
@@ -483,6 +485,7 @@ tvheadend.autoreceditor = function() {
 					return tvheadend.contentGroupLookupName(v);
 				},
 				editor : new Ext.form.ComboBox({
+					lazyRender : true,
 					valueField : 'code',
 					displayField : 'name',
 					store : tvheadend.data.contentGroup,
@@ -560,6 +563,7 @@ tvheadend.autoreceditor = function() {
 					}
 				},
 				editor : new Ext.form.ComboBox({
+					lazyRender : true,
 					store : tvheadend.data.configNames,
 					triggerAction : 'all',
 					mode : 'local',
