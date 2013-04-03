@@ -252,7 +252,7 @@ tvheadend.iptv = function(adapterId) {
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
-		text : 'Delete services',
+		text : 'Delete',
 		handler : delSelected,
 		disabled : true
 	});
