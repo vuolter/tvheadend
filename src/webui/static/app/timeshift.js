@@ -90,10 +90,12 @@ tvheadend.timeshift = function() {
   });
 
   var helpBtn = new Ext.Button({
-    text : 'Help',
     handler : function() {
       new tvheadend.help('Timeshift Configuration', 'config_timeshift.html');
-    }
+    },
+	iconCls : 'help',
+	text : 'Help',
+	tooltip : 'Show help page'
   });
   
 	var tbar = new Ext.Toolbar({

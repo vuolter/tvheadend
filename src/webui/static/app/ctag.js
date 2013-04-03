@@ -1,6 +1,13 @@
 tvheadend.cteditor = function() {
 	
-
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
 		dataIndex : 'enabled',
@@ -22,9 +29,11 @@ tvheadend.cteditor = function() {
 			+ 'on top of logo.'
 	});
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
-  columns : [ enabledColumn, {
+  columns : [ selModel, enabledColumn, {
 		header : "Name",
 		dataIndex : 'name',
 		editor : new Ext.form.TextField({
@@ -45,7 +54,7 @@ tvheadend.cteditor = function() {
 	var ChannelTagRecord = Ext.data.Record.create([ 'enabled', 'name',
 		'internal', 'icon', 'comment', 'titledIcon' ]);
 
-	return new tvheadend.tableEditor('ctagGrid', 'Channel Tags', 'channeltags', cm,
-		ChannelTagRecord, [ tvheadend.Search, enabledColumn, internalColumn, titledIconColumn ],
+	return new tvheadend.tableEditor('ctagGrid', 'Channel Tags', 'channeltags', selModel, cm,
+		ChannelTagRecord, [ search, enabledColumn, internalColumn, titledIconColumn ],
 		null, 'config_tags.html', 'tag');
 }

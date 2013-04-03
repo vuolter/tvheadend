@@ -122,6 +122,7 @@ tvheadend.status_subs = function() {
 		border: false,
 		loadMask : true,
 		stripeRows : true,
+		enableColumnMove : false,
 		disableSelection : true,
 		title : 'Subscriptions',
 		iconCls : 'eye',
@@ -196,6 +197,7 @@ tvheadend.status_adapters = function() {
 		border: false,
 		loadMask : true,
 		stripeRows : true,
+		enableColumnMove : false,
 		disableSelection : true,
 		title : 'Adapters',
 		iconCls : 'hardware',
@@ -215,7 +217,7 @@ tvheadend.status = function() {
                 border: false,
 		layout : 'vbox',
 		title : 'Status',
-		iconCls : 'eye',
+		iconCls : 'bulb',
 		items : [ new tvheadend.status_subs, new tvheadend.status_adapters ]
         });
 

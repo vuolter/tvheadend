@@ -2,6 +2,14 @@ tvheadend.capmteditor = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.dummy('Capmt Connections','key');
 
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
 		dataIndex : 'enabled',
@@ -27,9 +35,11 @@ tvheadend.capmteditor = function() {
 		}
 	}
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
-  columns: [ enabledColumn, {
+  columns: [ selModel, enabledColumn, {
 		header : "Camd.socket Filename",
 		dataIndex : 'camdfilename',
 		width : 200,
@@ -83,6 +93,6 @@ tvheadend.capmteditor = function() {
 		}
 	});
 
-	return new tvheadend.tableEditor('camptGrid', 'Capmt Connections', 'capmt', cm, rec,
-		[ tvheadend.Search, enabledColumn, oscamColumn ], store, 'config_capmt.html', 'key');
+	return new tvheadend.tableEditor('camptGrid', 'Capmt Connections', 'capmt', selModel, cm, rec,
+		[ search, enabledColumn, oscamColumn ], store, 'config_capmt.html', 'key');
 }

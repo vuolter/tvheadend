@@ -9,18 +9,6 @@ tvheadend.BufferView = new Ext.ux.grid.BufferView({
 	scrollDelay : false,
 	rowHeight : 29
 });
-
-/**
- * GridSearch
- */
-tvheadend.Search = new Ext.ux.grid.Search({
-	align : 'left',
-	iconCls : 'magnifier',
-	minChars : 3,
-	position : 'top',
-	searchText : '',
-	width : 250
-});
 	
 /**
  * Dummy maker
@@ -334,11 +322,14 @@ tvheadend.app = function() {
 			tvheadend.configPanel = new Ext.TabPanel({
 				activeTab : 0,
 				enableTabScroll : true,
-				title : 'Configuration',
 				iconCls : 'wrench-blue',
+				id : 'configTab',
 				items : [ tvheadend.miscconfPanel, tvheadend.tvadaptersPanel, tvheadend.timeshiftPanel,
 						  tvheadend.epggrabPanel, tvheadend.dvrsettingsPanel, tvheadend.ctagPanel,
-						  tvheadend.iptvPanel, tvheadend.aclPanel, tvheadend.cwcPanel, tvheadend.capmtPanel ]
+						  tvheadend.iptvPanel, tvheadend.aclPanel, tvheadend.cwcPanel, tvheadend.capmtPanel ],
+				stateful : true,
+				stateId : this.id,
+				title : 'Configuration'
 			});
 			
 			tvheadend.statusPanel = new tvheadend.status;
@@ -357,11 +348,14 @@ tvheadend.app = function() {
 		});
 		
 		tvheadend.tabsPanel = new Ext.TabPanel({
-			region : 'center',
 			activeTab : 0,
 			enableTabScroll : true,
+			id : 'rootTab',
 			items : [ tvheadend.epgPanel, tvheadend.dvrPanel, tvheadend.channelsPanel,
-					  tvheadend.configPanel, tvheadend.statusPanel, tvheadend.aboutPanel ]
+					  tvheadend.configPanel, tvheadend.statusPanel, tvheadend.aboutPanel ],
+			region : 'center',
+			stateful : true,
+			stateId : this.id
 		});
 		
 		tvheadend.logPanel = new Ext.Panel({
@@ -434,8 +428,8 @@ tvheadend.app = function() {
 				baseParams : { op : 'loadSettings' },
 				autoLoad : {
 					callback : function(rec, opts, succ){
-						var theme = rec[0].get('theme');
-						theme = '../static/extjs/resources/css/xtheme-' + str.replace(/\s/g, "").toLowerCase() + '.css';
+						var theme = rec[0].get('xtheme');
+						theme = '../static/extjs/resources/css/xtheme-' + theme.replace(/\s/g, "").toLowerCase() + '.css';
 						Ext.util.CSS.swapStyleSheet('theme', theme);
 						this.destroy();
 					}

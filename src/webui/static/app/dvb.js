@@ -5,7 +5,13 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
 
-	
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -21,9 +27,10 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		colored : true
 	});
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 	var cmlist = Array();
 
-	cmlist.push(enabledColumn, {
+	cmlist.push(selModel, enabledColumn, {
 		header : "Play",
 		dataIndex : 'id',
 		width : 50,
@@ -262,7 +269,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 						satConf.emptyText = 'Select satellite configuration...';
 						satConf.clearValue();
 						targetSatConfStore.baseParams = {
-							adapter : combo.value
+							adapter : c.value
 						}
 						targetSatConfStore.load();
 						satConf.focus();
@@ -324,8 +331,6 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		});
 	}
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
-
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete one or more selected muxes',
 		iconCls : 'remove',
@@ -379,12 +384,12 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "multiplexesGrid",
 		stripeRows : true,
+		enableColumnMove : false,
 		title : 'Multiplexes',
-		plugins : [ tvheadend.Search, enabledColumn, qualityColumn ],
+		plugins : [ search, enabledColumn, qualityColumn ],
 		store : store,
-		clicksToEdit : 2,
 		cm : cm,
-		selModel : selModel,
+		sm : selModel,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,
@@ -401,7 +406,13 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
  
-	
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -434,10 +445,10 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		} ]
 	});
 
-
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 	var cmlist = Array();
 
-	cmlist.push(enabledColumn,
+	cmlist.push(selModel, enabledColumn,
 		{
 			header : "Service name",
 			dataIndex : 'svcname',
@@ -691,8 +702,6 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
-
 	selModel.on('selectionchange', function(s) {
 		mapBtn.setDisabled(s.getCount() == 0);
 	});
@@ -705,12 +714,12 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "servicesGrid",
 		stripeRows : true,
+		enableColumnMove : false,
 		title : 'Services',
-		plugins : [ tvheadend.Search, enabledColumn, eitColumn, actions ],
+		plugins : [ search, enabledColumn, eitColumn, actions ],
 		store : store,
-		clicksToEdit : 2,
 		cm : cm,
-		selModel : selModel,
+		sm : selModel,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,
@@ -1420,10 +1429,18 @@ tvheadend.dvb_adapter_general = function(adapterData, satConfStore) {
  */
 tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	
-
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
-  columns: [ {
+  columns: [ selModel, {
 		header : "Name",
 		dataIndex : 'name',
 		width : 200,
@@ -1462,7 +1479,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	var rec = Ext.data.Record.create([ 'name', 'port', 'comment', 'lnb' ]);
 
 	return new tvheadend.tableEditor('dvbsatconfGrid', 'Satellite config', 'dvbsatconf/'
-		+ adapterId, cm, tvheadend.Search, null, null, null);
+		+ adapterId, selModel, cm, search, null, null, null);
 }
 
 /**

@@ -332,10 +332,12 @@ tvheadend.epggrab = function() {
 	});
 
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('EPG Grab Configuration', 'config_epggrab.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 
 	var tbar = new Ext.Toolbar({

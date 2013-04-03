@@ -14,7 +14,13 @@ tvheadend.iptv = function(adapterId) {
 	  autoLoad : false
   });
 
-	
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -41,10 +47,12 @@ tvheadend.iptv = function(adapterId) {
 		} ]
 	});
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns : [
-		enabledColumn,
+		selModel, enabledColumn,
 		{
 			header : "Channel name",
 			dataIndex : 'channelname',
@@ -275,13 +283,13 @@ tvheadend.iptv = function(adapterId) {
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
-
 	var helpBtn = new Ext.Button({
-		text : 'Help',
 		handler : function() {
 			new tvheadend.help('IPTV', 'config_iptv.html');
-		}
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
 	});
 	
 	var tbar = new Ext.Toolbar({
@@ -299,13 +307,13 @@ tvheadend.iptv = function(adapterId) {
 	var grid = new Ext.grid.EditorGridPanel({
 		id : "iptvGrid",
 		stripeRows : true,
+		enableColumnMove : false,
 		title : 'IPTV',
 		iconCls : 'iptv',
-		plugins : [ tvheadend.Search, enabledColumn, actions ],
+		plugins : [ search, enabledColumn, actions ],
 		store : store,
-		clicksToEdit : 2,
 		cm : cm,
-		selModel : selModel,
+		sm : selModel,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,

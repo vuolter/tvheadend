@@ -1,5 +1,13 @@
 tvheadend.acleditor = function() {
 
+	var search = new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		position : 'top',
+		searchText : '',
+		width : 250
+	});
+	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
 		dataIndex : 'enabled',
@@ -26,7 +34,7 @@ tvheadend.acleditor = function() {
 	});
 
 	var dvrcfgColumn = new Ext.grid.CheckColumn({
-		header : "DVR Settings",
+		header : "DVR",
 		dataIndex : 'dvrcfg',
 		width : 120
 	});
@@ -57,13 +65,15 @@ tvheadend.acleditor = function() {
 		}
 	});
 
+	var selModel = new Ext.grid.CheckboxSelectionModel();
+	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {
 			sortable : true,
 			allowBlank : false
 		},
-		columns : [ 
-			enabledColumn, {
+		columns : [
+			selModel, enabledColumn, {
 				header : "Username",
 				dataIndex : 'username',
 				width : 200,
@@ -107,13 +117,13 @@ tvheadend.acleditor = function() {
 		]
 	});
 	
-	var rec = Ext.data.Record.create([ 'enabled', 'intro', 'webui', 'streaming', 'dvr',
+	var records = Ext.data.Record.create([ 'enabled', 'intro', 'webui', 'streaming', 'dvr',
 		'dvrall', 'admin', 'username', 'prefix', 'password', 'comment' ]);
 	
 	var store = new Ext.data.JsonStore({
 		autoLoad : true,
 		root : 'entries',
-		fields : rec,
+		fields : records,
 		url : "tablemgr",
 		id : 'id',
 		baseParams : {
@@ -126,8 +136,8 @@ tvheadend.acleditor = function() {
 		}
 	});
 
-	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', cm,
-		UserRecord, [ enabledColumn, /*introColumn,*/ webuiColumn, streamingColumn, dvrColumn, 
+	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', selModel, cm,
+		records, [ search, enabledColumn, /*introColumn,*/ webuiColumn, streamingColumn, dvrColumn, 
 		dvrcfgColumn, adminColumn ], store, 'config_access.html', 'group');
 			
 	return grid;
