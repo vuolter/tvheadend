@@ -274,9 +274,7 @@ tvheadend.iptv = function(adapterId) {
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
+	var selModel = new Ext.grid.CheckboxSelectionModel();
 
 	var helpBtn = new Ext.Button({
 		text : 'Help',

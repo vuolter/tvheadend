@@ -225,7 +225,6 @@ tvheadend.epggrab = function() {
 	 * External modules
 	 */
 	var externalSelectionModel = new Ext.grid.CheckboxSelectionModel({
-		singleSelect : false,
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
@@ -279,7 +278,6 @@ tvheadend.epggrab = function() {
 	 */
 
 	var otaSelectionModel = new Ext.grid.CheckboxSelectionModel({
-		singleSelect : false,
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
