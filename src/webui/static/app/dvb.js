@@ -281,7 +281,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 
 		if (satConf) mitems.push(satConf);
 
-		var panel = new Ext.form.FormPanel({
+		var panel = new Ext.FormPanel({
 			frame : true,
 			border : true,
 			bodyStyle : 'padding:5px',
@@ -1146,7 +1146,7 @@ tvheadend.addMuxManually = function(adapterData, satConfStore) {
 		});
 	}
 
-	var panel = new Ext.form.FormPanel({
+	var panel = new Ext.FormPanel({
 		frame : true,
 		border : true,
 		bodyStyle : 'padding:5px',
@@ -1336,7 +1336,7 @@ tvheadend.dvb_adapter_general = function(adapterData, satConfStore) {
 		items.push(v);
 	}
 
-	var confform = new Ext.form.FormPanel({
+	var confform = new Ext.FormPanel({
 		title : 'Adapter configuration',
 		columnWidth : .40,
 		frame : true,
