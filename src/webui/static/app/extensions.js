@@ -1,9 +1,31 @@
 /*!
+ * @class     Ext.ux.grid.CheckMenu
+ * @extends   Ext.util.Observable
+ * @author    Walter Purcaro
+ * @copyright (c) 2013, Walter Purcaro
+ * @version   0.1
+ */
+ Ext.ns('Ext.ux.grid');
+ 
+Ext.ux.grid.CheckMenu = function(config) {
+    Ext.apply(this, config);
+	Ext.ux.grid.CheckMenu.superclass.constructor.call(this);
+};
+
+Ext.extend(Ext.ux.grid.CheckMenu, Ext.util.Observable, {
+	init : function(grid) {
+	},
+});
+ 
+ 
+/*!
+ * Ext.ux.panel.Player - An unified player for Tvheadend
+ *
  * @class     Ext.ux.panel.Player
  * @extends   Ext.Panel
  * @author    Walter Purcaro
  * @copyright (c) 2013, Walter Purcaro
- * @version   0.1
+ * @version   0.2
  */
 Ext.ns('Ext.ux.panel')
 
@@ -48,12 +70,6 @@ Ext.extend(Ext.ux.panel.Player, Ext.Panel, {
 		return check;
 	},
 	
-	buildPanel : function(type) {
-		this.buildPlayer(type);
-		// this.buildCtrl(type);
-		// this.buildInfo;
-	},
-	
 	setPlayerSize : function(width, height) {
 		if(width === null)
 			return false;
@@ -70,29 +86,35 @@ Ext.extend(Ext.ux.panel.Player, Ext.Panel, {
 					width : width,
 					height : height
 				});
-				this.player.getComponent('slider').setWidth(width - 180);
+				this.audio.getComponent('slider').setWidth(width - 20);
 				break;
-			default :
-				return false;
 		}
 		
+		this.audio.doLayout(true);
 		return true;
 	},
 	
-	setPlayer : function(type) {
-		var playerEl = type == 'html5' ? this.html5El
-									   : this.vlcEl;		
+	setPlayer : function(type, force) {
+		var playerEl = force ? type == 'html5' ? this.html5El
+											   : this.vlcEl
+							 : !checkPlayerType(type) ? return false;
+													  : type == 'html5' ? this.html5El
+																		: this.vlcEl
+		var oldplayerType = this.playerType;
 		
 		if(type == 'html5') {
 			this.playerType = 'html5';
 			this.play = undefined;
-			this.next = undefined;
-			this.prev = undefined;
 			this.pause = undefined;
 			this.stop = undefined;
+			this.next = undefined;
+			this.prev = undefined;
+			this.fullscreen = undefined;
 			this.mute = undefined;
 			this.volume = undefined;
-			this.fullscreen = undefined;
+			this.audiochannels = undefined;
+			this.deinterlace = undefined;
+			this.aspectratio = undefined;			
 		}
 		else {
 			this.playerType = 'vlc';
@@ -115,24 +137,6 @@ Ext.extend(Ext.ux.panel.Player, Ext.Panel, {
 				return check;
 			}
 
-			this.next = function() {
-				if(playerEl.dom.playlist.items.count > 1) {
-					playerEl.dom.playlist.next();
-					return true;
-				}
-				else
-					return false;
-			}
-			
-			this.prev = function() {
-				if(playerEl.dom.playlist.items.count > 1) {
-					playerEl.dom.playlist.prev();
-					return true;
-				}
-				else
-					return false;
-			}
-			
 			this.pause = function(v) {
 				if(v === null || v == playerEl.dom.playlist.isPlaying) {
 					playerEl.dom.playlist.togglePause();
@@ -155,19 +159,18 @@ Ext.extend(Ext.ux.panel.Player, Ext.Panel, {
 					return false;
 			}
 			
-			this.mute = function(v) {
-				if(v === null || v != playerEl.dom.audio.mute) {
-					playerEl.dom.audio.toggleMute();
-					this.fireEvent('mute');
+			this.next = function() {
+				if(playerEl.dom.playlist.items.count > 1) {
+					playerEl.dom.playlist.next();
 					return true;
 				}
 				else
 					return false;
 			}
 			
-			this.volume = function(v) {
-				if(v !== null && v != playerEl.dom.audio.volume) {
-					playerEl.dom.audio.volume = v;
+			this.prev = function() {
+				if(playerEl.dom.playlist.items.count > 1) {
+					playerEl.dom.playlist.prev();
 					return true;
 				}
 				else
@@ -177,79 +180,134 @@ Ext.extend(Ext.ux.panel.Player, Ext.Panel, {
 			this.fullscreen = function(v) {
 				if(v === null || v != playerEl.dom.video.fullscreen) {
 					playerEl.dom.video.toggleFullscreen();
+					return playerEl.dom.video.fullscreen;
+				}
+				else
+					return false;
+			}
+			
+			this.mute = function(v) {
+				if(v === null || v != playerEl.dom.audio.mute) {
+					playerEl.dom.audio.toggleMute();
+					this.fireEvent('mute');
+					return playerEl.audio.mute;
+				}
+				else
+					return false;
+			}
+			
+			this.volume = function(v) {
+				if(v === null)
+					return playerEl.dom.audio.volume;
+				else if(v != playerEl.dom.audio.volume) {
+					playerEl.dom.audio.volume = v;
 					return true;
 				}
 				else
 					return false;
 			}
+			
+			this.audiochannels = function(v) {
+				if(v === null)
+					return playerEl.dom.audio.channel;
+				else if(v != playerEl.dom.audio.channel) {
+					playerEl.dom.audio.channel = v;
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.deinterlace = function(v) {
+				if(v !== null) {
+					v == 'disabled' ? playerEl.dom.video.deinterlace.disable()
+									: playerEl.dom.video.deinterlace.enable(v);
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.aspectratio = function(v) {
+				if(v === null)
+					return playerEl.dom.video.aspectRatio;
+				else if(v != playerEl.dom.video.aspectRatio) {
+					playerEl.dom.video.aspectRatio = v;
+					return true;
+				}
+				else
+					return false;				
+			}
 		}
+		
+		this.player.contentEl = playerEl;
+		this.player.doLayout(true);
+		
+		this.fireEvent('playerchanged', this.playerType, oldplayerType);
+		return true;
+	},
+	
+	buildPanel : function(type) {
+		this.buildPlayer(type);
+		this.buildCtrl(type);
+		// this.buildInfo;
 	},
 	
 	buildPlayer : function(type) {
 		this.addEvents('play','pause','stop','mute','playerchanged');
-		
-		var slider = new Ext.Slider({
-			id : 'slider',
-			width : 233,
-			value : 100,
-			increment : 5,
-			minValue : 0,
-			maxValue : 200,
-			plugins : new Ext.slider.Tip({
-				getText : function(thumb) {
-					return String.format('<b>Volume {0}%</b>', thumb.value);
-				}
-			}),
-			listeners : {
-				'change' : function(slider, newValue, thumb) {
-					this.volume(newValue);
-				}
-			}
-		});
 		
 		var tb = new Ext.Toolbar({
 			buttonAlign : 'center',
 			enableOverflow : true,
 			items : [
 				{
-					id : 'button_play',
-					iconCls : 'play-active',
-					tooltip : 'Play/Pause',
 					handler : function() {
 						this.play();
-					}
+					},
+					iconCls : 'play',
+					tooltip : 'Play'					
 				}, {
-					iconCls : 'stop',
-					tooltip : 'Stop',
+					handler : function() {
+						this.pause();
+					},
+					iconCls : 'pause',
+					tooltip : 'Pause'
+				}, {
 					handler : function() {
 						this.stop();
-					}
+					},
+					iconCls : 'stop',
+					tooltip : 'Stop'
 				}, '-', {
-					iconCls : 'sound',
-					tooltip : 'Mute',
-					handler : function(btn) {
-						this.mute();
-					}
-				},
-				slider,
-				{
-					iconCls : 'fullscreen',
-					tooltip : 'Go to Fullscreen',
+					handler : function() {
+						this.prev();
+					},
+					iconCls : 'prev',
+					tooltip : 'Previous played channel'
+				}, {
+					handler : function() {
+						this.next();
+					},
+					iconCls : 'stop',
+					tooltip : 'Next played channel'
+					
+				}, '-', {
 					handler : function() {
 						this.fullscreen(true);
-					}
+					},
+					iconCls : 'fullscreen',
+					tooltip : 'Go to Fullscreen'
 				}
 			]
 		});		
 		
-		this.setPlayer(type);
-		
 		this.items = new Ext.form.FormPanel({
 			id : 'player',
-			contentEl : playerEl,
 			bbar : tb,
 			border : false
 		});
+		
+		this.setPlayer(type, true);
 		
 		//Events
 		var play = function() {
@@ -276,8 +334,153 @@ Ext.extend(Ext.ux.panel.Player, Ext.Panel, {
 			'expand' : expand,
 			'resize' : resize
 		});
-	}	
-}
+	},
+	
+	buildCtrl : function(type) {
+		
+		var muteButton = new Ext.Button({
+			handler : function(btn) {
+				this.mute();
+			},
+			iconCls : 'sound',
+			tooltip : 'Mute'
+		});
+		
+		var volumeSlider = new Ext.Slider({
+			id : 'slider',
+			increment : 5,
+			minValue : 0,
+			maxValue : 200,
+			listeners : {
+				'change' : function(slider, newValue, thumb) {
+					this.volume(newValue);
+				}
+			},
+			plugins : new Ext.slider.Tip({
+				getText : function(thumb) {
+					return String.format('<b>Volume {0}%</b>', thumb.value);
+				}
+			}),
+			value : 100
+		});
+		
+		var aCombo = new Ext.form.ComboBox({
+			displayField : 'display',
+			editable : false,
+			fieldLabel : 'Audio channels',
+			mode : 'local',
+			listeners : {
+				'afterrender' : 'select' : function(c) {
+					this.audiochannels(c.getValue());
+				}
+			},
+			store : new Ext.data.ArrayStore({
+				data : [
+					[ 'Dobly', 5 ],
+					[ 'Stereo', 1 ],
+					[ 'Reverse stereo', 2 ],
+					[ 'Only left', 3 ],
+					[ 'Only right', 4 ]
+				],
+				fields : [ 'display', 'value'],
+			}),
+			triggerAction : 'all',
+			value : 'Dobly',
+			valueField : 'value'
+		});
+			
+		var dCombo = new Ext.form.ComboBox({
+			displayField : 'display',
+			editable : false,
+			fieldLabel : 'Deinterlace',
+			listeners: {
+				'afterrender' : 'select' : function(c) {
+					this.deinterlace(c.getValue());
+				}
+			},
+			mode : 'local',
+			store : new Ext.data.ArrayStore({
+				data : [ 
+					 [ 'Yadif 2X', 'yadif2x' ],
+					 [ 'Yadif', 'yadif' ],
+					 [ 'Linear', 'linear' ],
+					 [ 'Bob', 'bob' ],
+					 [ 'Discard', 'discard' ],
+					 [ 'Off', 'disabled' ]
+				],
+				fields : [ 'display', 'value']
+			}),
+			triggerAction : 'all',
+			value : 'Discard',
+			valueField : 'value'
+		});
+		
+		var rCombo = new Ext.form.ComboBox({
+			displayField : 'display',
+			editable : false,
+			fieldLabel : 'Aspect ratio',
+			listeners: {
+				'afterrender' : 'select' : function(c) {
+					this.aspectratio(c.getValue());
+				}
+			}
+			mode : 'local',
+			store : new Ext.data.ArrayStore({
+				data : [ 
+					 [ 'Keep source', '1:1' ],
+					 [ '16:9', '16:9' ],
+					 [ '16:10', '16:10' ],
+					 [ '4:3', '4:3' ],
+				],
+				fields : [ 'display', 'value']
+			}),
+			triggerAction : 'all',
+			value : 'Keep source',
+			valueField : 'value'
+		});
+		
+		var audio = new Ext.form.FieldSet({
+			id : 'audio',
+			items : [ muteButton, volumeSlider, aCombo],
+			title : 'Audio'
+		});
+		
+		var video = new Ext.form.FieldSet({
+			id : 'video',
+			collapsed : true,
+			items : [ dCombo, rCombo ],
+			title : 'Video'
+		});
+		
+		// var subtitle = new Ext.form.FieldSet({
+			// id : 'subtitle',
+			// collapsed : true,
+			// items : [ sCombo ],
+			// title : 'Subtitle'
+		// });
+		
+		this.add(audio, video);
+	},
+	
+	buildInfo : function() {
+		var mkv = new Ext.form.DisplayField({
+			fieldLabel : 'MKV',
+			value : url
+		});
+		var ts = new Ext.form.DisplayField({
+			fieldLabel : 'TS',
+			value : url + '?mux=pass'
+		});
+		var urlFieldSet = new Ext.form.FieldSet({
+			id : 'url',
+			collapsed : true,
+			items : [ mkv, ts ],
+			title : 'Stream url'
+		});
+		
+		this.add(urlFieldSet);
+	}
+});
 
 Ext.preg('player', Ext.ux.panel.Player);
 
