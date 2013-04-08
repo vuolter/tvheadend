@@ -144,7 +144,7 @@ tvheadend.chconf = function() {
 		actions : [ {
 				cb : function(grid, record, action, row, col) {
 					url = 'playlist/channelid/' + record.get('chid');
-					tvheadend.VLC(url);
+					tvheadend.sidePlayer.play(url);
 				},
 				iconCls : 'eye',
 				qtip : 'Watch this channel'

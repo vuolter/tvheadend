@@ -1,4 +1,288 @@
 /*!
+ * @class     Ext.ux.panel.Player
+ * @extends   Ext.Panel
+ * @author    Walter Purcaro
+ * @copyright (c) 2013, Walter Purcaro
+ * @version   0.1
+ */
+Ext.ns('Ext.ux.panel')
+
+Ext.ux.panel.Player = function(config) {
+    Ext.apply(this, config);
+	Ext.ux.panel.Player.superclass.constructor.call(this);
+};
+
+Ext.extend(Ext.ux.panel.Player, Ext.Panel, {
+	collapsible : true,
+	playerType : undefined,
+	width : 500,
+	
+	init : function(panel) {
+		this.html5El = Ext.get(document.createElement('video')).set({ id: 'html5Player' });
+		this.vlcEl = Ext.get(document.createElement('embed')).set({
+			id : 'vlcPlayer',
+			type : 'application/x-vlc-plugin',
+			pluginspage : 'http : //www.videolan.org',
+			width : '0',
+			height : '0',
+			toolbar : false,
+			autoplay : false,
+		});
+		
+		this.checkPlayerType('html5') ? this.buildPanel('html5')
+									  : this.buildPanel('vlc');
+	},
+	
+	checkPlayerType : function(type) {
+		var check = false;
+		switch(type) {
+			case 'html5' :
+				if(html5El.dom.canPlayType('video/mp4'))
+					check = true;
+				break;
+			case 'vlc' :
+				if(vlcEl.dom.VersionInfo)
+					check = true;
+				break;
+		}		
+		return check;
+	},
+	
+	buildPanel : function(type) {
+		this.buildPlayer(type);
+		// this.buildCtrl(type);
+		// this.buildInfo;
+	},
+	
+	setPlayerSize : function(width, height) {
+		if(width === null)
+			return false;
+		
+		if(height === null)
+			height = Math.round((width / 16) * 9;
+		
+		switch(this.playerType) {
+			case 'html5' :
+				//
+				break;
+			case 'vlc' :
+				this.vlcEl.set({
+					width : width,
+					height : height
+				});
+				this.player.getComponent('slider').setWidth(width - 180);
+				break;
+			default :
+				return false;
+		}
+		
+		return true;
+	},
+	
+	setPlayer : function(type) {
+		var playerEl = type == 'html5' ? this.html5El
+									   : this.vlcEl;		
+		
+		if(type == 'html5') {
+			this.playerType = 'html5';
+			this.play = undefined;
+			this.next = undefined;
+			this.prev = undefined;
+			this.pause = undefined;
+			this.stop = undefined;
+			this.mute = undefined;
+			this.volume = undefined;
+			this.fullscreen = undefined;
+		}
+		else {
+			this.playerType = 'vlc';
+			
+			this.play = function(uri) {
+				var check = true;
+				
+				if(uri) {
+					var mrl = location.href.substring(0, location.href.length - 10) + uri;
+					playerEl.dom.playlist.playItem(playerEl.dom.playlist.add(mrl));
+					this.fireEvent('play', mrl);
+				}
+				else if(playerEl.dom.playlist.items.count && !playerEl.dom.playlist.isPlaying) {
+					playerEl.dom.playlist.play();
+					this.fireEvent('play');
+				}
+				else
+					check = false;
+				
+				return check;
+			}
+
+			this.next = function() {
+				if(playerEl.dom.playlist.items.count > 1) {
+					playerEl.dom.playlist.next();
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.prev = function() {
+				if(playerEl.dom.playlist.items.count > 1) {
+					playerEl.dom.playlist.prev();
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.pause = function(v) {
+				if(v === null || v == playerEl.dom.playlist.isPlaying) {
+					playerEl.dom.playlist.togglePause();
+					v ? this.fireEvent('pause')
+					  : this.fireEvent('play');
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.stop = function() {
+				if(playerEl.dom.playlist.items.count) {
+					playerEl.dom.playlist.stop();
+					playerEl.dom.playlist.items.clear();
+					this.fireEvent('stop');
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.mute = function(v) {
+				if(v === null || v != playerEl.dom.audio.mute) {
+					playerEl.dom.audio.toggleMute();
+					this.fireEvent('mute');
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.volume = function(v) {
+				if(v !== null && v != playerEl.dom.audio.volume) {
+					playerEl.dom.audio.volume = v;
+					return true;
+				}
+				else
+					return false;
+			}
+			
+			this.fullscreen = function(v) {
+				if(v === null || v != playerEl.dom.video.fullscreen) {
+					playerEl.dom.video.toggleFullscreen();
+					return true;
+				}
+				else
+					return false;
+			}
+		}
+	},
+	
+	buildPlayer : function(type) {
+		this.addEvents('play','pause','stop','mute','playerchanged');
+		
+		var slider = new Ext.Slider({
+			id : 'slider',
+			width : 233,
+			value : 100,
+			increment : 5,
+			minValue : 0,
+			maxValue : 200,
+			plugins : new Ext.slider.Tip({
+				getText : function(thumb) {
+					return String.format('<b>Volume {0}%</b>', thumb.value);
+				}
+			}),
+			listeners : {
+				'change' : function(slider, newValue, thumb) {
+					this.volume(newValue);
+				}
+			}
+		});
+		
+		var tb = new Ext.Toolbar({
+			buttonAlign : 'center',
+			enableOverflow : true,
+			items : [
+				{
+					id : 'button_play',
+					iconCls : 'play-active',
+					tooltip : 'Play/Pause',
+					handler : function() {
+						this.play();
+					}
+				}, {
+					iconCls : 'stop',
+					tooltip : 'Stop',
+					handler : function() {
+						this.stop();
+					}
+				}, '-', {
+					iconCls : 'sound',
+					tooltip : 'Mute',
+					handler : function(btn) {
+						this.mute();
+					}
+				},
+				slider,
+				{
+					iconCls : 'fullscreen',
+					tooltip : 'Go to Fullscreen',
+					handler : function() {
+						this.fullscreen(true);
+					}
+				}
+			]
+		});		
+		
+		this.setPlayer(type);
+		
+		this.items = new Ext.form.FormPanel({
+			id : 'player',
+			contentEl : playerEl,
+			bbar : tb,
+			border : false
+		});
+		
+		//Events
+		var play = function() {
+			if(this.collapsed)
+				this.expand();
+		}
+		var pause = function() {
+			this.pause(true);
+		}
+		var stop = function() {
+			this.un('collapse', pause);
+			this.collapse();
+		}
+		var expand = function() {
+			this.on('collapse', pause);
+		}
+		var resize = function(panel, adjWidth, adjHeight, rawWidth, rawHeight) {
+			if(!this.collapsed)
+				this.setPlayerSize(adjWidth);
+		}
+		this.on({
+			'play'   : play,
+			'stop'   : stop,
+			'expand' : expand,
+			'resize' : resize
+		});
+	}	
+}
+
+Ext.preg('player', Ext.ux.panel.Player);
+
+
+/*!
  * Simple localStorage state Provider
  */
 Ext.ns('Ext.ux.state')

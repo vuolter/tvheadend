@@ -61,7 +61,7 @@ tvheadend.epgDetails = function(event) {
 
 	now = new Date();
 	if (event.start < now && event.end > now) {
-		content += "<div class=\"x-epg-meta\"><a href=\"javascript:tvheadend.VLC('stream/channelid/" + event.channelid + "')\">Play</a>" + "</div>";
+		content += "<div class=\"x-epg-meta\"><a href=\"javascript:tvheadend.sidePlayer.play('stream/channelid/" + event.channelid + "')\">Play</a>" + "</div>";
 	}
 
 	content += '<div id="related"></div>';
@@ -510,14 +510,6 @@ tvheadend.epg = function() {
 				handler : epgQueryClear
 			},
 			'->',
-			{
-				text : 'Watch TV',
-				iconCls : 'eye',
-				handler : function() {
-					new tvheadend.VLC();
-				}
-			},
-			'-',
 			{
 				disabled : !tvheadend.accessupdate.dvr,
 				text : 'Create AutoRec',

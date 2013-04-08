@@ -68,7 +68,7 @@ tvheadend.dvrDetails = function(entry) {
 		content += '<div class="x-epg-meta">' + '<a href="' + entry.url
 			+ '" target="_blank">Download</a> '
 			+ parseInt(entry.filesize / 1000000) + ' MB<br>'
-			+ "<a href=\"javascript:tvheadend.VLC('dvrfile/" + entry.id
+			+ "<a href=\"javascript:tvheadend.sidePlayer.play('dvrfile/" + entry.id
 			+ "')\">Play</a>" + '</div>';
 	}
 
