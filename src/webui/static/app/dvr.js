@@ -395,7 +395,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		tooltip : 'Show help page'
 	});
 	
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
 			tooltip : 'Schedule a new recording session on the server.',
@@ -417,7 +417,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		stateId : this.id,
 		store : dvrStore,
 		stripeRows : true,
-		tbar : tbar,
+		tbar : tb,
 		title : title,
 		view : tvheadend.BufferView
 	});
@@ -787,7 +787,7 @@ tvheadend.dvrsettings = function() {
 		tooltip : 'Show help page'
 	});
 	
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ confcombo, {
 			tooltip : 'Save changes made to dvr configuration below',
@@ -874,7 +874,7 @@ tvheadend.dvrsettings = function() {
 			fieldLabel : 'Post-processor command',
 			name : 'postproc'
 		} ],
-		tbar : tbar
+		tbar : tb
 	});
 
 	function loadConfig() {

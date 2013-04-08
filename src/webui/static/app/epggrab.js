@@ -340,7 +340,7 @@ tvheadend.epggrab = function() {
 		tooltip : 'Show help page'
 	});
 
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ saveBtn, '->', helpBtn ]
 	});
@@ -358,7 +358,7 @@ tvheadend.epggrab = function() {
 		defaultType : 'textfield',
 		autoHeight : true,
 		items : [ simplePanel, internalPanel, otaPanel, externalPanel ],
-		tbar : tbar
+		tbar : tb
 	});
 
 	/* ****************************************************************

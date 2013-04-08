@@ -184,7 +184,7 @@ tvheadend.miscconf = function() {
 		tooltip : 'Show help page'
 	});
 
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ saveBtn, '->', helpBtn ]
 	});
@@ -203,7 +203,7 @@ tvheadend.miscconf = function() {
 		autoHeight : true,
 		items : [ language, dvbscanPath,
               imagecachePanel, tvhtimePanel, theme ],
-		tbar : tbar
+		tbar : tb
 	});
 
 	/* ****************************************************************

@@ -98,7 +98,7 @@ tvheadend.timeshift = function() {
 	tooltip : 'Show help page'
   });
   
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ saveBtn, '->', helpBtn ]
 	});
@@ -121,7 +121,7 @@ tvheadend.timeshift = function() {
       timeshiftMaxPeriod, timeshiftUnlPeriod,
       timeshiftMaxSize, timeshiftUnlSize
     ],
-    tbar : tbar
+    tbar : tb
   });
 
   /* ****************************************************************

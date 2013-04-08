@@ -158,7 +158,7 @@ tvheadend.tableEditor = function(id, title, dtable, selModel, cm, rec, plugins, 
 		tooltip : 'Show help page'
 	});
 	
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
 			tooltip : 'Create a new entry on the server. '
@@ -182,7 +182,7 @@ tvheadend.tableEditor = function(id, title, dtable, selModel, cm, rec, plugins, 
 		enableColumnMove : false,
 		stateful : true,
 		stateId : this.id,
-		tbar : tbar,
+		tbar : tb,
 		view : tvheadend.BufferView
 	});
 	return grid;

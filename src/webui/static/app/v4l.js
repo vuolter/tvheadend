@@ -275,7 +275,7 @@ tvheadend.v4l_services = function(adapterId) {
 		disabled : true
 	});
 
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [
 			{
@@ -300,7 +300,7 @@ tvheadend.v4l_services = function(adapterId) {
 		sm : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : tbar,
+		tbar : tb,
 		view : tvheadend.BufferView
 	});
 

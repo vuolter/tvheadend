@@ -494,7 +494,7 @@ tvheadend.epg = function() {
 		tooltip : 'Show help page'
 	});
 	
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [
 			epgFilterTitle,
@@ -533,7 +533,7 @@ tvheadend.epg = function() {
 		stateful : true,
 		stateId : this.id,
 		stripeRows : true,
-		tbar : tbar,
+		tbar : tb,
 		title : 'Electronic Program Guide',
 		view : epgView
 	});

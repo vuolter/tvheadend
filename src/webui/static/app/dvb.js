@@ -370,7 +370,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ delBtn, copyBtn, '-', saveBtn, rejectBtn, '-', {
 			text : 'Add mux(es) manually...',
@@ -392,7 +392,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		sm : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : tbar,
+		tbar : tb,
 		view : tvheadend.BufferView
 	});
 
@@ -706,7 +706,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		mapBtn.setDisabled(s.getCount() == 0);
 	});
 
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ saveBtn, rejectBtn, '-', mapBtn ]
 	});
@@ -722,7 +722,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		sm : selModel,
 		stateful : true,
 		stateId : this.id,
-		tbar : tbar,
+		tbar : tb,
 		view : tvheadend.BufferView
 	});
 	return grid;
