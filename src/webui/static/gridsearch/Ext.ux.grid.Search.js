@@ -6,6 +6,7 @@
  * @copyright (c) 2008, by Ing. Jozef Sakalos
  * @date      17. January 2008
  * @version   $Id: Ext.ux.grid.Search.js 220 2008-04-29 21:46:51Z jozo $
+ * @note      Updated by Walter Purcaro
  *
  * @license Ext.ux.grid.Search is licensed under the terms of
  * the Open Source LGPL 3.0 license.  Commercial use is permitted to the extent
@@ -55,7 +56,12 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 	 * Corresponding toolbar has to exist at least with mimimum configuration tbar:[] for position:top or bbar:[]
 	 * for position bottom. Plugin does NOT create any toolbar.
 	 */
-	,position:'bottom'
+	,positionY:'bottom'
+	
+	/**
+	 * @cfg {String} position Where to display the search controls. Valid values are left and right (defaults to left)
+	 */
+	,positionX:'left'
 
 	/**
 	 * @cfg {String} iconCls Icon class for menu button (defaults to icon-magnifier)
@@ -176,7 +182,7 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 	 */
 	,onRender:function() {
 		var panel = this.toolbarContainer || this.grid;
-		var tb = 'bottom' === this.position ? panel.bottomToolbar : panel.topToolbar;
+		var tb = 'bottom' === this.positionY ? panel.bottomToolbar : panel.topToolbar;
 
 		// add menu
 		this.menu = new Ext.menu.Menu();
@@ -190,13 +196,20 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 				tb.addSeparator();
 			}
 		}
-
+		
 		// add menu button
-		tb.add({
-			 text:this.searchText
-			,menu:this.menu
-			,iconCls:this.iconCls
-		});
+		if('right' == this.positionX)
+			tb.add({
+				 text:this.searchText
+				,menu:this.menu
+				,iconCls:this.iconCls
+			});
+		else
+			tb.insert(0, {
+				 text:this.searchText
+				,menu:this.menu
+				,iconCls:this.iconCls
+			});
 
 		// add input field (TwinTriggerField in fact)
 		this.field = new Ext.form.TwinTriggerField({
