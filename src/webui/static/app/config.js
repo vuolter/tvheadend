@@ -184,7 +184,7 @@ tvheadend.miscconf = function() {
 		tooltip : 'Show help page'
 	});
 
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ saveBtn, '->', helpBtn ]
 	});
@@ -200,7 +200,7 @@ tvheadend.miscconf = function() {
 		labelWidth : 200,
 		layout : 'form',
 		reader : confreader,
-		tbar : tbar,
+		tbar : tb,
 		title : 'General',
 		waitMsgTarget : true
 	});

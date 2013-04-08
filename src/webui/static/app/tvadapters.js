@@ -49,7 +49,7 @@ tvheadend.tvadapters = function() {
 		tooltip : 'Show help page'
 	});
 	
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ adapterSelection, '->', helpBtn ]
 	});
@@ -58,7 +58,7 @@ tvheadend.tvadapters = function() {
 		title : 'TV Adapters',
 		iconCls : 'hardware',
 		layout : 'fit',
-		tbar : tbar,
+		tbar : tb,
 		items : [ new tvheadend.dummy ]
 	});
 

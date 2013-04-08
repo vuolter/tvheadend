@@ -351,7 +351,7 @@ tvheadend.chconf = function() {
 		tooltip : 'Show help page'
 	});
 	
-	var tbar = new Ext.Toolbar({
+	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ addBtn, '-', delBtn, '-', saveBtn, rejectBtn, '->', helpBtn ]
 	});
@@ -367,7 +367,7 @@ tvheadend.chconf = function() {
 		sm : sm,
 		stateful : true,
 		stateId : this.id,
-		tbar : tbar,
+		tbar : tb,
 		title : 'Channels',
 		view : tvheadend.BufferView
 	});
