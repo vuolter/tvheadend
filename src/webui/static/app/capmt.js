@@ -35,11 +35,11 @@ tvheadend.capmteditor = function() {
 		}
 	}
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
-  columns: [ selModel, enabledColumn, {
+  columns: [ sm, enabledColumn, {
 		header : "Camd.socket Filename",
 		dataIndex : 'camdfilename',
 		width : 200,
@@ -93,6 +93,6 @@ tvheadend.capmteditor = function() {
 		}
 	});
 
-	return new tvheadend.tableEditor('camptGrid', 'Capmt Connections', 'capmt', selModel, cm, rec,
+	return new tvheadend.tableEditor('camptGrid', 'Capmt Connections', 'capmt', sm, cm, rec,
 		[ search, enabledColumn, oscamColumn ], store, 'config_capmt.html', 'key');
 }

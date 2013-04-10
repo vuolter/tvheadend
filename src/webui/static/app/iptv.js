@@ -47,12 +47,12 @@ tvheadend.iptv = function(adapterId) {
 		} ]
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns : [
-		selModel, enabledColumn,
+		sm, enabledColumn,
 		{
 			header : "Channel name",
 			dataIndex : 'channelname',
@@ -313,7 +313,7 @@ tvheadend.iptv = function(adapterId) {
 		plugins : [ search, enabledColumn, actions ],
 		store : store,
 		cm : cm,
-		sm : selModel,
+		sm : sm,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,
@@ -326,7 +326,7 @@ tvheadend.iptv = function(adapterId) {
 		rejectBtn.setDisabled(d);
 	});
 
-	selModel.on('selectionchange', function(self) {
+	sm.on('selectionchange', function(self) {
 		delBtn.setDisabled(self.getCount() == 0);
 	});
 

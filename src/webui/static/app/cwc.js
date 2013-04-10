@@ -41,11 +41,11 @@ tvheadend.cwceditor = function() {
 		}
 	}
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
     defaultSortable: true,
-    columns : [ selModel, enabledColumn, {
+    columns : [ sm, enabledColumn, {
 		header : "Hostname",
 		dataIndex : 'hostname',
 		width : 200,
@@ -123,7 +123,7 @@ tvheadend.cwceditor = function() {
 		}
 	});
 
-	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', selModel, cm, rec, [
+	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', sm, cm, rec, [
 		search, enabledColumn, emmColumn, emmexColumn ], store, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {

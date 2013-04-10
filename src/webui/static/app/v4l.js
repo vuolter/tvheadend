@@ -112,12 +112,12 @@ tvheadend.v4l_services = function(adapterId) {
 		width : 45
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns : [
-    selModel, enabledColumn, {
+    sm, enabledColumn, {
 		header : "Channel name",
 		dataIndex : 'channelname',
 		width : 150,
@@ -298,7 +298,7 @@ tvheadend.v4l_services = function(adapterId) {
 		plugins : [ enabledColumn ],
 		store : store,
 		cm : cm,
-		sm : selModel,
+		sm : sm,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,
@@ -311,7 +311,7 @@ tvheadend.v4l_services = function(adapterId) {
 		rejectBtn.setDisabled(d);
 	});
 
-	selModel.on('selectionchange', function(self) {
+	sm.on('selectionchange', function(self) {
 		delBtn.setDisabled(self.getCount() == 0);
 	});
 

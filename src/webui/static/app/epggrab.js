@@ -224,7 +224,7 @@ tvheadend.epggrab = function() {
 	/*
 	 * External modules
 	 */
-	var externalSelectionModel = new Ext.grid.CheckboxSelectionModel({
+	var externalSm = new Ext.grid.CheckboxSelectionModel({
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
@@ -235,7 +235,7 @@ tvheadend.epggrab = function() {
 		}
 	});
 
-	var externalColumnModel = new Ext.grid.ColumnModel([ externalSelectionModel,
+	var externalCm = new Ext.grid.ColumnModel([ externalSm,
 		{
 			header : 'Module',
 			dataIndex : 'name',
@@ -251,8 +251,8 @@ tvheadend.epggrab = function() {
 	var externalGrid = new Ext.grid.EditorGridPanel({
 		id : "externalGrid",
 		store : externalModuleStore,
-		cm : externalColumnModel,
-		sm : externalSelectionModel,
+		cm : externalCm,
+		sm : externalSm,
 		width : 600,
 		height : 150,
 		frame : false,
@@ -277,7 +277,7 @@ tvheadend.epggrab = function() {
 	 * OTA modules
 	 */
 
-	var otaSelectionModel = new Ext.grid.CheckboxSelectionModel({
+	var otaSm = new Ext.grid.CheckboxSelectionModel({
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
@@ -288,7 +288,7 @@ tvheadend.epggrab = function() {
 		}
 	});
 
-	var otaColumnModel = new Ext.grid.ColumnModel([ otaSelectionModel, {
+	var otaCm = new Ext.grid.ColumnModel([ otaSm, {
 		header : 'Module',
 		dataIndex : 'name',
 		width : 200,
@@ -298,8 +298,8 @@ tvheadend.epggrab = function() {
 	var otaGrid = new Ext.grid.EditorGridPanel({
 		id : "otaGrid",
 		store : otaModuleStore,
-		cm : otaColumnModel,
-		sm : otaSelectionModel,
+		cm : otaCm,
+		sm : otaSm,
 		width : 600,
 		height : 150,
 		frame : false,
@@ -372,7 +372,7 @@ tvheadend.epggrab = function() {
 			externalModuleStore.each(function(r) {
 				if (r.get('enabled')) rows.push(r);
 			});
-			externalSelectionModel.selectRecords(rows);
+			externalSm.selectRecords(rows);
 		});
 		delay.delay(100);
 	});
@@ -382,7 +382,7 @@ tvheadend.epggrab = function() {
 			otaModuleStore.each(function(r) {
 				if (r.get('enabled')) rows.push(r);
 			});
-			otaSelectionModel.selectRecords(rows);
+			otaSm.selectRecords(rows);
 		});
 		delay.delay(100);
 	});

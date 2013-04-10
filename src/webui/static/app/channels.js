@@ -160,12 +160,12 @@ tvheadend.chconf = function() {
 		hideable : false
 	});
 	
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
 		columns : [
-			selModel,
+			sm,
 			{
 				header : "Number",
 				dataIndex : 'number',
@@ -400,7 +400,7 @@ tvheadend.chconf = function() {
 		store : tvheadend.data.channels,
 		stripeRows : true,
 		plugins : [ search, actions ],
-		sm : selModel,
+		sm : sm,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,
@@ -409,7 +409,7 @@ tvheadend.chconf = function() {
 	});
 	
 	if(tvheadend.accessupdate.admin) {
-		selModel.on('selectionchange', function(s) {
+		sm.on('selectionchange', function(s) {
 			delBtn.setDisabled(s.getCount() == 0);
 		});
 		

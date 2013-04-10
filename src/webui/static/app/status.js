@@ -63,7 +63,7 @@ tvheadend.status_subs = function() {
 		return parseInt(value / 125) + ' KiB/s';
 	}
 
-	tvheadend.subsCm = new Ext.grid.ColumnModel({
+	cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
 		columns : [ {
 			dataIndex : 'hostname',
@@ -118,7 +118,7 @@ tvheadend.status_subs = function() {
 	});
 
 	var grid = new Ext.grid.GridPanel({
-		cm : subsCm,
+		cm : cm,
 		enableColumnMove : false,
 		disableSelection : true,
 		flex : 1,

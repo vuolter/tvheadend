@@ -1,4 +1,4 @@
-tvheadend.tableEditor = function(id, title, dtable, selModel, cm, rec, plugins, store,
+tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 	helpContent, icon) {
 
 	if (store == null) {
@@ -140,7 +140,7 @@ tvheadend.tableEditor = function(id, title, dtable, selModel, cm, rec, plugins, 
 		rejectBtn.setDisabled(d);
 	});
 
-	selModel.on('selectionchange', function(self) {
+	sm.on('selectionchange', function(self) {
 		if (self.getCount() > 0) {
 			delBtn.enable();
 		}
@@ -177,7 +177,7 @@ tvheadend.tableEditor = function(id, title, dtable, selModel, cm, rec, plugins, 
 		plugins : plugins,
 		store : store,
 		cm : cm,
-		sm : selModel,
+		sm : sm,
 		stripeRows : true,
 		enableColumnMove : false,
 		stateful : true,

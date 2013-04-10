@@ -27,10 +27,10 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		colored : true
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	var cmlist = Array();
 
-	cmlist.push(selModel, enabledColumn, {
+	cmlist.push(sm, enabledColumn, {
 		header : "Play",
 		dataIndex : 'id',
 		width : 50,
@@ -347,7 +347,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	selModel.on('selectionchange', function(s) {
+	sm.on('selectionchange', function(s) {
 		delBtn.setDisabled(s.getCount() == 0);
 		copyBtn.setDisabled(s.getCount() == 0);
 	});
@@ -389,7 +389,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		plugins : [ search, enabledColumn, qualityColumn ],
 		store : store,
 		cm : cm,
-		sm : selModel,
+		sm : sm,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,
@@ -445,10 +445,10 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		} ]
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	var cmlist = Array();
 
-	cmlist.push(selModel, enabledColumn,
+	cmlist.push(sm, enabledColumn,
 		{
 			header : "Service name",
 			dataIndex : 'svcname',
@@ -702,7 +702,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	selModel.on('selectionchange', function(s) {
+	sm.on('selectionchange', function(s) {
 		mapBtn.setDisabled(s.getCount() == 0);
 	});
 
@@ -719,7 +719,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		plugins : [ search, enabledColumn, eitColumn, actions ],
 		store : store,
 		cm : cm,
-		sm : selModel,
+		sm : sm,
 		stateful : true,
 		stateId : this.id,
 		tbar : tbar,
@@ -1437,10 +1437,10 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		width : 250
 	});
 	
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
-  columns: [ selModel, {
+  columns: [ sm, {
 		header : "Name",
 		dataIndex : 'name',
 		width : 200,
@@ -1479,7 +1479,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	var rec = Ext.data.Record.create([ 'name', 'port', 'comment', 'lnb' ]);
 
 	return new tvheadend.tableEditor('dvbsatconfGrid', 'Satellite config', 'dvbsatconf/'
-		+ adapterId, selModel, cm, search, null, null, null);
+		+ adapterId, sm, cm, search, null, null, null);
 }
 
 /**

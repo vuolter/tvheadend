@@ -201,9 +201,9 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		return tvheadend.data.dvrprio.getById(value).data.name;
 	}
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
-	var dvrCm = new Ext.grid.ColumnModel([ selModel, actions, {
+	var cm = new Ext.grid.ColumnModel([ sm, actions, {
 		width : 250,
 		id : 'title',
 		header : "Title",
@@ -406,13 +406,13 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 	});
 	
 	var grid = new Ext.grid.GridPanel({
-		cm : dvrCm,
+		cm : cm,
 		enableColumnMove : false,
 		iconCls : iconCls,
 		id : id,
 		loadMask : true,
 		plugins : [ search, actions ],
-		sm : selModel,
+		sm : sm,
 		stateful : true,
 		stateId : this.id,
 		store : dvrStore,
@@ -452,13 +452,13 @@ tvheadend.autoreceditor = function() {
 		width : 30
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns :
 		[
-			selModel, enabledColumn,
+			sm, enabledColumn,
 			{
 				header : "Title (Regexp)",
 				dataIndex : 'title',
@@ -609,7 +609,7 @@ tvheadend.autoreceditor = function() {
 				})
 			} ]});
 
-	return new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', selModel, cm,
+	return new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', sm, cm,
 		tvheadend.autorecRecord, [ search, enabledColumn ], tvheadend.data.autorec,
 		'autorec.html', 'wand');
 }

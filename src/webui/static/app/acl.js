@@ -65,7 +65,7 @@ tvheadend.acleditor = function() {
 		}
 	});
 
-	var selModel = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {
@@ -73,7 +73,7 @@ tvheadend.acleditor = function() {
 			allowBlank : false
 		},
 		columns : [
-			selModel, enabledColumn, {
+			sm, enabledColumn, {
 				header : "Username",
 				dataIndex : 'username',
 				width : 200,
@@ -136,7 +136,7 @@ tvheadend.acleditor = function() {
 		}
 	});
 
-	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', selModel, cm,
+	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', sm, cm,
 		records, [ search, enabledColumn, /*introColumn,*/ webuiColumn, streamingColumn, dvrColumn, 
 		dvrcfgColumn, adminColumn ], store, 'config_access.html', 'group');
 			

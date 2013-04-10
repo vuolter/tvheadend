@@ -302,7 +302,7 @@ tvheadend.epg = function() {
 					 : '<span class="tvh-grid-gray">Unknown</span>';
 	}
 
-	var epgCm = new Ext.grid.ColumnModel({
+	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : false },
 		columns : [ 
 			actions,
@@ -533,7 +533,7 @@ tvheadend.epg = function() {
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
 		enableColumnMove : false,
 		id : "epgGrid",
-		cm : epgCm,
+		cm : cm,
 		iconCls : 'bell',
 		plugins : [ actions ],
 		sm : new Ext.ux.grid.livegrid.RowSelectionModel(),
