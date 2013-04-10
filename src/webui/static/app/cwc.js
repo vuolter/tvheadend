@@ -1,7 +1,7 @@
 tvheadend.cwceditor = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.dummy('Code Word Client','key');
-
+	
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
 		minChars : 3,
@@ -10,121 +10,123 @@ tvheadend.cwceditor = function() {
 		width : 250
 	});
 	
+	var actions = new Ext.ux.grid.RowActions({
+		actions : { iconIndex : 'connect', qtip : 'Connected' },
+		dataIndex : 'connected',		
+		hideable : false,
+		width : 20
+	});
+	
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
 		dataIndex : 'enabled',
-		width : 60
+		header : "Enabled",
+		hideable : false,
+		width : 80
 	});
 
 	var emmColumn = new Ext.grid.CheckColumn({
-		header : "Update Card",
 		dataIndex : 'emm',
-		width : 100
+		header : "Update Card",
+		width : 120
 	});
 
 	var emmexColumn = new Ext.grid.CheckColumn({
-		header : "Update One",
 		dataIndex : 'emmex',
-		width : 100
+		header : "Update One",
+		width : 120
 	});
-
-	function setMetaAttr(meta, record) {
-		var enabled = record.get('enabled');
-		if (!enabled) return;
-
-		var connected = record.get('connected');
-		if (connected == 1) {
-			meta.attr = 'style="color:green;"';
-		}
-		else {
-			meta.attr = 'style="color:red;"';
-		}
-	}
 
 	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
-    defaultSortable: true,
-    columns : [ sm, enabledColumn, {
-		header : "Hostname",
-		dataIndex : 'hostname',
-		width : 200,
-		renderer : function(value, metadata, record, row, col, store) {
-			setMetaAttr(metadata, record);
-			return value;
+		defaults : {
+			allowBlank : false,
+			sortable : true
 		},
-		editor : new Ext.form.TextField({
-			allowBlank : false
-		})
-	}, {
-		header : "Port",
-		dataIndex : 'port',
-		renderer : function(value, metadata, record, row, col, store) {
-			setMetaAttr(metadata, record);
-			return value;
-		},
-		editor : new Ext.form.TextField({
-			allowBlank : false
-		})
-	}, {
-		header : "Username",
-		dataIndex : 'username',
-		renderer : function(value, metadata, record, row, col, store) {
-			setMetaAttr(metadata, record);
-			return value;
-		},
-		editor : new Ext.form.TextField({
-			allowBlank : false
-		})
-	}, {
-		header : "Password",
-		dataIndex : 'password',
-		renderer : function(value, metadata, record, row, col, store) {
-			setMetaAttr(metadata, record);
-			return '<span class="tvh-grid-unset">Hidden</span>';
-		},
-		editor : new Ext.form.TextField({
-			allowBlank : false
-		})
-	}, {
-		header : "DES Key",
-		dataIndex : 'deskey',
-		width : 300,
-		renderer : function(value, metadata, record, row, col, store) {
-			setMetaAttr(metadata, record);
-			return '<span class="tvh-grid-unset">Hidden</span>';
-		},
-		editor : new Ext.form.TextField({
-			allowBlank : false
-		})
-	}, emmColumn, emmexColumn, {
-		header : "Comment",
-		dataIndex : 'comment',
-		width : 400,
-		renderer : function(value, metadata, record, row, col, store) {
-			setMetaAttr(metadata, record);
-			return value;
-		},
-		editor : new Ext.form.TextField()
-	} ]});
+		columns : [ actions, enabledColumn, {
+			dataIndex : 'username',
+			editor : new Ext.form.TextField,
+			header : "Username",
+			hideable : false,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-red">Unset</span>';
+			},
+			width : 200
+		}, {
+			dataIndex : 'password',
+			editor : new Ext.form.TextField,
+			header : "Password",
+			hideable : false,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? '<span class="tvh-grid-green">Hidden</span>'
+					: '<span class="tvh-grid-red">Unset</span>';
+			},
+			width : 200
+		}, {
+			dataIndex : 'hostname',
+			editor : new Ext.form.TextField,
+			header : "Hostname",
+			hideable : false,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-red">Unset</span>';
+			},
+			width : 200
+		}, {
+			dataIndex : 'port',
+			header : "Port",
+			hideable : false,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-red">Unset</span>';
+			},
+			editor : new Ext.form.TextField,
+			width : 120
+		}, {
+			
+			dataIndex : 'deskey',
+			editor : new Ext.form.TextField,
+			header : "DES Key",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value == '00:00:00:00:00:00:00:00:00:00:00:00:00:00' ? '<span class="tvh-grid-blue">' + value + '</span>'
+				: '<span class="tvh-grid-green">Hidden</span>';
+			},
+			width : 400
+		}, 
+		emmColumn, emmexColumn, {
+			dataIndex : 'comment',
+			editor : new Ext.form.TextField({ allowBlank : true }),
+			header : "Comment",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-blue">No comments yet</span>';
+			},
+			width : 250
+		} ]
+	});
 
-	var rec = Ext.data.Record.create([ 'enabled', 'connected', 'hostname',
-		'port', 'username', 'password', 'deskey', 'emm', 'emmex', 'comment' ]);
+	var rec = Ext.data.Record.create([ 'comment', 'connected', 'emm', 'emmex', 'deskey', 'enabled', 
+									   'hostname', 'password', 'port', 'username' ]);
 
 	var store = new Ext.data.JsonStore({
-		root : 'entries',
-		fields : rec,
-		url : "tablemgr",
 		autoLoad : true,
-		id : 'id',
 		baseParams : {
 			table : 'cwc',
 			op : "get"
-		}
+		},
+		fields : rec,
+		id : 'id',
+		root : 'entries',
+		sortInfo : {
+			field : 'username',
+			direction : 'ASC'
+		},
+		url : "tablemgr"
 	});
 
-	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', sm, cm, rec, [
-		search, enabledColumn, emmColumn, emmexColumn ], store, 'config_cwc.html', 'key');
+	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', sm, cm, rec, 
+		[ actions, emmColumn, emmexColumn, enabledColumn, search ], store, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {
 		var rec = store.getById(msg.id);
