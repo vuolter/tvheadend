@@ -43,50 +43,51 @@ tvheadend.mergeChannel = function(chan) {
 
 	function doMerge() {
 		panel.getForm().submit({
-			url : 'mergechannel/' + chan.chid,
 			success : function() {
 				win.close();
-			}
+			},
+			url : 'mergechannel/' + entry.chid
 		});
 	}
 
+	var channelsCombo = new Ext.form.ComboBox({
+		allowBlank : false,
+		displayField : 'name',
+		emptyText : 'Select a channel...',
+		fieldLabel : 'Target channel',
+		hiddenName : 'targetID',
+		name : 'targetchannel',		
+		store : tvheadend.data.channels2
+		triggerAction : 'all',
+		valueField : 'chid',
+		width : 200
+	});
+
 	var panel = new Ext.form.FormPanel({
-		frame : true,
+		bodyStyle : 'padding : 5px',
 		border : true,
-		bodyStyle : 'padding:5px',
-		labelAlign : 'right',
-		labelWidth : 110,
-		defaultType : 'textfield',
-		items : [ new Ext.form.ComboBox({
-			store : tvheadend.data.channels2,
-			fieldLabel : 'Target channel',
-			name : 'targetchannel',
-			hiddenName : 'targetID',
-			editable : false,
-			allowBlank : false,
-			triggerAction : 'all',
-			mode : 'remote',
-			displayField : 'name',
-			valueField : 'chid',
-			emptyText : 'Select a channel...'
-		}) ],
 		buttons : [ {
 			text : 'Merge',
 			handler : doMerge
-		} ]
+		} ],
+		defaultType : 'textfield',
+		frame : true,
+		items : [ channelsCombo ],
+		labelWidth : 110
 	});
 
-	win = new Ext.Window({
-		title : 'Merge channel ' + '<span class="x-content-highlight">' + chan.name + '</span>' + ' into...',
-		layout : 'fit',
-		width : 500,
-		height : 120,
+	var win = new Ext.Window({
+		autoHeight : true,
+		items : panel,
+		layout : 'form',
 		modal : true,
 		plain : true,
-		items : panel
+		resizable : false,
+		title : 'Merge channel ' + '<span class="x-content-highlight">' + chan.name + '</span>' + ' into...',
+		width : 470
 	});
+	
 	win.show();
-
 }
 
 /**
@@ -103,25 +104,24 @@ tvheadend.chconf = function() {
 	});
 	
 	var actions = new Ext.ux.grid.RowActions({
-		dataIndex : 'actions',
-		width : 45,
 		actions : [ {
-				cb : function(grid, record, action, row, col) {
-					url = 'playlist/channelid/' + record.get('chid');
-					tvheadend.VLC(url);
-				},
-				iconCls : 'eye',
-				qtip : 'Watch this channel'
-			}, ' ', {
-				cb : function(grid, record, action, row, col) {
-					tvheadend.mergeChannel(record.data);
-				},
-				disabled : !tvheadend.accessupdate.admin,
-				iconCls : 'merge',
-				qtip : 'Merge this channel with another channel'
-			}
-		],
-		hideable : false
+			cb : function(grid, record, action, row, col) {
+				url = 'playlist/channelid/' + record.get('chid');
+				tvheadend.VLC(url);
+			},
+			iconCls : 'eye',
+			qtip : 'Watch this channel'
+		}, ' ', {
+			cb : function(grid, record, action, row, col) {
+				tvheadend.mergeChannel(record.data);
+			},
+			disabled : !tvheadend.accessupdate.admin,
+			iconCls : 'merge',
+			qtip : 'Merge this channel with another channel'
+		} ],
+		dataIndex : 'actions',
+		hideable : false,
+		width : 45
 	});
 	
 	var sm = new Ext.grid.CheckboxSelectionModel();
@@ -148,7 +148,7 @@ tvheadend.chconf = function() {
 				header : "Name",
 				dataIndex : 'name',
 				width : 200,
-				editor : new Ext.form.TextField({allowBlank : false}),
+				editor : new Ext.form.TextField({ allowBlank : false }),
 				hideable : false
 			}, {
 				header : "Tags",
