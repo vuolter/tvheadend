@@ -609,9 +609,11 @@ tvheadend.autoreceditor = function() {
 				})
 			} ]});
 
-	return new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', sm, cm,
+	var grid = new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', sm, cm,
 		tvheadend.autorecRecord, [ enabledColumn, search ], tvheadend.data.autorec,
 		'autorec.html', 'wand');
+		
+	return grid;
 }
 /**
  *

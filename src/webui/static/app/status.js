@@ -5,22 +5,12 @@ tvheadend.status_subs = function() {
 
 	tvheadend.data.subscriptions = new Ext.data.JsonStore({
 		autoLoad : true,
-		fields : [ 
-			{ name : 'id' },
-			{ name : 'hostname' },
-			{ name : 'username' },
-			{ name : 'title' },
-			{ name : 'channel' },
-			{ name : 'service' },
-			{ name : 'state' },
-			{ name : 'errors' },
-			{ name : 'bw' },
-			{
-				name : 'start',
-				dateFormat : 'U', /* unix time */
-				type : 'date'
-			}
-		],
+		fields : [ 'bw', 'channel', 'errors', 'hostname', 'id', 'service', 'state', 'title', 'username'
+		{
+			name : 'start',
+			dateFormat : 'U', /* unix time */
+			type : 'date'
+		} ],
 		id : 'id',
 		root : 'entries',
 		sortInfo : {
@@ -207,14 +197,11 @@ var cm = new Ext.grid.ColumnModel({
 	});
 
 	var store = new Ext.data.JsonStore({
-		fields : [ 
-			'identifier', 'type', 'name', 'path', 
-			'devicename', 'hostconnection', 'currentMux', 'services',
-			'muxes', 'initialMuxes', 'satConf', 'deliverySystem',
-			'freqMin', 'freqMax', 'freqStep', 'symrateMin',
-			'symrateMax', 'signal', 'snr', 'ber',
-			'unc', 'uncavg'
-		],
+		fields : [ 'ber', 'currentMux', 'freqMax', 'freqMin', 'freqStep' 
+			'deliverySystem', 'devicename', 'hostconnection', 'identifier', 'initialMuxes', 
+			'muxes', 'name', 'path', 'satConf', 'services', 
+			'signal', 'snr', 'symrateMax', 'symrateMin', 'type', 
+			'unc', 'uncavg' ],
 		id : 'identifier',
 		root : 'entries',
 		sortInfo : {
