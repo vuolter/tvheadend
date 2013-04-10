@@ -192,7 +192,6 @@ tvheadend.miscconf = function() {
 	var panel = new Ext.form.FormPanel({
 		autoHeight : true,
 		autoScroll : true,
-		border : false,
 		bodyStyle : 'padding:15px',
 		defaultType : 'textfield',
 		iconCls : 'wrench-orange',

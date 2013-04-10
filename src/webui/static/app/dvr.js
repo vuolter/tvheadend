@@ -800,7 +800,6 @@ tvheadend.dvrsettings = function() {
 		autoScroll : true,
 		title : 'Digital Video Recorder',
 		iconCls : 'drive',
-		border : false,
 		bodyStyle : 'padding:15px',
 		anchor : '100% 50%',
 		labelAlign : 'right',

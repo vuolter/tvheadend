@@ -322,6 +322,7 @@ tvheadend.app = function() {
 			
 			tvheadend.configPanel = new Ext.TabPanel({
 				activeTab : 0,
+				defaults : { border : false },
 				enableTabScroll : true,
 				iconCls : 'wrench-blue',
 				id : 'configTab',
@@ -351,6 +352,7 @@ tvheadend.app = function() {
 		
 		tvheadend.tabsPanel = new Ext.TabPanel({
 			activeTab : 0,
+			defaults : { border : false },
 			enableTabScroll : true,
 			id : 'rootTab',
 			items : [ tvheadend.epgPanel, tvheadend.dvrPanel, tvheadend.channelsPanel,

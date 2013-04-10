@@ -349,7 +349,6 @@ tvheadend.epggrab = function() {
 		autoScroll : true,
 		title : 'EPG Grabber',
 		iconCls : 'xml',
-		border : false,
 		bodyStyle : 'padding:15px',
 		labelAlign : 'left',
 		labelWidth : 150,

@@ -264,7 +264,6 @@ tvheadend.status = function() {
 	});
 	
 	var panel = new Ext.Panel({
-		border : false,
 		iconCls : 'bulb',		
 		items : [ new tvheadend.status_subs, new tvheadend.status_adapters ],
 		layout : 'vbox',

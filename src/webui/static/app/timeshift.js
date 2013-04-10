@@ -107,7 +107,6 @@ tvheadend.timeshift = function() {
     autoScroll : true,
 	title : 'Timeshift',
     iconCls : 'clock',
-    border : false,
     bodyStyle : 'padding:15px',
     labelAlign : 'left',
     labelWidth : 150,

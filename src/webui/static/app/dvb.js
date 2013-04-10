@@ -1515,7 +1515,6 @@ tvheadend.dvb_adapter = function(data) {
 		lnbStore));
 
 	var panel = new Ext.TabPanel({
-		border : false,
 		activeTab : 0,
 		items : items
 	});

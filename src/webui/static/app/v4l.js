@@ -323,7 +323,6 @@ tvheadend.v4l_services = function(adapterId) {
  */
 tvheadend.v4l_adapter = function(data) {
 	var panel = new Ext.TabPanel({
-		border : false,
 		activeTab : 0,
 		items : [ new tvheadend.v4l_adapter_general(data),
 			new tvheadend.v4l_services(data.identifier) ]
