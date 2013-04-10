@@ -346,6 +346,7 @@ tvheadend.epggrab = function() {
 	});
 	
 	var panel = new Ext.form.FormPanel({
+		autoScroll : true,
 		title : 'EPG Grabber',
 		iconCls : 'xml',
 		border : false,

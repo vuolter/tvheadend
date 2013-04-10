@@ -84,6 +84,7 @@ tvheadend.v4l_adapter_general = function(adapterData) {
 	 * Main adapter panel
 	 */
 	var panel = new Ext.Panel({
+		autoScroll : true,
 		title : 'General',
 		layout : 'column',
 		items : [ confform, infoPanel ]
@@ -324,7 +325,6 @@ tvheadend.v4l_adapter = function(data) {
 	var panel = new Ext.TabPanel({
 		border : false,
 		activeTab : 0,
-		autoScroll : true,
 		items : [ new tvheadend.v4l_adapter_general(data),
 			new tvheadend.v4l_services(data.identifier) ]
 	});

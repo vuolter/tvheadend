@@ -1517,7 +1517,6 @@ tvheadend.dvb_adapter = function(data) {
 	var panel = new Ext.TabPanel({
 		border : false,
 		activeTab : 0,
-		autoScroll : true,
 		items : items
 	});
 

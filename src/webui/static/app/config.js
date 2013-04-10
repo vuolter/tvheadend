@@ -190,20 +190,20 @@ tvheadend.miscconf = function() {
 	});
 	
 	var panel = new Ext.form.FormPanel({
-		title : 'General',
-		iconCls : 'wrench-orange',
+		autoHeight : true,
+		autoScroll : true,
 		border : false,
 		bodyStyle : 'padding:15px',
+		defaultType : 'textfield',
+		iconCls : 'wrench-orange',
+		items : [ language, dvbscanPath, imagecachePanel, tvhtimePanel, theme ],
 		labelAlign : 'left',
 		labelWidth : 200,
-		waitMsgTarget : true,
-		reader : confreader,
 		layout : 'form',
-		defaultType : 'textfield',
-		autoHeight : true,
-		items : [ language, dvbscanPath,
-              imagecachePanel, tvhtimePanel, theme ],
-		tbar : tbar
+		reader : confreader,
+		tbar : tbar,
+		title : 'General',
+		waitMsgTarget : true
 	});
 
 	/* ****************************************************************

@@ -104,7 +104,8 @@ tvheadend.timeshift = function() {
 	});
 	
   var panel = new Ext.form.FormPanel({
-    title : 'Timeshift',
+    autoScroll : true,
+	title : 'Timeshift',
     iconCls : 'clock',
     border : false,
     bodyStyle : 'padding:15px',

@@ -731,10 +731,9 @@ tvheadend.dvr = function() {
 
 	var panel = new Ext.TabPanel({
 		activeTab : 0,
-		autoScroll : true,
 		iconCls : 'drive',
 		id : 'DVRTab',		
-		items : [ 
+		items : [
 			new tvheadend.dvrschedule('dvrupcomingGrid', 'Upcoming recordings', 'clock', tvheadend.dvrStoreUpcoming),
 			new tvheadend.dvrschedule('dvrfinishedGrid', 'Finished recordings', 'television', tvheadend.dvrStoreFinished),
 			new tvheadend.dvrschedule('dvrfailedGrid', 'Failed recordings', 'exclamation', tvheadend.dvrStoreFailed),
@@ -798,6 +797,7 @@ tvheadend.dvrsettings = function() {
 	});
 	
 	var panel = new Ext.form.FormPanel({
+		autoScroll : true,
 		title : 'Digital Video Recorder',
 		iconCls : 'drive',
 		border : false,

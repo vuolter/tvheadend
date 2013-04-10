@@ -341,6 +341,7 @@ tvheadend.app = function() {
 		}
 	
 		tvheadend.aboutPanel = new Ext.Panel({
+			autoScroll : true,
 			border : false,
 			layout : 'fit',
 			title : 'About',
