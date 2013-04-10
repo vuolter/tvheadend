@@ -1,3 +1,42 @@
+/**
+ * Channel tags
+ */
+tvheadend.data.channelTags = new Ext.data.JsonStore({
+	autoLoad : true,
+	root : 'entries',
+	fields : [ 'identifier', 'name' ],
+	id : 'identifier',
+	url : 'channeltags',
+	baseParams : { op : 'listTags' },
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	}
+});
+
+tvheadend.data.channelTags2 = new Ext.data.JsonStore({
+	root : 'entries',
+	fields : [ 'identifier', 'name' ],
+	id : 'identifier',
+	url : 'channeltags',
+	baseParams : { op : 'listTags' },
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	}
+});
+
+tvheadend.data.channelTags.on('update', function() {
+	tvheadend.data.channelTags2.reload();
+});
+
+tvheadend.comet.on('channeltags', function(m) {
+	if (m.reload != null) tvheadend.data.channelTags.reload();
+});
+
+/**
+ * 
+ */
 tvheadend.cteditor = function() {
 	
 	var search = new Ext.ux.grid.Search({
@@ -9,52 +48,67 @@ tvheadend.cteditor = function() {
 	});
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
 		dataIndex : 'enabled',
-		width : 60
+		header : "Enabled",
+		hideable : false,
+		width : 85
 	});
 
 	var internalColumn = new Ext.grid.CheckColumn({
-		header : "Internal",
 		dataIndex : 'internal',
-		width : 100
+		header : "Internal",
+		hideable : false,
+		width : 85
 	});
 
 	var titledIconColumn = new Ext.grid.CheckColumn({
-		header : "Icon has title",
 		dataIndex : 'titledIcon',
-		width : 100,
+		header : "Icon has title",
 		tooltip : 'Set this if the supplied icon has a title embedded. '
 			+ 'This will tell displaying application not to superimpose title '
-			+ 'on top of logo.'
+			+ 'on top of logo.',
+		width : 85
 	});
 
 	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
-  defaultSortable: true,
-  columns : [ sm, enabledColumn, {
-		header : "Name",
-		dataIndex : 'name',
-		editor : new Ext.form.TextField({
-			allowBlank : false
-		})
-	}, internalColumn, {
-		header : "Icon (full URL)",
-		dataIndex : 'icon',
-		width : 400,
-		editor : new Ext.form.TextField({})
-	}, titledIconColumn, {
-		header : "Comment",
-		dataIndex : 'comment',
-		width : 400,
-		editor : new Ext.form.TextField({})
-	} ]});
+		defaults : { sortable : true },
+		columns : [ enabledColumn, {
+			dataIndex : 'name',
+			editor : new Ext.form.TextField({ allowBlank : false }),
+			header : "Name",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-red">Unset</span>';
+			},
+			hideable : false,
+			width : 150
+		}, 
+		internalColumn, titledIconColumn, {
+			dataIndex : 'icon',
+			editor : new Ext.form.TextField(),
+			header : "Icon URL (absolute)",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-blue">Unset</span>';
+			},
+			width : 300
+		}, {
+			dataIndex : 'comment',
+			editor : new Ext.form.TextField(),
+			header : "Comment",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value != "New tag" ? value
+					: '<span class="tvh-grid-blue">No comments yet</span>';
+			},
+			width : 300
+		} ]
+	});
 
-	var ChannelTagRecord = Ext.data.Record.create([ 'enabled', 'name',
-		'internal', 'icon', 'comment', 'titledIcon' ]);
+	var rec = Ext.data.Record.create([ 'comment', 'enabled', 'icon', 'internal', 'name', 'titledIcon' ]);
 
 	return new tvheadend.tableEditor('ctagGrid', 'Channel Tags', 'channeltags', sm, cm,
-		ChannelTagRecord, [ search, enabledColumn, internalColumn, titledIconColumn ],
-		null, 'config_tags.html', 'tag');
+		rec, [ search, enabledColumn, internalColumn, titledIconColumn ],
+		tvheadend.data.channelTags, 'config_tags.html', 'tag');
 }

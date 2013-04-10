@@ -1,40 +1,4 @@
 /**
- * Channel tags
- */
-tvheadend.data.channelTags = new Ext.data.JsonStore({
-	autoLoad : true,
-	root : 'entries',
-	fields : [ 'identifier', 'name' ],
-	id : 'identifier',
-	url : 'channeltags',
-	baseParams : { op : 'listTags' },
-	sortInfo : {
-		field : 'name',
-		direction : 'ASC'
-	}
-});
-
-tvheadend.data.channelTags2 = new Ext.data.JsonStore({
-	root : 'entries',
-	fields : [ 'identifier', 'name' ],
-	id : 'identifier',
-	url : 'channeltags',
-	baseParams : { op : 'listTags' },
-	sortInfo : {
-		field : 'name',
-		direction : 'ASC'
-	}
-});
-
-tvheadend.data.channelTags.on('update', function() {
-	tvheadend.data.channelTags2.reload();
-});
-
-tvheadend.comet.on('channeltags', function(m) {
-	if (m.reload != null) tvheadend.data.channelTags.reload();
-});
-
-/**
  * Channels
  */
 tvheadend.channelrec = new Ext.data.Record.create(
