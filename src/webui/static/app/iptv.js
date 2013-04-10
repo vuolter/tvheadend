@@ -3,16 +3,24 @@
  */
 tvheadend.iptv = function(adapterId) {
 
-  var servicetypeStore = new Ext.data.JsonStore({
-	  root : 'entries',
-	  id : 'val',
-	  url : '/iptv/services',
-	  baseParams : {
-		  op : 'servicetypeList'
-	  },
-	  fields : [ 'val', 'str' ],
-	  autoLoad : false
-  });
+	var channelsCombo = new Ext.form.ComboBox({
+		allowBlank : true,
+		displayField : 'name',
+		lazyRender : true,
+		minChars : 2,
+		store : tvheadend.data.channels2,
+		triggerAction : 'all',
+		typeAhead : true
+	});
+	
+	var servicetypeStore = new Ext.data.JsonStore({
+		autoLoad : false,
+		baseParams : { op : 'servicetypeList' },
+		fields : [ 'val', 'str' ],
+		id : 'val',
+		root : 'entries',
+		url : '/iptv/services'
+	});
 
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
@@ -23,143 +31,148 @@ tvheadend.iptv = function(adapterId) {
 	});
 
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
 		dataIndex : 'enabled',
-		width : 45
+		header : "Enabled",
+		hideable : false,
+		width : 45,
 	});
 
 	var actions = new Ext.ux.grid.RowActions({
-		header : '',
-		dataIndex : 'actions',
-		width : 45,
 		actions : [ {
-			iconCls : 'info',
-			qtip : 'Detailed information about service',
 			cb : function(grid, record, action, row, col) {
 				Ext.Ajax.request({
-					url : "servicedetails/" + record.id,
 					success : function(response, options) {
 						r = Ext.util.JSON.decode(response.responseText);
 						tvheadend.showTransportDetails(r);
-					}
+					},
+					url : "servicedetails/" + record.id
 				})
-			}
-		} ]
+			},
+			iconCls : 'info',
+			qtip : 'Detailed information about service'
+		} ],
+		dataIndex : 'actions',
+		header : '',
+		hideable : false,
+		width : 45
 	});
 
 	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
-  defaultSortable: true,
-  columns : [
-		sm, enabledColumn,
-		{
-			header : "Channel name",
+		defaults : { sortable : true },
+		columns : [ enabledColumn, {
 			dataIndex : 'channelname',
-			width : 150,
+			header : "Channel name",
+			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
-					: '<span class="tvh-grid-unset">Unmapped</span>';
+					: '<span class="tvh-grid-red">Unset</span>';
 			},
-			editor : new Ext.form.ComboBox({
-				store : tvheadend.data.channels2,
-				allowBlank : true,
-				typeAhead : true,
-				minChars : 2,
-				lazyRender : true,
-				triggerAction : 'all',
-				mode : 'local',
-				displayField : 'name'
-			})
-		},
-		{
-			header : "Interface",
+			editor : channelsCombo,
+			width : 150
+		}, {
 			dataIndex : 'interface',
-			width : 100,
+			editor : new Ext.form.TextField({ allowBlank : false })
+			header : "Interface",
 			renderer : function(value, metadata, record, row, col, store) {
-				return value ? value : '<span class="tvh-grid-unset">Unset</span>';
+				return value ? value
+					: '<span class="tvh-grid-red">Unset</span>';
 			},
-			editor : new Ext.form.TextField({
-				allowBlank : false
-			})
-		},
-		{
-			header : "Group",
-			dataIndex : 'group',
-			width : 100,
-			renderer : function(value, metadata, record, row, col, store) {
-				return value ? value : '<span class="tvh-grid-unset">Unset</span>';
-			},
-			editor : new Ext.form.TextField({
-				allowBlank : false
-			})
-		},
-		{
-			header : "UDP Port",
+			width : 100
+		}, {
 			dataIndex : 'port',
-			width : 60,
 			editor : new Ext.form.NumberField({
-				minValue : 1,
-				maxValue : 65535
-			})
-		},
-		{
-			header : "Service ID",
-			dataIndex : 'sid',
-			width : 50,
-			hidden : true
-		},
-		{
-			header : 'Service Type',
-			width : 100,
-			dataIndex : 'stype',
-			hidden : true,
-			editor : new Ext.form.ComboBox({
-				lazyRender : true,
-				valueField : 'val',
-				displayField : 'str',
-				forceSelection : false,
-				editable : false,
-				mode : 'local',
-				triggerAction : 'all',
-				store : servicetypeStore
+				maxValue : 65535,
+				minValue : 1
 			}),
+			header : "UDP Port",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-red">Unset</span>';
+			},
+			width : 60
+		}, {
+			dataIndex : 'group',
+			editor : new Ext.form.TextField({ allowBlank : false }),
+			header : "Group",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value != '::' ? value
+					: '<span class="tvh-grid-red">Unset</span>';
+			},
+			width : 100
+		}, {
+			dataIndex : 'stype',
+			editor : new Ext.form.ComboBox({
+				displayField : 'str',
+				editable : false,
+				forceSelection : false,
+				store : servicetypeStore,
+				triggerAction : 'all',
+				valueField : 'val'
+			}),
+			header : 'Service Type',
+			hidden : true,
 			renderer : function(value, metadata, record, row, col, store) {
 				var val = value ? servicetypeStore.getById(value) : null;
 				return val ? val.get('str')
-					: '<span class="tvh-grid-unset">Unset</span>';
-			}
+					 : '<span class="tvh-grid-red">Unset</span>';
+			},
+			width : 100
 		}, {
-			header : "PMT PID",
+			dataIndex : 'sid',
+			header : "Service ID",
+			hidden : true,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unknown</span>';
+			},
+			width : 50
+		}, {
 			dataIndex : 'pmt',
-			width : 50,
-			hidden : true
+			header : "PMT PID",
+			hidden : true,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unknown</span>';
+			},
+			width : 50
 		}, {
-			header : "PCR PID",
 			dataIndex : 'pcr',
+			header : "PCR PID",
+			hidden : true,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unknown</span>';
+			},
 			width : 50,
-			hidden : true
-		}, actions ]});
+		},
+		actions ]
+	});
 
-	var rec = Ext.data.Record.create([ 'id', 'enabled', 'channelname',
-		'interface', 'group', 'port', 'sid', 'pmt', 'pcr', 'stype' ]);
+	var rec = Ext.data.Record.create([ 'channelname', 'enabled', 'group', 'id'
+		'interface', 'pcr', 'pmt', 'port', 'sid', 'stype' ]);
 
 	var store = new Ext.data.JsonStore({
-		root : 'entries',
-		fields : rec,
-		url : "iptv/services",
 		autoLoad : true,
-		id : 'id',
 		baseParams : {
 			op : "get"
 		},
+		fields : rec,
+		id : 'id',
 		listeners : {
 			'update' : function(s, r, o) {
 				d = s.getModifiedRecords().length == 0
 				saveBtn.setDisabled(d);
 				rejectBtn.setDisabled(d);
 			}
-		}
+		},
+		root : 'entries',
+		sortInfo : {
+			field : 'channelname',
+			direction : 'ASC'
+		},
+		url : "iptv/services"
 	});
 
 	/*
@@ -305,18 +318,18 @@ tvheadend.iptv = function(adapterId) {
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({
-		id : "iptvGrid",
-		stripeRows : true,
-		enableColumnMove : false,
-		title : 'IPTV',
-		iconCls : 'iptv',
-		plugins : [ enabledColumn, actions,search ],
-		store : store,
 		cm : cm,
+		enableColumnMove : false,
+		iconCls : 'iptv',
+		id : "iptvGrid",
+		plugins : [ enabledColumn, actions,search ],
 		sm : sm,
 		stateful : true,
 		stateId : this.id,
+		store : store,
+		stripeRows : true,
 		tbar : tb,
+		title : 'IPTV',
 		view : new tvheadend.BufferView
 	});
 
