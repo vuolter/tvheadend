@@ -4,37 +4,32 @@
 tvheadend.status_subs = function() {
 
 	tvheadend.data.subscriptions = new Ext.data.JsonStore({
-		root : 'entries',
-		totalProperty : 'totalCount',
-		fields : [ {
-			name : 'id'
-		}, {
-			name : 'hostname'
-		}, {
-			name : 'username'
-		}, {
-			name : 'title'
-		}, {
-			name : 'channel'
-		}, {
-			name : 'service'
-		}, {
-			name : 'state'
-		}, {
-			name : 'errors'
-		}, {
-			name : 'bw'
-		}, {
-			name : 'start',
-			type : 'date',
-			dateFormat : 'U' /* unix time */
-		} ],
-		url : 'subscriptions',
 		autoLoad : true,
-		id : 'id'
+		fields : [ 
+			{ name : 'id' },
+			{ name : 'hostname' },
+			{ name : 'username' },
+			{ name : 'title' },
+			{ name : 'channel' },
+			{ name : 'service' },
+			{ name : 'state' },
+			{ name : 'errors' },
+			{ name : 'bw' },
+			{
+				name : 'start',
+				dateFormat : 'U', /* unix time */
+				type : 'date'
+			}
+		],
+		id : 'id',
+		root : 'entries',
+		sortInfo : {
+			direction : 'ASC',
+			field : 'username'
+		},
+		totalProperty : 'totalCount',
+		url : 'subscriptions'	
 	});
-
-
 
 	tvheadend.comet.on('subscriptions', function(m) {
 
@@ -61,79 +56,84 @@ tvheadend.status_subs = function() {
 
 	function renderDate(value) {
 		var dt = new Date(value);
-		return dt.format('D j M H:i');
+		return dt.format('Y-m-d , H:i');
 	}
 
 	function renderBw(value) {
-		return parseInt(value / 125);
+		return parseInt(value / 125) + ' KiB/s';
 	}
 
-	var subsCm = new Ext.grid.ColumnModel([{
-		width : 50,
-		id : 'hostname',
-		header : "Hostname",
-		dataIndex : 'hostname'
-	}, {
-		width : 50,
-		id : 'username',
-		header : "Username",
-		dataIndex : 'username'
-	}, {
-		width : 80,
-		id : 'title',
-		header : "Title",
-		dataIndex : 'title'
-	}, {
-		width : 50,
-		id : 'channel',
-		header : "Channel",
-		dataIndex : 'channel'
-	}, {
-		width : 200,
-		id : 'service',
-		header : "Service",
-		dataIndex : 'service',
-	}, {
-		width : 50,
-		id : 'start',
-		header : "Start",
-		dataIndex : 'start',
-		renderer : renderDate
-	}, {
-		width : 50,
-		id : 'state',
-		header : "State",
-		dataIndex : 'state'
-	}, {
-		width : 50,
-		id : 'errors',
-		header : "Errors",
-		dataIndex : 'errors'
-	}, {
-		width : 50,
-		id : 'bw',
-		header : "Bandwidth (kb/s)",
-		dataIndex : 'bw',
-		renderer: renderBw
-	} ]);
+	tvheadend.subsCm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ {
+			dataIndex : 'hostname',
+			header : "Hostname",
+			hideable : false,
+			id : 'hostname',
+			width : 100
+		}, {
+			dataIndex : 'username',
+			header : "Username",
+			hideable : false,
+			id : 'username',
+			width : 100,
+		}, {
+			dataIndex : 'channel',
+			header : "Channel",
+			id : 'channel',
+			width : 100
+		}, {
+			dataIndex : 'service',
+			header : "Service",
+			id : 'service',			
+			width : 100
+		}, {
+			dataIndex : 'state',
+			header : "Status",
+			id : 'state',
+			width : 100
+		}, {
+			dataIndex : 'start',
+			header : "Start date",
+			id : 'start',
+			renderer : renderDate,
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : "Type",
+			id : 'title',
+			width : 100
+		}, {
+			header : "Errors",
+			id : 'errors',
+			dataIndex : 'errors',
+			width : 50
+		}, {
+			dataIndex : 'bw',
+			header : "Bandwidth",
+			id : 'bw',
+			renderer : renderBw,
+			width : 50
+		} ]
+	});
 
 	var grid = new Ext.grid.GridPanel({
-		id : "subscriptionsGrid",
-		border: false,
-		loadMask : true,
-		stripeRows : true,
+		cm : subsCm,
 		enableColumnMove : false,
 		disableSelection : true,
-		title : 'Subscriptions',
-		iconCls : 'eye',
-		store : tvheadend.data.subscriptions,
-		cm : subsCm,
-		flex: 1,
-		stateful : true,
+		flex : 1,
+		iconCls : 'transmit-blue',
+		id : "subscriptionsGrid",
+		loadMask : true,
 		stateId : this.id,
+		stateful : true,
+		store : tvheadend.data.subscriptions,
+		stripeRows : true,		
+		title : 'Subscriptions',
 		view : tvheadend.BufferView
 	});
-        return grid;
+	
+	return grid;
 }
 
 
@@ -142,85 +142,135 @@ tvheadend.status_subs = function() {
  */
 tvheadend.status_adapters = function() {
 
-	var signal = new Ext.ux.grid.ProgressColumn({
-		header : "Signal Strength",
+	function renderBw(value) {
+		return parseInt(value / 125) + ' KiB/s';
+	}
+	
+	var strength = new Ext.ux.grid.ProgressColumn({
+		colored : true,
 		dataIndex : 'signal',
-		width : 85,
+		header : "Signal Strength",
 		textPst : '%',
-		colored : true
+		width : 80
+	});
+/*	
+	var quality = new Ext.ux.grid.ProgressColumn({
+		colored : true,
+		dataIndex : 'quality',
+		header : "Signal Quality",
+		textPst : '%',
+		width : 80
+	});
+*/
+
+var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ {
+			dataIndex : 'name',
+			header : "Name",			
+			hideable : false,
+			width : 100
+		}, {
+			
+			dataIndex : 'path',
+			header : "Device",
+			hideable : false
+			width : 100		
+		}, {
+			dataIndex : 'currentMux',
+			header : "Currently tuned to",
+			hideable : false,
+			width : 100
+		}, {
+			dataIndex : 'bw',
+			header : "Bandwidth (kb/s)",
+			renderer: renderBw,
+			width : 100
+		}, {
+			header : "Bit error rate",
+			dataIndex : 'ber',
+			width : 50
+		}, {
+			dataIndex : 'uncavg',
+			header : "Uncorrected bit error rate",
+			width : 50
+		}, {
+			dataIndex : 'snr',
+			header : "SNR",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value > 0 ? value.toFixed(1) + " dB"
+								 : '<span class="tvh-grid-gray">Unknown</span>';
+			},
+			width : 50
+		},
+		strength /*, quality*/ ]
 	});
 
-	function renderBw(value) {
-		return parseInt(value / 125);
-	}
+	var store = new Ext.data.JsonStore({
+		fields : [ 
+			'identifier', 'type', 'name', 'path', 
+			'devicename', 'hostconnection', 'currentMux', 'services',
+			'muxes', 'initialMuxes', 'satConf', 'deliverySystem',
+			'freqMin', 'freqMax', 'freqStep', 'symrateMin',
+			'symrateMax', 'signal', 'snr', 'ber',
+			'unc', 'uncavg'
+		],
+		id : 'identifier',
+		root : 'entries',
+		sortInfo : {
+			direction : 'ASC',
+			field : 'path'
+		},
+		url : 'tv/adapter'
+	});
 
-	var cm = new Ext.grid.ColumnModel([{
-		width : 50,
-		header : "Name",
-		dataIndex : 'name'
-        },{
-		width : 50,
-		header : "Hardware device",
-		dataIndex : 'path'
-        },{
-		width : 100,
-		header : "Currently tuned to",
-		dataIndex : 'currentMux'
-        },{
-		width : 100,
-		header : "Bandwidth (kb/s)",
-		dataIndex : 'bw',
-		renderer: renderBw
-        },{
-		width : 50,
-		header : "Bit error rate",
-		dataIndex : 'ber'
-        },{
-		width : 50,
-		header : "Uncorrected bit error rate",
-		dataIndex : 'uncavg'
-        },{
-		width : 50,
-		header : "SNR",
-		dataIndex : 'snr',
-                renderer: function(value) {
-                        if(value > 0) {
-                                return value.toFixed(1) + " dB";
-                        } else {
-                                return '<span class="tvh-grid-unset">Unknown</span>';
-                        }
-                }
-        }, signal]);
-
+	tvheadend.data.adapters.on('update', function() {
+		store.reload();
+	});
+	
 	var grid = new Ext.grid.GridPanel({
-		id : "adaptersGrid",
-		border: false,
-		loadMask : true,
-		stripeRows : true,
+		cm : cm,
 		enableColumnMove : false,
 		disableSelection : true,
-		title : 'Adapters',
+		flex : 1,
 		iconCls : 'hardware',
-		store : tvheadend.data.adapters,
-		cm : cm,
-		flex: 1,
-		stateful : true,
+		id : "adaptersGrid",
+		loadMask : true,
 		stateId : this.id,
+		stateful : true,
+		store : store,
+		stripeRows : true,		
+		title : 'Adapters',
 		view : tvheadend.BufferView
 	});
-        return grid;
+	
+	return grid;
 }
 
 tvheadend.status = function() {
-
-        var panel = new Ext.Panel({
-                border: false,
+	
+	var helpBtn = new Ext.Button({
+		handler : function() {
+			new tvheadend.help('Status', 'status.html');
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : 'Show help page'
+	});
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ '->', helpBtn ]
+	});
+	
+	var panel = new Ext.Panel({
+		border : false,
+		iconCls : 'bulb',		
+		items : [ new tvheadend.status_subs, new tvheadend.status_adapters ],
 		layout : 'vbox',
-		title : 'Status',
-		iconCls : 'bulb',
-		items : [ new tvheadend.status_subs, new tvheadend.status_adapters ]
-        });
-
+		tbar : tb,
+		title : 'Status'
+	});
+	
 	return panel;
 }
-
