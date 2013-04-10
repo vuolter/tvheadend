@@ -1473,7 +1473,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		header : "Comment",
 		dataIndex : 'comment',
 		width : 400,
-		editor : new Ext.form.TextField()
+		editor : new Ext.form.TextField
 	} ]});
 
 	var rec = Ext.data.Record.create([ 'name', 'port', 'comment', 'lnb' ]);

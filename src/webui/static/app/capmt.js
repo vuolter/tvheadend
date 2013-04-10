@@ -68,7 +68,7 @@ tvheadend.capmteditor = function() {
 			setMetaAttr(metadata, record);
 			return value;
 		},
-		editor : new Ext.form.TextField()
+		editor : new Ext.form.TextField
 	} ]});
 
 	var rec = Ext.data.Record.create([ 'enabled', 'connected', 'camdfilename',

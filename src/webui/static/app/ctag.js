@@ -87,7 +87,7 @@ tvheadend.cteditor = function() {
 		}, 
 		internalColumn, titledIconColumn, {
 			dataIndex : 'icon',
-			editor : new Ext.form.TextField(),
+			editor : new Ext.form.TextField,
 			header : "Icon URL (absolute)",
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -96,7 +96,7 @@ tvheadend.cteditor = function() {
 			width : 300
 		}, {
 			dataIndex : 'comment',
-			editor : new Ext.form.TextField(),
+			editor : new Ext.form.TextField,
 			header : "Comment",
 			renderer : function(value, metadata, record, row, col, store) {
 				return value != "New tag" ? value

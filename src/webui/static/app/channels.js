@@ -197,7 +197,7 @@ tvheadend.chconf = function() {
 				header : "Icon (full URL)",
 				dataIndex : 'ch_icon',
 				width : 200,
-				editor : new Ext.form.TextField(),
+				editor : new Ext.form.TextField,
 				hidden : true,
 				sortable : false
 			}, {
