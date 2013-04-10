@@ -54,7 +54,7 @@ tvheadend.tvhlog = function() {
 
 	var confpanel = new Ext.form.FormPanel({
 		title : 'Debugging',
-		iconCls : 'wrench',
+		iconCls : 'bug',
 		border : false,
 		bodyStyle : 'padding:15px',
 		labelAlign : 'left',

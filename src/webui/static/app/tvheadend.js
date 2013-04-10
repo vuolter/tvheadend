@@ -316,6 +316,7 @@ tvheadend.app = function() {
 			tvheadend.channelsPanel = new tvheadend.dummy('Channels','tv');
 		
 		if(tvheadend.accessupdate.admin) {			
+			tvheadend.tvhlogPanel = new tvheadend.tvhlog;
 			tvheadend.miscconfPanel = new tvheadend.miscconf;
 			tvheadend.tvadaptersPanel = new tvheadend.tvadapters;
 			tvheadend.timeshiftPanel = new tvheadend.timeshift;
@@ -325,7 +326,6 @@ tvheadend.app = function() {
 			tvheadend.aclPanel = new tvheadend.acleditor;
 			tvheadend.cwcPanel = new tvheadend.cwceditor;
 			tvheadend.capmtPanel = new tvheadend.capmteditor;
-			tvheadend.tvhlogPanel = new tvheadend.tvhlog;
 			
 			tvheadend.configPanel = new Ext.TabPanel({
 				activeTab : 0,
@@ -333,9 +333,9 @@ tvheadend.app = function() {
 				enableTabScroll : true,
 				iconCls : 'wrench-blue',
 				id : 'configTab',
-				items : [ tvheadend.miscconfPanel, tvheadend.tvadaptersPanel, tvheadend.timeshiftPanel,
+				items : [ tvheadend.tvhlogPanel, tvheadend.miscconfPanel, tvheadend.tvadaptersPanel, tvheadend.timeshiftPanel,
 						  tvheadend.epggrabPanel, tvheadend.dvrsettingsPanel, tvheadend.ctagPanel,
-						  tvheadend.iptvPanel, tvheadend.aclPanel, tvheadend.cwcPanel, tvheadend.capmtPanel, tvheadend.tvhlogPanel ],
+						  tvheadend.iptvPanel, tvheadend.aclPanel, tvheadend.cwcPanel, tvheadend.capmtPanel ],
 				title : 'Configuration'
 			});
 			
