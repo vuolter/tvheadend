@@ -296,6 +296,11 @@ tvheadend.app = function() {
 		window.localStorage ? Ext.state.Manager.setProvider(new Ext.ux.state.LocalStorage({ namePrefix : 'tvh-' }))
 							: tvhlog(LOG_NOTICE, "webui", "HTML5 localStorage not supported by browser");
 		
+		Ext.apply(Ext.QuickTips.getQuickTip(), {
+			anchor : 'top',
+			anchorOffset : 85
+		});
+		
 		tvheadend.epgPanel = new tvheadend.epg;
 		
 		if(tvheadend.accessupdate.dvr) {
@@ -398,12 +403,6 @@ tvheadend.app = function() {
 			tvheadend.log(m.logtxt);
 		});
 		
-	/*
-		Ext.apply(Ext.QuickTips.getQuickTip(), {
-			anchor : 'top',
-			anchorOffset : 85
-		});
-	*/
 		Ext.QuickTips.init();
 	}
 	
