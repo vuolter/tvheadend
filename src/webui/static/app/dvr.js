@@ -419,7 +419,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		stripeRows : true,
 		tbar : tb,
 		title : title,
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 
 	grid.on('rowclick', rowclicked);

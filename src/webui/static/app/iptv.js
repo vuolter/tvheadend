@@ -317,7 +317,7 @@ tvheadend.iptv = function(adapterId) {
 		stateful : true,
 		stateId : this.id,
 		tbar : tb,
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 
 	store.on('update', function(s, r, o) {

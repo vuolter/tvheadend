@@ -120,7 +120,7 @@ tvheadend.status_subs = function() {
 		store : tvheadend.data.subscriptions,
 		stripeRows : true,		
 		title : 'Subscriptions',
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 	
 	return grid;
@@ -228,7 +228,7 @@ var cm = new Ext.grid.ColumnModel({
 		store : store,
 		stripeRows : true,		
 		title : 'Adapters',
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 	
 	return grid;

@@ -183,7 +183,7 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 		stateful : true,
 		stateId : this.id,
 		tbar : tb,
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 	return grid;
 }

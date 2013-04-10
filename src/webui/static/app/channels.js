@@ -369,7 +369,7 @@ tvheadend.chconf = function() {
 		stateId : this.id,
 		tbar : tb,
 		title : 'Channels',
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 	
 	if(tvheadend.accessupdate.admin) {

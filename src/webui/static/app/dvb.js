@@ -393,7 +393,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		stateful : true,
 		stateId : this.id,
 		tbar : tb,
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 
 	return grid;
@@ -723,7 +723,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		stateful : true,
 		stateId : this.id,
 		tbar : tb,
-		view : tvheadend.BufferView
+		view : new tvheadend.BufferView
 	});
 	return grid;
 }
