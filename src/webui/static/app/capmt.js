@@ -94,5 +94,5 @@ tvheadend.capmteditor = function() {
 	});
 
 	return new tvheadend.tableEditor('camptGrid', 'Capmt Connections', 'capmt', sm, cm, rec,
-		[ search, enabledColumn, oscamColumn ], store, 'config_capmt.html', 'key');
+		[ enabledColumn, oscamColumn, search ], store, 'config_capmt.html', 'key');
 }

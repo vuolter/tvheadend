@@ -137,8 +137,8 @@ tvheadend.acleditor = function() {
 	});
 
 	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', sm, cm,
-		records, [ search, enabledColumn, /*introColumn,*/ webuiColumn, streamingColumn, dvrColumn, 
-		dvrcfgColumn, adminColumn ], store, 'config_access.html', 'group');
+		records, [ adminColumn, enabledColumn, /*introColumn,*/ dvrColumn, 
+		dvrcfgColumn, search, streamingColumn, webuiColumn ], store, 'config_access.html', 'group');
 			
 	return grid;
 }

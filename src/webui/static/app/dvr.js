@@ -411,7 +411,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		iconCls : iconCls,
 		id : id,
 		loadMask : true,
-		plugins : [ search, actions ],
+		plugins : [ actions, search ],
 		sm : sm,
 		stateful : true,
 		stateId : this.id,
@@ -610,7 +610,7 @@ tvheadend.autoreceditor = function() {
 			} ]});
 
 	return new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', sm, cm,
-		tvheadend.autorecRecord, [ search, enabledColumn ], tvheadend.data.autorec,
+		tvheadend.autorecRecord, [ enabledColumn, search ], tvheadend.data.autorec,
 		'autorec.html', 'wand');
 }
 /**

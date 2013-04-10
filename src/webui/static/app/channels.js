@@ -363,7 +363,7 @@ tvheadend.chconf = function() {
 		enableColumnMove : false,
 		store : tvheadend.data.channels,
 		stripeRows : true,
-		plugins : [ search, actions ],
+		plugins : [ actions, search ],
 		sm : sm,
 		stateful : true,
 		stateId : this.id,

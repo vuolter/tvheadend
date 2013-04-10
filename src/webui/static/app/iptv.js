@@ -310,7 +310,7 @@ tvheadend.iptv = function(adapterId) {
 		enableColumnMove : false,
 		title : 'IPTV',
 		iconCls : 'iptv',
-		plugins : [ search, enabledColumn, actions ],
+		plugins : [ enabledColumn, actions,search ],
 		store : store,
 		cm : cm,
 		sm : sm,
