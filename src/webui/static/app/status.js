@@ -174,7 +174,7 @@ var cm = new Ext.grid.ColumnModel({
 			
 			dataIndex : 'path',
 			header : "Device",
-			hideable : false
+			hideable : false,
 			width : 100		
 		}, {
 			dataIndex : 'currentMux',
