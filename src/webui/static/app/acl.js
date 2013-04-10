@@ -9,46 +9,45 @@ tvheadend.acleditor = function() {
 	});
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
 		dataIndex : 'enabled',
-		width : 80,
-		hideable : false
+		header : "Enabled",
+		hideable : false,
+		width : 80
 	});
 /*	
 	var introColumn = new Ext.grid.CheckColumn({
-		header : "Show intro",
 		dataIndex : 'intro',
+		header : "Show intro",
 		width : 120
 	});
 */
 	var streamingColumn = new Ext.grid.CheckColumn({
-		header : "Streaming",
 		dataIndex : 'streaming',
+		header : "Streaming",
 		width : 120
 	});
 
 	var dvrColumn = new Ext.grid.CheckColumn({
-		header : "Recording",
 		dataIndex : 'dvr',
+		header : "Recording",
 		width : 120
 	});
 
 	var dvrcfgColumn = new Ext.grid.CheckColumn({
-		header : "DVR",
 		dataIndex : 'dvrcfg',
+		header : "DVR",		
 		width : 120
 	});
 
 	var webuiColumn = new Ext.grid.CheckColumn({
-		header : "Web Interface",
 		dataIndex : 'webui',
+		header : "Web Interface",
 		width : 120
 	});
 
 	var adminColumn = new Ext.grid.CheckColumn({
-		header : "Admin",
 		dataIndex : 'admin',
-		width : 120,
+		header : "Admin",
 		listeners : {
 			'click' : function(c, e, r) {
 				var val = r.get('admin');
@@ -62,82 +61,81 @@ tvheadend.acleditor = function() {
 					r.set('webui', val);
 				grid.getView().refresh();
 			}
-		}
+		},
+		width : 120
 	});
 
 	var sm = new Ext.grid.CheckboxSelectionModel();
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {
-			sortable : true,
-			allowBlank : false
+			allowBlank : false,
+			sortable : true
 		},
-		columns : [
-			sm, enabledColumn, {
-				header : "Username",
-				dataIndex : 'username',
-				width : 200,
-				editor : new Ext.form.TextField,
-				renderer : function(value, metadata, record, row, col, store) {
-					return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
-										: value;
-				},
-				hideable : false
-			}, {
-				header : "Password",
-				dataIndex : 'password',
-				width : 200,
-				renderer : function(value, metadata, record, row, col, store) {
-					return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
-										: '<span class="tvh-grid-green">Hidden</span>';
-				},
-				editor : new Ext.form.TextField,
-				hideable : false
-			}, {
-				header : "IP allowed",
-				dataIndex : 'prefix',
-				width : 120,
-				editor : new Ext.form.TextField,
-				renderer : function(value, metadata, record, row, col, store) {
-					return value != '0.0.0.0/0' ? value
-												: '<span class="tvh-grid-blue">Any IP address</span>';
-				},
+		columns : [ sm, enabledColumn, {
+			dataIndex : 'username',
+			editor : new Ext.form.TextField,
+			header : "Username",
+			hideable : false,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
+									: value;
 			},
-			/*introColumn,*/ webuiColumn, streamingColumn, dvrColumn, dvrcfgColumn, adminColumn,
-			{
-				header : "Comment",
-				dataIndex : 'comment',
-				width : 250,
-				editor : new Ext.form.TextField({allowBlank : true}),
-				renderer : function(value, metadata, record, row, col, store) {
-					return value != "New entry" ? value
-								 : '<span class="tvh-grid-blue">No comments yet</span>';
-				}
-			}
-		]
+			width : 200
+		}, {
+			dataIndex : 'password',
+			editor : new Ext.form.TextField,
+			header : "Password",
+			hideable : false,
+			renderer : function(value, metadata, record, row, col, store) {
+				return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
+									: '<span class="tvh-grid-green">Hidden</span>';
+			},
+			width : 200
+		}, {
+			dataIndex : 'prefix',
+			editor : new Ext.form.TextField,
+			header : "IP allowed",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value != '0.0.0.0/0' ? value
+											: '<span class="tvh-grid-blue">Any IP address</span>';
+			},
+			width : 120
+		},
+		/*introColumn,*/ webuiColumn, streamingColumn, dvrColumn, dvrcfgColumn, adminColumn,
+		{
+			dataIndex : 'comment',
+			editor : new Ext.form.TextField({ allowBlank : true }),
+			header : "Comment",
+			renderer : function(value, metadata, record, row, col, store) {
+				return value != "New entry" ? value
+							 : '<span class="tvh-grid-blue">No comments yet</span>';
+			},
+			width : 250
+		} ]
 	});
 	
-	var records = Ext.data.Record.create([ 'enabled', 'intro', 'webui', 'streaming', 'dvr',
-		'dvrall', 'admin', 'username', 'prefix', 'password', 'comment' ]);
+	var rec = Ext.data.Record.create([ 'admin', 'comment', 'enabled', 'dvr', 'dvrall', 'intro', 
+									   'password', 'prefix', 'streaming', 'username', 'webui' ]);
 	
 	var store = new Ext.data.JsonStore({
 		autoLoad : true,
-		root : 'entries',
-		fields : records,
-		url : "tablemgr",
-		id : 'id',
 		baseParams : {
 			table : 'accesscontrol',
 			op : "get"
 		},
+		fields : records,
+		id : 'id',
+		root : 'entries',
 		sortInfo : {
 			field : 'username',
 			direction : 'ASC'
-		}
+		},
+		url : "tablemgr"
 	});
 
 	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', sm, cm,
-		records, [ adminColumn, enabledColumn, /*introColumn,*/ dvrColumn, 
+		rec, [ adminColumn, enabledColumn, /*introColumn,*/ dvrColumn, 
 		dvrcfgColumn, search, streamingColumn, webuiColumn ], store, 'config_access.html', 'group');
 			
 	return grid;
