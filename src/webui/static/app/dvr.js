@@ -739,8 +739,6 @@ tvheadend.dvr = function() {
 			new tvheadend.dvrschedule('dvrfailedGrid', 'Failed recordings', 'exclamation', tvheadend.dvrStoreFailed),
 			new tvheadend.autoreceditor
 		],
-		stateful : true,
-		stateId : this.id,
 		title : 'Digital Video Recorder'
 	});
 	return panel;

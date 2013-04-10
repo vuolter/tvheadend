@@ -331,8 +331,6 @@ tvheadend.app = function() {
 				items : [ tvheadend.miscconfPanel, tvheadend.tvadaptersPanel, tvheadend.timeshiftPanel,
 						  tvheadend.epggrabPanel, tvheadend.dvrsettingsPanel, tvheadend.ctagPanel,
 						  tvheadend.iptvPanel, tvheadend.aclPanel, tvheadend.cwcPanel, tvheadend.capmtPanel, tvheadend.tvhlogPanel ],
-				stateful : true,
-				stateId : this.id,
 				title : 'Configuration'
 			});
 			
@@ -359,9 +357,7 @@ tvheadend.app = function() {
 			id : 'rootTab',
 			items : [ tvheadend.epgPanel, tvheadend.dvrPanel, tvheadend.channelsPanel,
 					  tvheadend.configPanel, tvheadend.statusPanel, tvheadend.aboutPanel ],
-			region : 'center',
-			stateful : true,
-			stateId : this.id
+			region : 'center'
 		});
 		
 		tvheadend.logPanel = new Ext.Panel({
