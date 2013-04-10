@@ -4,11 +4,13 @@ tvheadend.capabilities  = null;
 /**
  * BufferView
  */
-tvheadend.BufferView = new Ext.ux.grid.BufferView({
-	forceFit : true,
-	scrollDelay : false,
-	rowHeight : 29
-});
+tvheadend.BufferView = function() {
+	return new Ext.ux.grid.BufferView({
+		forceFit : true,
+		scrollDelay : false,
+		rowHeight : 29
+	});
+}
 	
 /**
  * Dummy maker
