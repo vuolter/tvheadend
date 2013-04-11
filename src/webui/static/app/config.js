@@ -140,7 +140,18 @@ tvheadend.miscconf = function() {
 	 * Theme
 	 */
 	var theme = new Ext.form.ComboBox({
+		displayField : 'display',
+		editable : false,
+		emptyText : 'Blue',
 		fieldLabel : 'Theme',
+		lazyRender : true,
+		listeners : {
+			'select' : function(c){ 
+				if(c.isDirty())
+					Ext.util.CSS.swapStyleSheet('theme', c.getValue());
+			}
+		},
+		mode : 'local',
 		name : 'xtheme',
 		store : new Ext.data.ArrayStore({
 			fields : [ 'display', 'value' ],
@@ -150,18 +161,8 @@ tvheadend.miscconf = function() {
 				//,[ 'Dark Orange', '../static/extjs/resources/css/xtheme-darkorange.css' ]
 			]
 		}),
-		mode : 'local',
 		triggerAction : 'all',
-		emptyText : 'Blue',
-		displayField : 'display',
-		valueField : 'value',
-		editable : false,
-		listeners : {
-			'select' : function(c){ 
-				if(c.isDirty())
-					Ext.util.CSS.swapStyleSheet('theme', c.getValue());
-			}
-		}
+		valueField : 'value'
 	});
 	
 	/* ****************************************************************

@@ -65,6 +65,7 @@ tvheadend.epgDetails = function(event) {
 		name : 'config_name',
 		emptyText : '(default)',
 		value : '',
+		lazyRender : true,
 		editable : false
 	});
 
@@ -373,6 +374,7 @@ tvheadend.epg = function() {
 		editable : true,
 		forceSelection: true,
 		triggerAction : 'all',
+		lazyRender : true,
 		emptyText : 'Filter channel...'
 	});
 
@@ -386,6 +388,7 @@ tvheadend.epg = function() {
 		editable : true,
 		forceSelection: true,
 		triggerAction : 'all',
+		lazyRender : true,
 		emptyText : 'Filter tag...'
 	});
 
@@ -400,6 +403,7 @@ tvheadend.epg = function() {
 		editable : true,
 		forceSelection: true,
 		triggerAction : 'all',
+		lazyRender : true,
 		emptyText : 'Filter content type...'
 	});
 

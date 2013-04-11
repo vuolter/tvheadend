@@ -518,7 +518,8 @@ tvheadend.autoreceditor = function() {
 		autoScroll : true,
 		displayField : 'name',
 		editable : false,
-		emptyText : 'Only include channel...'
+		emptyText : 'Only include channel...',
+		lazyRender : true,
 		loadingText : 'Loading...',
 		store : tvheadend.data.channels2,
 		triggerAction : 'all'
@@ -552,6 +553,7 @@ tvheadend.autoreceditor = function() {
 				displayField : 'name',
 				editable : false,
 				emptyText : 'Only include tag...',
+				lazyRender : true,
 				mode : 'local',
 				store : tvheadend.data.channelTags2,
 				triggerAction : 'all'
@@ -568,6 +570,7 @@ tvheadend.autoreceditor = function() {
 				displayField : 'name',
 				editable : false,
 				emptyText : 'Only include content...',
+				lazyRender : true,
 				mode : 'local',
 				store : tvheadend.data.contentGroup,
 				triggerAction : 'all',
@@ -619,6 +622,7 @@ tvheadend.autoreceditor = function() {
 				displayField : 'name',
 				editable : false,
 				emptyText : '(default profile)',
+				lazyRender : true,
 				mode : 'local',
 				name : 'config_name',
 				store : tvheadend.data.configNames,
@@ -637,6 +641,7 @@ tvheadend.autoreceditor = function() {
 			header : 'Priority',
 			editor : new Ext.form.ComboBox({
 				displayField : 'name',
+				lazyRender : true,
 				mode : 'local',
 				store : tvheadend.data.dvrprio,
 				triggerAction : 'all',
@@ -788,14 +793,15 @@ tvheadend.dvrsettings = function() {
 		'episodeInTitle', 'cleanTitle', 'tagFiles', 'commSkip' ]);
 
 	var confcombo = new Ext.form.ComboBox({
+		displayField : 'name',
+		editable : true,
+		emptyText : '(default)',
+		lazyRender : true,
+		mode : 'local',
+		name : 'config_name',
 		store : tvheadend.data.configNames,
 		triggerAction : 'all',
-		mode : 'local',
-		displayField : 'name',
-		name : 'config_name',
-		emptyText : '(default)',
-		value : '',
-		editable : true
+		value : ''
 	});
 
 	var delBtn = new Ext.Toolbar.Button({

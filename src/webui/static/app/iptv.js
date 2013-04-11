@@ -108,6 +108,7 @@ tvheadend.iptv = function(adapterId) {
 				displayField : 'str',
 				editable : false,
 				forceSelection : false,
+				lazyRender : true,
 				store : servicetypeStore,
 				triggerAction : 'all',
 				valueField : 'val'

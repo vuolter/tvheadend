@@ -55,6 +55,7 @@ tvheadend.mergeChannel = function(chan) {
 		emptyText : 'Select a channel...',
 		fieldLabel : 'Target channel',
 		hiddenName : 'targetID',
+		lazyRender : true,
 		name : 'targetchannel',		
 		store : tvheadend.data.channels2,
 		triggerAction : 'all',

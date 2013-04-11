@@ -36,6 +36,7 @@ tvheadend.tvadapters = function() {
 		store : tvheadend.data.adapters,
 		mode : 'remote',
 		editable : false,
+		lazyRender : true,
 		triggerAction : 'all',
 		emptyText : 'Select TV adapter...'
 	});

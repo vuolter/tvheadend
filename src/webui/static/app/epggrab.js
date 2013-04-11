@@ -95,6 +95,7 @@ tvheadend.epggrab = function() {
 		forceSelection : true,
 		editable : false,
 		mode : 'local',
+		lazyRender : true,
 		triggerAction : 'all',
 		store : internalModuleStore
 	});
@@ -125,6 +126,7 @@ tvheadend.epggrab = function() {
 		width : 300,
 		valueField : 'key',
 		displayField : 'value',
+		lazyRender : true,
 		value : 86400,
 		forceSelection : true,
 		editable : false,
