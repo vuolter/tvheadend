@@ -1,14 +1,3 @@
-tvheadend.data.brands = new Ext.data.JsonStore({
-	root : 'entries',
-	fields : [ 'uri', 'title' ],
-	autoLoad : true,
-	url : 'epgobject',
-	baseParams : {
-		op : 'brandList'
-	}
-});
-//WIBNI: might want this store to periodically update
-
 tvheadend.data.contentGroup = new Ext.data.JsonStore({
 	autoLoad : {
 		callback : function(rec, opts, succ) {
@@ -167,7 +156,7 @@ tvheadend.epgDetails = function(event) {
 			id : event.id,
 			type : 'alternative'
 		},
-		fields : Ext.data.Record.create([ 'id', 'channel', 'start' ]),
+		fields : Ext.data.Record.create([ 'channel', 'id', 'start' ]),
 		listeners : {
 			'datachanged' : showAlternatives
 		}
@@ -182,8 +171,7 @@ tvheadend.epgDetails = function(event) {
 			id : event.id,
 			type : 'related'
 		},
-		fields : Ext.data.Record
-			.create([ 'uri', 'title', 'subtitle', 'episode' ]),
+		fields : Ext.data.Record.create([ 'uri', 'title', 'subtitle', 'episode' ]),
 		listeners : {
 			'datachanged' : showRelated
 		}
@@ -206,13 +194,13 @@ tvheadend.epg = function() {
 		{ name : 'contenttype' },
 		{ name : 'description' },
 		{ name : 'duration' },
-		{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */},
+		{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */ },
 		{ name : 'episode' },
 		{ name : 'id' },
 		{ name : 'number' },
 		{ name : 'schedstate' },
 		{ name : 'serieslink' },
-		{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */},
+		{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ },
 		{ name : 'subtitle' },
 		{ name : 'title' }
 	]);
@@ -221,26 +209,26 @@ tvheadend.epg = function() {
 		autoLoad : true,
 		bufferSize : 300,
 		reader : new Ext.ux.grid.livegrid.JsonReader({
+			fields : rec,
+			id : 'id',
 			root : 'entries',
-			totalProperty : 'totalCount',
-			id : 'id'
-			fields : recal
+			totalProperty : 'totalCount'
 		}),
 		url : 'epg'
 	});
 
-	function setMetaAttr(meta, record) {
+	function setMetaAttr(meta, rec) {
 		var now = new Date;
-		var start = record.get('start');
+		var start = rec.get('start');
 
 		if(now.getTime() >= start.getTime()) 
 			meta.attr = 'style="font-weight : bold;"';
 	}
 	
-	function renderDay(value, meta, record, rowIndex, colIndex, store){
-        setMetaAttr(meta, record);
+	function renderDay(value, meta, rec, row, col, store){
+        setMetaAttr(meta, rec);
 		
-		var start = record.get('start');
+		var start = rec.get('start');
 		var now = new Date();
 		var tomorrow = new Date().add(Date.DAY, 2).clearTime();
 		var today = new Date().add(Date.DAY, 1).clearTime();
@@ -261,13 +249,13 @@ tvheadend.epg = function() {
 		return value;
     }
 	
-    function renderTime(value, meta, record, rowIndex, colIndex, store){
-        setMetaAttr(meta, record);
+    function renderTime(value, meta, rec, row, col, store){
+        setMetaAttr(meta, rec);
 		return new Date(value).format('H:i');
     }
 
-	function renderDuration(value, meta, record, rowIndex, colIndex, store){
-		setMetaAttr(meta, record);
+	function renderDuration(value, meta, rec, row, col, store){
+		setMetaAttr(meta, rec);
 
 		var value = Math.floor(value / 60);
 
@@ -281,8 +269,8 @@ tvheadend.epg = function() {
 			return value + ' min';
     }
 
-	function renderText(value, meta, record, rowIndex, colIndex, store) {
-		setMetaAttr(meta, record);
+	function renderText(value, meta, rec, row, col, store) {
+		setMetaAttr(meta, rec);
 		return value ? value
 					 : '<span class="tvh-grid-gray">Unknown</span>';
 	}
@@ -353,8 +341,8 @@ tvheadend.epg = function() {
 			dataIndex : 'contenttype',
 			header : 'Genre',
 			id : 'contenttype',
-			renderer : function(value, metadata, record, row, col, store) {
-				setMetaAttr(metadata, record);
+			renderer : function(value, meta, rec, row, col, store) {
+				setMetaAttr(meta, rec);
 				return tvheadend.contentGroupLookupName(value);
 			},
 			width : 150

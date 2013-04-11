@@ -209,7 +209,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		return tvheadend.data.dvrprio.getById(value).data.name;
 	}
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	
 	var cm = new Ext.grid.ColumnModel([ sm, actions, {
 		width : 250,
@@ -269,7 +269,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		width : 200,
 		id : 'config_name',
 		header : "DVR Configuration",
-		renderer : function(value, metadata, record, row, col, store) {
+		renderer : function(value, meta, rec, row, col, store) {
 			if (!value) {
 				return '<span class="tvh-grid-unset">(default)</span>';
 			}
@@ -442,7 +442,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
  */
 tvheadend.autoreceditor = function() {
 	
-	var renderTime = function(value, metadata, record, row, col, store) {
+	var renderTime = function(value, meta, rec, row, col, store) {
 		if(typeof value === 'string')
 			return value;
 		else if(value === 0)
@@ -458,7 +458,7 @@ tvheadend.autoreceditor = function() {
 		}
 	}
 	
-	var renderWeek = function(value, metadata, record, row, col, store) {
+	var renderWeek = function(value, meta, rec, row, col, store) {
 		if(typeof value === 'undefined' || value.length < 1)
 			return 'No days';
 		else if(value == '1,2,3,4,5,6,7')
@@ -524,7 +524,7 @@ tvheadend.autoreceditor = function() {
 		triggerAction : 'all'
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -532,7 +532,7 @@ tvheadend.autoreceditor = function() {
 			dataIndex : 'title',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Title (regexp)',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -541,7 +541,7 @@ tvheadend.autoreceditor = function() {
 			dataIndex : 'channel',
 			editor : channelsCombo,
 			header : 'Channel',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -557,7 +557,7 @@ tvheadend.autoreceditor = function() {
 				triggerAction : 'all'
 			}),
 			header : 'Channel Tags',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-blue">Unset</span>';
 			},
@@ -601,7 +601,7 @@ tvheadend.autoreceditor = function() {
 				format : 'H:i',
 				increment : 5
 			}),
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			}
@@ -625,7 +625,7 @@ tvheadend.autoreceditor = function() {
 				triggerAction : 'all',
 				valueField : 'identifier'
 			}),
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				if(!value)
 					return '<span class="tvh-grid-blue">(default profile)</span>';
 				else 
@@ -642,7 +642,7 @@ tvheadend.autoreceditor = function() {
 				triggerAction : 'all',
 				valueField : 'identifier'
 			}),
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return tvheadend.data.dvrprio.getById(value).get("name");
 			},
 			width : 150
@@ -651,7 +651,7 @@ tvheadend.autoreceditor = function() {
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Created by',
 			hidden : true,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-gray">Unset</span>';
 			},
@@ -661,7 +661,7 @@ tvheadend.autoreceditor = function() {
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Comment',
 			hidden : true,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-blue">No comments yet</span>';
 			},
@@ -688,8 +688,8 @@ tvheadend.dvr = function() {
 			{ name : 'pri' },
 			{ name : 'description' },
 			{ name : 'chicon' },
-			{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */},
-			{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */},
+			{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ },
+			{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */ },
 			{ name : 'config_name' },
 			{ name : 'status' },
 			{ name : 'schedstate' },

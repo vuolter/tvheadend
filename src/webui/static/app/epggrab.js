@@ -1,11 +1,8 @@
 tvheadend.data.epggrabChannels = new Ext.data.JsonStore({
 	root : 'entries',
 	url : 'epggrab',
-	baseParams : {
-		op : 'channelList'
-	},
-	fields : [ 'id', 'mod', 'name', 'icon', 'number', 'channel', 'mod-id',
-		'mod-name' ]
+	baseParams : { op : 'channelList' },
+	fields : [ 'id', 'mod', 'name', 'icon', 'number', 'channel', 'mod-id', 'mod-name' ]
 });
 
 tvheadend.epggrab = function() {
@@ -24,9 +21,7 @@ tvheadend.epggrab = function() {
 	var moduleStore = new Ext.data.JsonStore({
 		root : 'entries',
 		url : 'epggrab',
-		baseParams : {
-			op : 'moduleList'
-		},
+		baseParams : { op : 'moduleList' },
 		autoLoad : true,
 		fields : [ 'id', 'name', 'path', 'type', 'enabled' ]
 	});
@@ -233,7 +228,7 @@ tvheadend.epggrab = function() {
 				moduleSelect(r, 0);
 			}
 		},
-		width : 22
+		width : 21
 	});
 
 	var externalCm = new Ext.grid.ColumnModel([ externalSm,
@@ -287,7 +282,7 @@ tvheadend.epggrab = function() {
 				moduleSelect(r, 0);
 			}
 		},
-		width : 22
+		width : 21
 	});
 
 	var otaCm = new Ext.grid.ColumnModel([ otaSm, {

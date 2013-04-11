@@ -1,14 +1,13 @@
 /**
  * Channels
  */
-tvheadend.channelrec = new Ext.data.Record.create(
-	[ 'name', 'chid', 'epggrabsrc', 'tags', 'ch_icon', 'epg_pre_start',
-		'epg_post_end', 'number' ]);
+tvheadend.channelRec = new Ext.data.Record.create([ 'ch_icon', 'chid', 'epg_post_end', 'epg_pre_start', 
+													'epggrabsrc', 'name', 'number', 'tags']);
 
 tvheadend.data.channels = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
-	fields : tvheadend.channelrec,
+	fields : tvheadend.channelRec,
 	url : 'channels',
 	baseParams : { op : 'list' },
 	sortInfo : {
@@ -19,7 +18,7 @@ tvheadend.data.channels = new Ext.data.JsonStore({
 
 tvheadend.data.channels2 = new Ext.data.JsonStore({
 	root : 'entries',
-	fields : tvheadend.channelrec,
+	fields : tvheadend.channelRec,
 	url : 'channels',
 	baseParams : { op : 'list' },
 	sortInfo : {
@@ -106,15 +105,15 @@ tvheadend.chconf = function() {
 	
 	var actions = new Ext.ux.grid.RowActions({
 		actions : [ {
-			cb : function(grid, record, action, row, col) {
-				url = 'playlist/channelid/' + record.get('chid');
+			cb : function(grid, rec, action, row, col) {
+				url = 'playlist/channelid/' + rec.get('chid');
 				tvheadend.VLC(url);
 			},
 			iconCls : 'eye',
 			qtip : 'Watch this channel'
 		}, ' ', {
-			cb : function(grid, record, action, row, col) {
-				tvheadend.mergeChannel(record.data);
+			cb : function(grid, rec, action, row, col) {
+				tvheadend.mergeChannel(rec.data);
 			},
 			disabled : !tvheadend.accessupdate.admin,
 			iconCls : 'merge',
@@ -125,7 +124,7 @@ tvheadend.chconf = function() {
 		width : 45
 	});
 	
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -136,7 +135,7 @@ tvheadend.chconf = function() {
 				dataIndex : 'number',
 				sortable : true,
 				width : 65,
-				renderer : function(value, metadata, record, row, col, store) {
+				renderer : function(value, meta, rec, row, col, store) {
 					return !value ? '<span class="tvh-grid-red">Unset</span>'
 								  : value;
 				},
@@ -155,7 +154,7 @@ tvheadend.chconf = function() {
 				header : 'Tags',
 				dataIndex : 'tags',
 				width : 250,
-				renderer : function(value, metadata, record, row, col, store) {
+				renderer : function(value, meta, rec, row, col, store) {
 					if(typeof value === 'undefined' || value.length < 2)
 						return '<span class="tvh-grid-blue">Unset</span>';
 					else {
@@ -178,7 +177,7 @@ tvheadend.chconf = function() {
 				header : 'EPG Grab source',
 				dataIndex : 'epggrabsrc',
 				width : 150,
-				renderer : function(value, metadata, record, row, col, store) {
+				renderer : function(value, meta, rec, row, col, store) {
 					return value ? value
 						: '<span class="tvh-grid-blue">Unknown</span>';
 				},
@@ -205,7 +204,7 @@ tvheadend.chconf = function() {
 				header : 'DVR Pre-Start',
 				dataIndex : 'epg_pre_start',
 				width : 85,
-				renderer : function(value, metadata, record, row, col, store) {
+				renderer : function(value, meta, rec, row, col, store) {
 					return !value ? '<span class="tvh-grid-blue">Unset</span>'
 						: value + ' min';
 				},
@@ -217,7 +216,7 @@ tvheadend.chconf = function() {
 				header : 'DVR Post-End',
 				dataIndex : 'epg_post_end',
 				width : 85,
-				renderer : function(value, metadata, record, row, col, store) {
+				renderer : function(value, meta, rec, row, col, store) {
 					return !value ? '<span class="tvh-grid-blue">Unset</span>'
 						: value + ' min';
 				},
@@ -260,7 +259,7 @@ tvheadend.chconf = function() {
       },
       success : function(response, options) {
         var responseData = Ext.util.JSON.decode(response.responseText);
-        var p = new tvheadend.channelrec(responseData, responseData.id);
+        var p = new tvheadend.channelRec(responseData, responseData.id);
         grid.stopEditing();
         store.insert(0, p)
         grid.startEditing(0, 0);

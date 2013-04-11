@@ -112,7 +112,7 @@ tvheadend.v4l_services = function(adapterId) {
 		width : 45
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
@@ -121,7 +121,7 @@ tvheadend.v4l_services = function(adapterId) {
 		header : 'Channel name',
 		dataIndex : 'channelname',
 		width : 150,
-		renderer : function(value, metadata, record, row, col, store) {
+		renderer : function(value, meta, rec, row, col, store) {
 			return value ? value : '<span class="tvh-grid-unset">Unmapped</span>';
 		},
 		editor : new Ext.form.ComboBox({
@@ -144,8 +144,7 @@ tvheadend.v4l_services = function(adapterId) {
 		})
 	} ]});
 
-	var rec = Ext.data.Record.create([ 'id', 'enabled', 'channelname',
-		'frequency' ]);
+	var rec = Ext.data.Record.create([ 'id', 'enabled', 'channelname', 'frequency' ]);
 
 	var store = new Ext.data.JsonStore({
 		root : 'entries',
@@ -153,9 +152,7 @@ tvheadend.v4l_services = function(adapterId) {
 		url : 'v4l/services/' + adapterId,
 		autoLoad : true,
 		id : 'id',
-		baseParams : {
-			op : 'get'
-		},
+		baseParams : { op : 'get' },
 		listeners : {
 			'update' : function(s, r, o) {
 				d = s.getModifiedRecords().length == 0

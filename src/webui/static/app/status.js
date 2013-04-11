@@ -3,14 +3,21 @@
  */
 tvheadend.subscriptions = function() {
 
+	var rec = Ext.data.Record.create([
+		{ name : 'bw' },
+		{ name : 'channel' },
+		{ name : 'errors' },
+		{ name : 'id' },
+		{ name : 'service' },
+		{ name : 'state' },
+		{ name : 'title' },
+		{ name : 'username' },
+		{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ }
+	]);
+	
 	tvheadend.data.subscriptions = new Ext.data.JsonStore({
 		autoLoad : true,
-		fields : [ 'bw', 'channel', 'errors', 'hostname', 'id', 'service', 'state', 'title', 'username',
-		{
-			name : 'start',
-			dateFormat : 'U', /* unix time */
-			type : 'date'
-		} ],
+		fields : rec,
 		id : 'id',
 		root : 'entries',
 		sortInfo : {
@@ -188,7 +195,7 @@ tvheadend.adapters = function() {
 		}, {
 			dataIndex : 'snr',
 			header : 'SNR',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value > 0 ? value.toFixed(1) + " dB"
 								 : '<span class="tvh-grid-gray">Unknown</span>';
 			},
@@ -197,12 +204,13 @@ tvheadend.adapters = function() {
 		strength /*, quality*/ ]
 	});
 
+	var rec = Ext.data.Record.create([ 'ber', 'currentMux', 'freqMax', 'freqMin', 'freqStep', 'deliverySystem', 
+									   'devicename', 'hostconnection', 'identifier', 'initialMuxes', 'muxes', 
+									   'name', 'path', 'satConf', 'services', 'signal', 'snr', 'symrateMax', 
+									   'symrateMin', 'type', 'unc', 'uncavg' ]);
+	
 	var store = new Ext.data.JsonStore({
-		fields : [ 'ber', 'currentMux', 'freqMax', 'freqMin', 'freqStep', 
-			'deliverySystem', 'devicename', 'hostconnection', 'identifier', 'initialMuxes', 
-			'muxes', 'name', 'path', 'satConf', 'services', 
-			'signal', 'snr', 'symrateMax', 'symrateMin', 'type', 
-			'unc', 'uncavg' ],
+		fields : rec,
 		id : 'identifier',
 		root : 'entries',
 		sortInfo : {

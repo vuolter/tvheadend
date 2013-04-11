@@ -40,13 +40,13 @@ tvheadend.iptv = function(adapterId) {
 
 	var actions = new Ext.ux.grid.RowActions({
 		actions : [ {
-			cb : function(grid, record, action, row, col) {
+			cb : function(grid, rec, action, row, col) {
 				Ext.Ajax.request({
 					success : function(response, options) {
 						r = Ext.util.JSON.decode(response.responseText);
 						tvheadend.showTransportDetails(r);
 					},
-					url : 'servicedetails/' + record.id
+					url : 'servicedetails/' + rec.id
 				})
 			},
 			iconCls : 'info',
@@ -58,7 +58,7 @@ tvheadend.iptv = function(adapterId) {
 		width : 45
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -66,7 +66,7 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'channelname',
 			header : 'Channel name',
 			hideable : false,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -76,7 +76,7 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'interface',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Interface',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -88,7 +88,7 @@ tvheadend.iptv = function(adapterId) {
 				minValue : 1
 			}),
 			header : 'UDP Port',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -97,7 +97,7 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'group',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Group',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value != '::' ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -114,7 +114,7 @@ tvheadend.iptv = function(adapterId) {
 			}),
 			header : 'Service Type',
 			hidden : true,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				var val = value ? servicetypeStore.getById(value) : null;
 				return val ? val.get('str')
 					 : '<span class="tvh-grid-red">Unset</span>';
@@ -124,7 +124,7 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'sid',
 			header : 'Service ID',
 			hidden : true,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-gray">Unknown</span>';
 			},
@@ -133,7 +133,7 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'pmt',
 			header : 'PMT PID',
 			hidden : true,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-gray">Unknown</span>';
 			},
@@ -142,7 +142,7 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'pcr',
 			header : 'PCR PID',
 			hidden : true,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-gray">Unknown</span>';
 			},
@@ -151,14 +151,12 @@ tvheadend.iptv = function(adapterId) {
 		actions ]
 	});
 
-	var rec = Ext.data.Record.create([ 'channelname', 'enabled', 'group', 'id',
-		'interface', 'pcr', 'pmt', 'port', 'sid', 'stype' ]);
+	var rec = Ext.data.Record.create([ 'channelname', 'enabled', 'group', 'id', 'interface', 
+									   'pcr', 'pmt', 'port', 'sid', 'stype' ]);
 
 	var store = new Ext.data.JsonStore({
 		autoLoad : true,
-		baseParams : {
-			op : 'get'
-		},
+		baseParams : { op : 'get' },
 		fields : rec,
 		id : 'id',
 		listeners : {

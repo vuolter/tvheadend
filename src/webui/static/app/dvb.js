@@ -28,14 +28,14 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		colored : true
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	var cmlist = Array();
 
 	cmlist.push(sm, enabledColumn, {
 		header : 'Play',
 		dataIndex : 'id',
 		width : 50,
-		renderer : function(value, metadata, record, row, col, store) {
+		renderer : function(value, meta, rec, row, col, store) {
 			url = 'stream/mux/' + value
 			return '<a href="' + url + '">Play</a>'
 		}
@@ -79,7 +79,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 					header : "Satellite config",
 					dataIndex : 'satconf',
 					width : 100,
-					renderer : function(value, metadata, record, row, col, store) {
+					renderer : function(value, meta, rec, row, col, store) {
 						r = satConfStore.getById(value);
 						return typeof r === 'undefined' ? '<span class="tvh-grid-unset">Unset</span>'
 							: r.data.name;
@@ -105,8 +105,8 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
     columns: cmlist, 
     defaultSortable: true});
 
-	var rec = Ext.data.Record.create([ 'id', 'enabled', 'network', 'freq',
-		'pol', 'satconf', 'onid', 'muxid', 'quality', 'fe_status', 'mod' ]);
+	var rec = Ext.data.Record.create([ 'id', 'enabled', 'network', 'freq', 'pol', 'satconf', 'onid', 
+									   'muxid', 'quality', 'fe_status', 'mod' ]);
 
 	var store = new Ext.data.JsonStore({
 		root : 'entries',
@@ -435,9 +435,9 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		actions : [ {
 			iconCls : 'info',
 			qtip : 'Detailed information about service',
-			cb : function(grid, record, action, row, col) {
+			cb : function(grid, rec, action, row, col) {
 				Ext.Ajax.request({
-					url : "servicedetails/" + record.id,
+					url : "servicedetails/" + rec.id,
 					success : function(response, options) {
 						r = Ext.util.JSON.decode(response.responseText);
 						tvheadend.showTransportDetails(r);
@@ -447,7 +447,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		} ]
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	var cmlist = Array();
 
 	cmlist.push(sm, enabledColumn,
@@ -460,7 +460,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header : 'Play',
 			dataIndex : 'id',
 			width : 50,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				url = 'stream/service/' + value
 				return '<a href="' + url + '">Play</a>'
 			}
@@ -469,7 +469,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header : "Channel name",
 			dataIndex : 'channelname',
 			width : 150,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-unset">Unmapped</span>';
 			},
@@ -488,7 +488,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header : "DVB charset",
 			dataIndex : 'dvb_charset',
 			width : 200,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-unset">auto</span>';
 			},
@@ -564,7 +564,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 				header : "Satellite config",
 				dataIndex : 'satconf',
 				width : 100,
-				renderer : function(value, metadata, record, row, col, store) {
+				renderer : function(value, meta, rec, row, col, store) {
 					r = satConfStore.getById(value);
 					return typeof r === 'undefined' ? '<span class="tvh-grid-unset">Unset</span>'
 					  : r.data.name;
@@ -1440,7 +1440,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		width : 250
 	});
 	
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns: [ sm, {

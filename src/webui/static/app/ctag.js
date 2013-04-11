@@ -71,7 +71,7 @@ tvheadend.cteditor = function() {
 		width : 85
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -79,7 +79,7 @@ tvheadend.cteditor = function() {
 			dataIndex : 'name',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Name',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -90,7 +90,7 @@ tvheadend.cteditor = function() {
 			dataIndex : 'icon',
 			editor : new Ext.form.TextField,
 			header : 'Icon URL (absolute)',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-blue">Unset</span>';
 			},
@@ -99,7 +99,7 @@ tvheadend.cteditor = function() {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField,
 			header : 'Comment',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value != "New tag" ? value
 					: '<span class="tvh-grid-blue">No comments yet</span>';
 			},

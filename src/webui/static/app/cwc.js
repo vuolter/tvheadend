@@ -37,7 +37,7 @@ tvheadend.cwceditor = function() {
 		width : 120
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 22 });
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {
@@ -49,7 +49,7 @@ tvheadend.cwceditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'Username',
 			hideable : false,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -59,7 +59,7 @@ tvheadend.cwceditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'Password',
 			hideable : false,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? '<span class="tvh-grid-green">Hidden</span>'
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -69,7 +69,7 @@ tvheadend.cwceditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'Hostname',
 			hideable : false,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -78,7 +78,7 @@ tvheadend.cwceditor = function() {
 			dataIndex : 'port',
 			header : 'Port',
 			hideable : false,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
 			},
@@ -89,7 +89,7 @@ tvheadend.cwceditor = function() {
 			dataIndex : 'deskey',
 			editor : new Ext.form.TextField,
 			header : 'DES Key',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value == '00:00:00:00:00:00:00:00:00:00:00:00:00:00' ? '<span class="tvh-grid-blue">' + value + '</span>'
 				: '<span class="tvh-grid-green">Hidden</span>';
 			},
@@ -99,7 +99,7 @@ tvheadend.cwceditor = function() {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-blue">No comments yet</span>';
 			},
