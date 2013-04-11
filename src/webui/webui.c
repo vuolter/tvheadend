@@ -1002,7 +1002,7 @@ webui_static_content(const char *http_path, const char *source)
 static int
 favicon(http_connection_t *hc, const char *remain, void *opaque)
 {
-  http_redirect(hc, "static/icons/htslogo.png");
+  http_redirect(hc, "static/app/resources/images/htslogo.png");
   return 0;
 }
 

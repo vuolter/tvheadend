@@ -232,7 +232,8 @@ tvheadend.epggrab = function() {
 			'rowdeselect' : function(s, ri, r) {
 				moduleSelect(r, 0);
 			}
-		}
+		},
+		width : 22
 	});
 
 	var externalCm = new Ext.grid.ColumnModel([ externalSm,
@@ -285,7 +286,8 @@ tvheadend.epggrab = function() {
 			'rowdeselect' : function(s, ri, r) {
 				moduleSelect(r, 0);
 			}
-		}
+		},
+		width : 22
 	});
 
 	var otaCm = new Ext.grid.ColumnModel([ otaSm, {
