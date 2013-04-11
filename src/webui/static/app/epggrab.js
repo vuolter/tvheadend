@@ -152,7 +152,7 @@ tvheadend.epggrab = function() {
 		listeners : {
 			'enable' : function(e) {
 				v = e.getValue();
-				for (i = 0; i < intervalUnits.length; i++) {
+				for (var i in intervalUnits) {
 					u = intervalUnits[i][0];
 					if ((v % u) == 0) {
 						intervalUnit.setValue(u);

@@ -90,7 +90,7 @@ tvheadend.showTransportDetails = function(data) {
 	html += '<span>Details</span>';
 	html += '</div>';
 
-	for (i = 0; i < data.streams.length; i++) {
+	for (var i in data.streams) {
 		s = data.streams[i];
 
 		html += '<div style="display:block">';

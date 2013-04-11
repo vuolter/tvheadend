@@ -161,7 +161,7 @@ tvheadend.chconf = function() {
 					else {
 						var ret = [];
 						var tags = value.split(',');
-						for(i in tags) {
+						for(var i in tags) {
 							tag = tvheadend.data.channelTags.getById(tags[i]);
 							if(typeof tag !== 'undefined')
 								ret.push(tag.data.name);
@@ -288,7 +288,7 @@ tvheadend.chconf = function() {
 	function saveChanges() {
 		var mr = tvheadend.data.channels.getModifiedRecords();
 		var out = new Array();
-		for ( var x = 0; x < mr.length; x++) {
+		for (var x in mr) {
 			v = mr[x].getChanges();
 			out[x] = v;
 			out[x].id = mr[x].id;

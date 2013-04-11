@@ -229,7 +229,7 @@ tvheadend.v4l_services = function(adapterId) {
 	function saveChanges() {
 		var mr = store.getModifiedRecords();
 		var out = new Array();
-		for ( var x = 0; x < mr.length; x++) {
+		for (var x in mr) {
 			v = mr[x].getChanges();
 			out[x] = v;
 			out[x].id = mr[x].id;

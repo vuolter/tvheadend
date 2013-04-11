@@ -529,7 +529,7 @@ tvheadend.autoreceditor = function() {
 
 					ret = [];
 					tags = value.split(',');
-					for ( var i = 0; i < tags.length; i++) {
+					for (var i in tags) {
 						var tag = tvheadend.data.weekdays.getById(tags[i]);
 						if (typeof tag !== 'undefined') ret.push(tag.data.name);
 					}
@@ -689,7 +689,7 @@ tvheadend.dvr = function() {
 	}
 
 	function reloadStores() {
-		for (var i = 0; i < tvheadend.dvrStores.length; i++) {
+		for (var i in tvheadend.dvrStores) {
 			tvheadend.dvrStores[i].reload();
 		}
 	}
@@ -701,7 +701,7 @@ tvheadend.dvr = function() {
 		}
 
 		if (m.updateEntry != null) {
-			for (var i = 0; i < tvheadend.dvrStores.length; i++) {
+			for (var i in tvheadend.dvrStores) {
 				var store = tvheadend.dvrStores[i];
 				r = tvheadend.data.dvrUpcoming.getById(m.id);
 				if (typeof r !== 'undefined') {

@@ -58,7 +58,7 @@ tvheadend.cometPoller = function() {
 	function parse_comet_response(responsetxt) {
 		response = Ext.util.JSON.decode(responsetxt);
 		tvheadend.boxid = response.boxid
-		for (x = 0; x < response.messages.length; x++) {
+		for (var x in response.messages) {
 			m = response.messages[x];
 			tvheadend.comet.fireEvent(m.notificationClass, m);
 		}
