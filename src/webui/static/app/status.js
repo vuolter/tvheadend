@@ -1,7 +1,7 @@
 /**
  *
  */
-tvheadend.status_subs = function() {
+tvheadend.subscriptions = function() {
 
 	tvheadend.data.subscriptions = new Ext.data.JsonStore({
 		autoLoad : true,
@@ -131,7 +131,7 @@ tvheadend.status_subs = function() {
 /**
  *
  */
-tvheadend.status_adapters = function() {
+tvheadend.adapters = function() {
 
 	function renderBw(value) {
 		return parseInt(value / 125) + ' KiB/s';
@@ -154,7 +154,7 @@ tvheadend.status_adapters = function() {
 	});
 */
 
-var cm = new Ext.grid.ColumnModel({
+	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
 		columns : [ {
 			dataIndex : 'name',
@@ -254,7 +254,7 @@ tvheadend.status = function() {
 	
 	var panel = new Ext.Panel({
 		iconCls : 'bulb',		
-		items : [ new tvheadend.status_subs, new tvheadend.status_adapters ],
+		items : [ new tvheadend.subscriptions, new tvheadend.adapters ],
 		layout : 'vbox',
 		tbar : tb,
 		title : 'Status'

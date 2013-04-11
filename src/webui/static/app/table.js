@@ -171,19 +171,20 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({
-		id : id,
-		title : title,
-		iconCls : icon,
-		plugins : plugins,
-		store : store,
 		cm : cm,
-		sm : sm,
-		stripeRows : true,
 		enableColumnMove : false,
+		iconCls : icon,
+		id : id,
+		plugins : plugins,
+		sm : sm,
 		stateful : true,
 		stateId : this.id,
+		store : store,
+		stripeRows : true,
 		tbar : tb,
+		title : title,
 		view : new tvheadend.BufferView
 	});
+	
 	return grid;
 }

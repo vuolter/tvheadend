@@ -75,7 +75,7 @@ tvheadend.cteditor = function() {
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
-		columns : [ enabledColumn, {
+		columns : [ sm, enabledColumn, {
 			dataIndex : 'name',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Name',
