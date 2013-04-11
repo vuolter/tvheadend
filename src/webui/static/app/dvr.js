@@ -154,7 +154,8 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
 		minChars : 3,
-		position : 'top',
+		positionX : 'left',
+		positionY : 'top',
 		searchText : '',
 		width : 250
 	});
@@ -441,7 +442,8 @@ tvheadend.autoreceditor = function() {
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
 		minChars : 3,
-		position : 'top',
+		positionX : 'left',
+		positionY : 'top',
 		searchText : '',
 		width : 250
 	});

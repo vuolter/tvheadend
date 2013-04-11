@@ -59,9 +59,9 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 	,positionY:'bottom'
 	
 	/**
-	 * @cfg {String} position Where to display the search controls. Valid values are left and right (defaults to left)
+	 * @cfg {String} position Where to display the search controls. Valid values are left and right (defaults to right)
 	 */
-	,positionX:'left'
+	,positionX:'right'
 
 	/**
 	 * @cfg {String} iconCls Icon class for menu button (defaults to icon-magnifier)
@@ -146,10 +146,6 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 	,shortcutModifier:'alt'
 
 	/**
-	 * @cfg {String} align 'left' or 'right' (defaults to 'left')
-	 */
-
-	/**
 	 * @cfg {Number} minLength force user to type this many character before he can make a search
 	 */
 
@@ -187,16 +183,6 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 		// add menu
 		this.menu = new Ext.menu.Menu();
 
-		// handle position
-		if('right' === this.align) {
-			tb.addFill();
-		}
-		else {
-			if(0 < tb.items.getCount()) {
-				tb.addSeparator();
-			}
-		}
-		
 		// add menu button
 		if('right' == this.positionX)
 			tb.add({

@@ -25,7 +25,8 @@ tvheadend.iptv = function(adapterId) {
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
 		minChars : 3,
-		position : 'top',
+		positionX : 'left',
+		positionY : 'top',
 		searchText : '',
 		width : 250
 	});

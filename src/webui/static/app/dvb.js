@@ -8,7 +8,8 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
 		minChars : 3,
-		position : 'top',
+		positionX : 'left',
+		positionY : 'top',
 		searchText : '',
 		width : 250
 	});
@@ -409,7 +410,8 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
 		minChars : 3,
-		position : 'top',
+		positionX : 'left',
+		positionY : 'top',
 		searchText : '',
 		width : 250
 	});
@@ -1432,7 +1434,8 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',
 		minChars : 3,
-		position : 'top',
+		positionX : 'left',
+		positionY : 'top',
 		searchText : '',
 		width : 250
 	});
