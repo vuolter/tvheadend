@@ -29,20 +29,20 @@ td.x-grid3-progresscol {
 }
 
 .x-progress-bar-red {
-  background: #ff0000 url(../resources/progress-bg-red.png) repeat-x scroll left
+  background: #ff0000 url(../resources/images/progress-bg-red.png) repeat-x scroll left
     center !important;
   border-top: 1px solid #ecb7ad !important;
 }
 
 .x-progress-bar-orange {
-  background: #9cbfee url(../resources/progress-bg-orange.png) repeat-x scroll
+  background: #9cbfee url(../resources/images/progress-bg-orange.png) repeat-x scroll
     left center !important;
   border-right: 1px solid #deab7e !important;
   border-top: 1px solid #d7b290 !important;
 }
 
 .x-progress-bar-green {
-  background: #00ff00 url(../resources/progress-bg-green.png) repeat-x scroll
+  background: #00ff00 url(../resources/images/progress-bg-green.png) repeat-x scroll
     left center !important;
   border-right: 1px solid #5bd976 !important;
   border-top: 1px solid #79e18f !important;

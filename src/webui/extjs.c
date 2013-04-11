@@ -98,12 +98,12 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext/ext-base%s.js\"></script>\n"
                      "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/gridsearch/css/gridsearch.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/gridsearch/resources/css/gridsearch.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/livegrid/resources/css/ext-ux-livegrid.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/lovcombo/css/Ext.ux.form.LovCombo.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/multiselect/resources/multiselect.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/progresscolumn/resources/Ext.ux.grid.ProgressColumn.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/rowactions/css/Ext.ux.grid.RowActions.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/lovcombo/resources/css/Ext.ux.form.LovCombo.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/multiselect/resources/css/multiselect.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/ext.css\">\n",
                      tvheadend_webui_debug ? "-debug" : "",
                      tvheadend_webui_debug ? "-debug" : "",
