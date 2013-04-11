@@ -104,7 +104,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/multiselect/resources/css/multiselect.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/ext.css\">\n",
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\">\n",
                      tvheadend_webui_debug ? "-debug" : "",
                      tvheadend_webui_debug ? "-debug" : "",
                      tvheadend_webui_debug ? ""       : "-min");
