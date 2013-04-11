@@ -199,49 +199,34 @@ tvheadend.epg = function() {
 		width : 20
 	});
 
-	var epgStore = new Ext.ux.grid.livegrid.Store({
+	var rec = Ext.data.Record.create([
+		{ name : 'channel' },
+		{ name : 'channelid' },
+		{ name : 'chicon' },
+		{ name : 'contenttype' },
+		{ name : 'description' },
+		{ name : 'duration' },
+		{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */},
+		{ name : 'episode' },
+		{ name : 'id' },
+		{ name : 'number' },
+		{ name : 'schedstate' },
+		{ name : 'serieslink' },
+		{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */},
+		{ name : 'subtitle' },
+		{ name : 'title' }
+	]);
+	
+	var store = new Ext.ux.grid.livegrid.Store({
 		autoLoad : true,
-		url : 'epg',
 		bufferSize : 300,
 		reader : new Ext.ux.grid.livegrid.JsonReader({
 			root : 'entries',
 			totalProperty : 'totalCount',
 			id : 'id'
-		}, [ {
-			name : 'id'
-		}, {
-			name : 'channel'
-		}, {
-			name : 'channelid'
-		}, {
-			name : 'number'
-		}, {
-			name : 'title'
-		}, {
-			name : 'subtitle'
-		}, {
-			name : 'episode'
-		}, {
-			name : 'description'
-		}, {
-			name : 'chicon'
-		}, {
-			name : 'start',
-			type : 'date',
-			dateFormat : 'U' /* unix time */
-		}, {
-			name : 'end',
-			type : 'date',
-			dateFormat : 'U' /* unix time */
-		}, {
-			name : 'duration'
-		}, {
-			name : 'contenttype'
-		}, {
-			name : 'schedstate'
-		}, {
-			name : 'serieslink'
-		} ])
+			fields : recal
+		}),
+		url : 'epg'
 	});
 
 	function setMetaAttr(meta, record) {
@@ -431,37 +416,37 @@ tvheadend.epg = function() {
 	});
 
 	function epgQueryClear() {
-		delete epgStore.baseParams.channel;
-		delete epgStore.baseParams.tag;
-		delete epgStore.baseParams.contenttype;
-		delete epgStore.baseParams.title;
+		delete store.baseParams.channel;
+		delete store.baseParams.tag;
+		delete store.baseParams.contenttype;
+		delete store.baseParams.title;
 
 		epgFilterChannels.setValue("");
 		epgFilterChannelTags.setValue("");
 		epgFilterContentGroup.setValue("");
 		epgFilterTitle.setValue("");
 
-		epgStore.reload();
+		store.reload();
 	}
 
 	epgFilterChannels.on('select', function(c, r) {
-		if (epgStore.baseParams.channel != r.data.name) {
-			epgStore.baseParams.channel = r.data.name;
-			epgStore.reload();
+		if (store.baseParams.channel != r.data.name) {
+			store.baseParams.channel = r.data.name;
+			store.reload();
 		}
 	});
 
 	epgFilterChannelTags.on('select', function(c, r) {
-		if (epgStore.baseParams.tag != r.data.name) {
-			epgStore.baseParams.tag = r.data.name;
-			epgStore.reload();
+		if (store.baseParams.tag != r.data.name) {
+			store.baseParams.tag = r.data.name;
+			store.reload();
 		}
 	});
 
 	epgFilterContentGroup.on('select', function(c, r) {
-		if (epgStore.baseParams.contenttype != r.data.code) {
-			epgStore.baseParams.contenttype = r.data.code;
-			epgStore.reload();
+		if (store.baseParams.contenttype != r.data.code) {
+			store.baseParams.contenttype = r.data.code;
+			store.reload();
 		}
 	});
 
@@ -470,16 +455,10 @@ tvheadend.epg = function() {
 
 		if (value.length < 1) value = null;
 
-		if (epgStore.baseParams.title != value) {
-			epgStore.baseParams.title = value;
-			epgStore.reload();
+		if (store.baseParams.title != value) {
+			store.baseParams.title = value;
+			store.reload();
 		}
-	});
-
-	var epgView = new Ext.ux.grid.livegrid.GridView({
-		forceFit : true,
-		loadMask : { msg : 'Buffering. Please wait...' },
-		nearLimit : 100
 	});
 
 	var helpBtn = new Ext.Button({
@@ -516,6 +495,12 @@ tvheadend.epg = function() {
 		'-', helpBtn ]
 	});
 	
+	var view = new Ext.ux.grid.livegrid.GridView({
+		forceFit : true,
+		loadMask : { msg : 'Buffering. Please wait...' },
+		nearLimit : 100
+	});
+	
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
 		enableColumnMove : false,
 		id : 'epgGrid',
@@ -523,13 +508,13 @@ tvheadend.epg = function() {
 		iconCls : 'bell',
 		plugins : [ actions ],
 		sm : new Ext.ux.grid.livegrid.RowSelectionModel(),
-		store : epgStore,
+		store : store,
 		stateful : true,
 		stateId : this.id,
 		stripeRows : true,
 		tbar : tb,
 		title : 'Electronic Program Guide',
-		view : epgView
+		view : view
 	});
 
 	grid.on('rowclick', rowclicked);
@@ -540,13 +525,13 @@ tvheadend.epg = function() {
 
 	function createAutoRec() {
 
-		var title = epgStore.baseParams.title ? epgStore.baseParams.title
+		var title = store.baseParams.title ? store.baseParams.title
 			: "<i>Don't care</i>";
-		var channel = epgStore.baseParams.channel ? epgStore.baseParams.channel
+		var channel = store.baseParams.channel ? store.baseParams.channel
 			: "<i>Don't care</i>";
-		var tag = epgStore.baseParams.tag ? epgStore.baseParams.tag
+		var tag = store.baseParams.tag ? store.baseParams.tag
 			: "<i>Don't care</i>";
-		var contenttype = epgStore.baseParams.contenttype ? epgStore.baseParams.contenttype
+		var contenttype = store.baseParams.contenttype ? store.baseParams.contenttype
 			: "<i>Don't care</i>";
 
 		Ext.MessageBox.confirm('Auto Recorder',
@@ -558,11 +543,11 @@ tvheadend.epg = function() {
 				+ '<div class="x-smallhdr">Tag:</div>' + tag + '<br>'
 				+ '<div class="x-smallhdr">Genre:</div>' + contenttype + '<br>'
 				+ '<br>' + 'Currently this will match (and record) '
-				+ epgStore.getTotalCount() + ' events. ' + 'Are you sure?',
+				+ store.getTotalCount() + ' events. ' + 'Are you sure?',
 
 			function(button) {
 				if (button == 'no') return;
-				createAutoRec2(epgStore.baseParams);
+				createAutoRec2(store.baseParams);
 			});
 	}
 
