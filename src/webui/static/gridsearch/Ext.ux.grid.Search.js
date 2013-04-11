@@ -183,20 +183,6 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 		// add menu
 		this.menu = new Ext.menu.Menu();
 
-		// add menu button
-		if('right' == this.positionX)
-			tb.add({
-				 text:this.searchText
-				,menu:this.menu
-				,iconCls:this.iconCls
-			});
-		else
-			tb.insert(0, {
-				 text:this.searchText
-				,menu:this.menu
-				,iconCls:this.iconCls
-			});
-
 		// add input field (TwinTriggerField in fact)
 		this.field = new Ext.form.TwinTriggerField({
 			 width:this.width
@@ -229,7 +215,19 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 			map.stopEvent = true;
 		}, this, {single:true});
 
-		tb.add(this.field);
+		// add components to the toolbar
+		if('right' == this.positionX)
+			tb.add({
+				 text:this.searchText
+				,menu:this.menu
+				,iconCls:this.iconCls
+			}, this.field);
+		else
+			tb.insert(0, {
+				 text:this.searchText
+				,menu:this.menu
+				,iconCls:this.iconCls
+			}, this.field);
 
 		// reconfigure
 		this.reconfigure();
@@ -412,7 +410,7 @@ Ext.extend(Ext.ux.grid.Search, Ext.util.Observable, {
 				Ext.each(this.disableIndexes, function(item) {
 					disable = disable ? disable : item === config.dataIndex;
 				});
-				if(!disable) {
+				if(!disable && (config.header.indexOf('x-grid3-hd-checker') == -1)) {
 					menu.add(new Ext.menu.CheckItem({
 						 text:config.header
 						,hideOnClick:false
