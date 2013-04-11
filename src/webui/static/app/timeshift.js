@@ -83,7 +83,7 @@ tvheadend.timeshift = function() {
    * ***************************************************************/
 
   var saveBtn = new Ext.Button({
-    text : "Save configuration",
+    text : 'Save configuration',
     tooltip : 'Save changes made to configuration below',
     iconCls : 'save',
     handler : saveChanges

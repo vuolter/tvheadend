@@ -50,21 +50,21 @@ tvheadend.cteditor = function() {
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'enabled',
-		header : "Enabled",
+		header : 'Enabled',
 		hideable : false,
 		width : 85
 	});
 
 	var internalColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'internal',
-		header : "Internal",
+		header : 'Internal',
 		hideable : false,
 		width : 85
 	});
 
 	var titledIconColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'titledIcon',
-		header : "Icon has title",
+		header : 'Icon has title',
 		tooltip : 'Set this if the supplied icon has a title embedded. '
 			+ 'This will tell displaying application not to superimpose title '
 			+ 'on top of logo.',
@@ -78,7 +78,7 @@ tvheadend.cteditor = function() {
 		columns : [ enabledColumn, {
 			dataIndex : 'name',
 			editor : new Ext.form.TextField({ allowBlank : false }),
-			header : "Name",
+			header : 'Name',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
@@ -89,7 +89,7 @@ tvheadend.cteditor = function() {
 		internalColumn, titledIconColumn, {
 			dataIndex : 'icon',
 			editor : new Ext.form.TextField,
-			header : "Icon URL (absolute)",
+			header : 'Icon URL (absolute)',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-blue">Unset</span>';
@@ -98,7 +98,7 @@ tvheadend.cteditor = function() {
 		}, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField,
-			header : "Comment",
+			header : 'Comment',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value != "New tag" ? value
 					: '<span class="tvh-grid-blue">No comments yet</span>';

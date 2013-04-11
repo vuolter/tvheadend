@@ -20,20 +20,20 @@ tvheadend.cwceditor = function() {
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'enabled',
-		header : "Enabled",
+		header : 'Enabled',
 		hideable : false,
 		width : 80
 	});
 
 	var emmColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'emm',
-		header : "Update Card",
+		header : 'Update Card',
 		width : 120
 	});
 
 	var emmexColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'emmex',
-		header : "Update One",
+		header : 'Update One',
 		width : 120
 	});
 
@@ -47,7 +47,7 @@ tvheadend.cwceditor = function() {
 		columns : [ actions, enabledColumn, {
 			dataIndex : 'username',
 			editor : new Ext.form.TextField,
-			header : "Username",
+			header : 'Username',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -57,7 +57,7 @@ tvheadend.cwceditor = function() {
 		}, {
 			dataIndex : 'password',
 			editor : new Ext.form.TextField,
-			header : "Password",
+			header : 'Password',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? '<span class="tvh-grid-green">Hidden</span>'
@@ -67,7 +67,7 @@ tvheadend.cwceditor = function() {
 		}, {
 			dataIndex : 'hostname',
 			editor : new Ext.form.TextField,
-			header : "Hostname",
+			header : 'Hostname',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -76,7 +76,7 @@ tvheadend.cwceditor = function() {
 			width : 200
 		}, {
 			dataIndex : 'port',
-			header : "Port",
+			header : 'Port',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -88,7 +88,7 @@ tvheadend.cwceditor = function() {
 			
 			dataIndex : 'deskey',
 			editor : new Ext.form.TextField,
-			header : "DES Key",
+			header : 'DES Key',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value == '00:00:00:00:00:00:00:00:00:00:00:00:00:00' ? '<span class="tvh-grid-blue">' + value + '</span>'
 				: '<span class="tvh-grid-green">Hidden</span>';
@@ -98,7 +98,7 @@ tvheadend.cwceditor = function() {
 		emmColumn, emmexColumn, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
-			header : "Comment",
+			header : 'Comment',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-blue">No comments yet</span>';
@@ -114,7 +114,7 @@ tvheadend.cwceditor = function() {
 		autoLoad : true,
 		baseParams : {
 			table : 'cwc',
-			op : "get"
+			op : 'get'
 		},
 		fields : rec,
 		id : 'id',
@@ -123,7 +123,7 @@ tvheadend.cwceditor = function() {
 			field : 'username',
 			direction : 'ASC'
 		},
-		url : "tablemgr"
+		url : 'tablemgr'
 	});
 
 	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', sm, cm, rec, 

@@ -26,7 +26,7 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 });
 
 tvheadend.contentGroupLookupName = function(code) {
-	var index = tvheadend.ContentGroupStore.find("code", (code & 0xF0));
+	var index = tvheadend.ContentGroupStore.find('code', (code & 0xF0));
 	var name = index != -1 ? tvheadend.contentGroupLookupName.getAt(index).get('name')
 					   : null;
 	return !name ? '<span class="tvh-grid-gray">Unknown</span>'
@@ -88,11 +88,11 @@ tvheadend.epgDetails = function(event) {
 		buttons : [ confcombo, new Ext.Button({
 			disabled : !tvheadend.accessupdate.dvr,
 			handler : recordEvent,
-			text : "Record program"
+			text : 'Record program'
 		}), new Ext.Button({
 			disabled : !tvheadend.accessupdate.dvr,
 			handler : recordSeries,
-			text : event.serieslink ? "Record series" : "Autorec"
+			text : event.serieslink ? 'Record series' : 'Autorec'
 		}) ],
 		buttonAlign : 'center',
 		html : content
@@ -127,7 +127,7 @@ tvheadend.epgDetails = function(event) {
 	}
 
 	function showAlternatives(s) {
-		var e = Ext.get('altbcast')
+		var e = Ext.get('altbcast');
 		html = '';
 		if (s.getTotalCount() > 0) {
 			html += '<div class="x-epg-subtitle">Alternative Broadcasts</div>';
@@ -141,7 +141,7 @@ tvheadend.epgDetails = function(event) {
 		e.dom.innerHTML = html;
 	}
 	function showRelated(s) {
-		var e = Ext.get('related')
+		var e = Ext.get('related');
 		html = '';
 		if (s.getTotalCount() > 0) {
 			html += '<div class="x-epg-subtitle">Related Episodes</div>';
@@ -303,86 +303,83 @@ tvheadend.epg = function() {
 	}
 
 	var cm = new Ext.grid.ColumnModel({
-		defaults : { sortable : false },
-		columns : [ 
-			actions,
-			{
-				width : 85,
-				id : 'day',
-				header : "Airing",
-				dataIndex : 'day',
-				renderer : renderDay,
-				hideable : false
-			}, {
-				width : 85,
-				id : 'start',
-				header : "Start",
-				dataIndex : 'start',
-				renderer : renderTime,
-				hideable : false
-			}, {
-				width : 85,
-				id : 'end',
-				header : "End",
-				dataIndex : 'end',
-				renderer : renderTime,
-				hideable : false
-			}, {
-				width : 150,
-				id : 'channel',
-				header : "Channel",
-				dataIndex : 'channel',
-				renderer : renderText,
-			}, {
-				width : 55,
-				id : 'number',
-				header : "Ch. #",
-				dataIndex : 'number',
-				renderer : renderText,
-				hidden : true
-			}, {
-				width : 400,
-				id : 'title',
-				header : "Title",
-				dataIndex : 'title',
-				renderer : renderText,
-				hideable : false
-			}, {
-				width : 300,
-				id : 'subtitle',
-				header : "Subtitle",
-				dataIndex : 'subtitle',
-				renderer : renderText
-			}, {
-				width : 85,
-				id : 'episode',
-				header : "Episode",
-				dataIndex : 'episode',
-				renderer : renderText
-			}, {
-				width : 400,
-				id : 'description',
-				header : "Description",
-				dataIndex : 'description',
-				renderer : renderText,
-				hidden : true
-			}, {
-				width : 150,
-				id : 'contenttype',
-				header : "Genre",
-				dataIndex : 'contenttype',
-				renderer : function(value, metadata, record, row, col, store) {
-					setMetaAttr(metadata, record);
-					return tvheadend.contentGroupLookupName(value);
-				}
-			}, {
-				width : 100,
-				id : 'duration',
-				header : "Duration",
-				dataIndex : 'duration',
-				renderer : renderDuration
-			}
-		]
+		defaults : { sortable : true },
+		columns : [ actions, {
+			dataIndex : 'day',
+			header : 'Airing',
+			hideable : false,
+			id : 'day',
+			renderer : renderDay,
+			width : 85
+		}, {
+			dataIndex : 'start',
+			header : 'Start',
+			hideable : false,
+			id : 'start',
+			renderer : renderTime,
+			width : 85
+		}, {
+			dataIndex : 'end',
+			header : 'End',
+			hideable : false,
+			id : 'end',
+			renderer : renderTime,
+			width : 85
+		}, {
+			width : 150,
+			id : 'channel',
+			header : 'Channel',
+			dataIndex : 'channel',
+			renderer : renderText,
+		}, {
+			dataIndex : 'number',
+			header : 'Ch. #',
+			hidden : true,
+			id : 'number',
+			renderer : renderText,
+			width : 55
+		}, {
+			dataIndex : 'title',
+			header : 'Title',
+			hideable : false,
+			id : 'title',
+			renderer : renderText,
+			width : 400
+		}, {
+			dataIndex : 'subtitle',
+			header : 'Subtitle',
+			id : 'subtitle',
+			renderer : renderText,
+			width : 300
+		}, {
+			dataIndex : 'episode',
+			header : 'Episode',
+			id : 'episode',
+			renderer : renderText,
+			width : 85
+		}, {
+			dataIndex : 'description',
+			header : 'Description',
+			hidden : true,
+			id : 'description',
+			renderer : renderText,
+			width : 400
+		}, {
+			dataIndex : 'contenttype',
+			header : 'Genre',
+			id : 'contenttype',
+			renderer : function(value, metadata, record, row, col, store) {
+				setMetaAttr(metadata, record);
+				return tvheadend.contentGroupLookupName(value);
+			},
+			width : 150
+		}, {
+			dataIndex : 'duration',
+			header : 'Duration',
+			id : 'duration',
+			renderer : renderDuration,
+			width : 100
+		} ]
 	});
 	
 	// Title search box
@@ -496,43 +493,32 @@ tvheadend.epg = function() {
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
-		items : [
-			epgFilterTitle,
-			'-',
-			epgFilterChannels,
-			'-',
-			epgFilterChannelTags,
-			'-',
-			epgFilterContentGroup,
-			'-',
-			{
-				text : 'Reset',
-				handler : epgQueryClear
+		items : [ epgFilterTitle, '-', epgFilterChannels, '-', epgFilterChannelTags, '-', epgFilterContentGroup, '-', {
+			handler : epgQueryClear,
+			text : 'Reset'
+		},
+		'->', {
+			handler : function() {
+				new tvheadend.VLC();
 			},
-			'->',
-			{
-				text : 'Watch TV',
-				iconCls : 'eye',
-				handler : function() {
-					new tvheadend.VLC();
-				}
-			},
-			'-',
-			{
-				disabled : !tvheadend.accessupdate.dvr,
-				text : 'Create AutoRec',
-				iconCls : 'wand',
-				tooltip : 'Create an automatic recording entry that will '
-						+ 'record all future programmes that matches '
-						+ 'the current query.',
-				handler : createAutoRec
-			}, '-', helpBtn
-		]
+			iconCls : 'eye',
+			text : 'Watch TV'
+		},
+		'-', {
+			disabled : !tvheadend.accessupdate.dvr,
+			handler : createAutoRec,
+			iconCls : 'wand',
+			text : 'Create AutoRec',
+			tooltip : 'Create an automatic recording entry that will '
+					+ 'record all future programmes that matches '
+					+ 'the current query.'
+		}, 
+		'-', helpBtn ]
 	});
 	
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
 		enableColumnMove : false,
-		id : "epgGrid",
+		id : 'epgGrid',
 		cm : cm,
 		iconCls : 'bell',
 		plugins : [ actions ],

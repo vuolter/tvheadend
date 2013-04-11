@@ -11,44 +11,44 @@ tvheadend.acleditor = function() {
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'enabled',
-		header : "Enabled",
+		header : 'Enabled',
 		hideable : false,
 		width : 80
 	});
 /*	
 	var introColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'intro',
-		header : "Show intro",
+		header : 'Show intro',
 		width : 120
 	});
 */
 	var streamingColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'streaming',
-		header : "Streaming",
+		header : 'Streaming',
 		width : 120
 	});
 
 	var dvrColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'dvr',
-		header : "Recording",
+		header : 'Recording',
 		width : 120
 	});
 
 	var dvrcfgColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'dvrcfg',
-		header : "DVR",		
+		header : 'DVR',		
 		width : 120
 	});
 
 	var webuiColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'webui',
-		header : "Web Interface",
+		header : 'Web Interface',
 		width : 120
 	});
 
 	var adminColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'admin',
-		header : "Admin",
+		header : 'Admin',
 		listeners : {
 			'click' : function(c, e, r) {
 				var val = r.get('admin');
@@ -76,7 +76,7 @@ tvheadend.acleditor = function() {
 		columns : [ sm, enabledColumn, {
 			dataIndex : 'username',
 			editor : new Ext.form.TextField,
-			header : "Username",
+			header : 'Username',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
@@ -86,7 +86,7 @@ tvheadend.acleditor = function() {
 		}, {
 			dataIndex : 'password',
 			editor : new Ext.form.TextField,
-			header : "Password",
+			header : 'Password',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
@@ -96,7 +96,7 @@ tvheadend.acleditor = function() {
 		}, {
 			dataIndex : 'prefix',
 			editor : new Ext.form.TextField,
-			header : "IP allowed",
+			header : 'IP allowed',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value != '0.0.0.0/0' ? value
 											: '<span class="tvh-grid-blue">Any IP address</span>';
@@ -107,7 +107,7 @@ tvheadend.acleditor = function() {
 		{
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
-			header : "Comment",
+			header : 'Comment',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value != "New entry" ? value
 							 : '<span class="tvh-grid-blue">No comments yet</span>';
@@ -123,7 +123,7 @@ tvheadend.acleditor = function() {
 		autoLoad : true,
 		baseParams : {
 			table : 'accesscontrol',
-			op : "get"
+			op : 'get'
 		},
 		fields : rec,
 		id : 'id',
@@ -132,7 +132,7 @@ tvheadend.acleditor = function() {
 			field : 'username',
 			direction : 'ASC'
 		},
-		url : "tablemgr"
+		url : 'tablemgr'
 	});
 
 	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', sm, cm,

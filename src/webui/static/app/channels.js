@@ -9,7 +9,7 @@ tvheadend.data.channels = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
 	fields : tvheadend.channelrec,
-	url : "channels",
+	url : 'channels',
 	baseParams : { op : 'list' },
 	sortInfo : {
 		field : 'number',
@@ -20,7 +20,7 @@ tvheadend.data.channels = new Ext.data.JsonStore({
 tvheadend.data.channels2 = new Ext.data.JsonStore({
 	root : 'entries',
 	fields : tvheadend.channelrec,
-	url : "channels",
+	url : 'channels',
 	baseParams : { op : 'list' },
 	sortInfo : {
 		field : 'name',
@@ -125,14 +125,14 @@ tvheadend.chconf = function() {
 		width : 45
 	});
 	
-	var sm = new Ext.grid.CheckboxSelectionModel();
+	var sm = new Ext.grid.CheckboxSelectionModel({ width : 30 });
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
 		columns : [
 			sm,
 			{
-				header : "Number",
+				header : 'Number',
 				dataIndex : 'number',
 				sortable : true,
 				width : 65,
@@ -146,13 +146,13 @@ tvheadend.chconf = function() {
 				}),
 				hideable : false
 			}, {
-				header : "Name",
+				header : 'Name',
 				dataIndex : 'name',
 				width : 200,
 				editor : new Ext.form.TextField({ allowBlank : false }),
 				hideable : false
 			}, {
-				header : "Tags",
+				header : 'Tags',
 				dataIndex : 'tags',
 				width : 250,
 				renderer : function(value, metadata, record, row, col, store) {
@@ -175,7 +175,7 @@ tvheadend.chconf = function() {
 					displayField : 'name'
 				})
 			}, {
-				header : "EPG Grab source",
+				header : 'EPG Grab source',
 				dataIndex : 'epggrabsrc',
 				width : 150,
 				renderer : function(value, metadata, record, row, col, store) {
@@ -195,14 +195,14 @@ tvheadend.chconf = function() {
 					valueField : 'mod-id'
 				})
 			}, {
-				header : "Icon (full URL)",
+				header : 'Icon (URL)',
 				dataIndex : 'ch_icon',
 				width : 200,
 				editor : new Ext.form.TextField,
 				hidden : true,
 				sortable : false
 			}, {
-				header : "DVR Pre-Start",
+				header : 'DVR Pre-Start',
 				dataIndex : 'epg_pre_start',
 				width : 85,
 				renderer : function(value, metadata, record, row, col, store) {
@@ -214,7 +214,7 @@ tvheadend.chconf = function() {
 					maxValue : 1440
 				})
 			}, {
-				header : "DVR Post-End",
+				header : 'DVR Post-End',
 				dataIndex : 'epg_post_end',
 				width : 85,
 				renderer : function(value, metadata, record, row, col, store) {
@@ -251,9 +251,9 @@ tvheadend.chconf = function() {
 
   function addRecord() {
     Ext.Ajax.request({
-      url : "channels",
+      url : 'channels',
       params : {
-        op : "create"
+        op : 'create'
       },
       failure : function(response, options) {
         Ext.MessageBox.alert('Server Error', 'Unable to create new record');
@@ -273,9 +273,9 @@ tvheadend.chconf = function() {
 			var selectedKeys = grid.selModel.selections.keys;
 
 			Ext.Ajax.request({
-				url : "channels",
+				url : 'channels',
 				params : {
-					op : "delete",
+					op : 'delete',
 					entries : Ext.encode(selectedKeys)
 				},
 				failure : function(response, options) {
@@ -295,9 +295,9 @@ tvheadend.chconf = function() {
 		}
 
 		Ext.Ajax.request({
-			url : "channels",
+			url : 'channels',
 			params : {
-				op : "update",
+				op : 'update',
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
@@ -328,7 +328,7 @@ tvheadend.chconf = function() {
 	var saveBtn = new Ext.Toolbar.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
@@ -336,7 +336,7 @@ tvheadend.chconf = function() {
 	var rejectBtn = new Ext.Toolbar.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			tvheadend.data.channels.rejectChanges();
 		},
@@ -360,7 +360,7 @@ tvheadend.chconf = function() {
 	var grid = new Ext.grid.EditorGridPanel({
 		cm : cm,
 		iconCls : 'television',
-		id : "channelsGrid",
+		id : 'channelsGrid',
 		enableColumnMove : false,
 		store : tvheadend.data.channels,
 		stripeRows : true,

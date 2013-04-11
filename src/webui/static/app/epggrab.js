@@ -249,7 +249,7 @@ tvheadend.epggrab = function() {
 		} ]);
 
 	var externalGrid = new Ext.grid.EditorGridPanel({
-		id : "externalGrid",
+		id : 'externalGrid',
 		store : externalModuleStore,
 		cm : externalCm,
 		sm : externalSm,
@@ -296,7 +296,7 @@ tvheadend.epggrab = function() {
 	} ]);
 
 	var otaGrid = new Ext.grid.EditorGridPanel({
-		id : "otaGrid",
+		id : 'otaGrid',
 		store : otaModuleStore,
 		cm : otaCm,
 		sm : otaSm,
@@ -325,7 +325,7 @@ tvheadend.epggrab = function() {
 	 * ***************************************************************/
 
 	var saveBtn = new Ext.Button({
-		text : "Save configuration",
+		text : 'Save configuration',
 		tooltip : 'Save changes made to configuration below',
 		iconCls : 'save',
 		handler : saveChanges

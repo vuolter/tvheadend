@@ -250,7 +250,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 	}, {
 		width : 250,
 		id : 'channel',
-		header : "Channel",
+		header : 'Channel',
 		dataIndex : 'channel'
 	}, {
 		width : 200,
@@ -399,10 +399,10 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
-			tooltip : 'Schedule a new recording session on the server.',
+			handler : addEntry,
 			iconCls : 'add',
 			text : 'Add entry',
-			handler : addEntry
+			tooltip : 'Schedule a new recording session on the server.'
 		}, '->', helpBtn ]
 	});
 	
@@ -449,7 +449,7 @@ tvheadend.autoreceditor = function() {
 	});
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
+		header : 'Enabled',
 		dataIndex : 'enabled',
 		width : 30
 	});
@@ -469,7 +469,7 @@ tvheadend.autoreceditor = function() {
 				})
 			},
 			{
-				header : "Channel",
+				header : 'Channel',
 				dataIndex : 'channel',
 				editor : new Ext.form.ComboBox({
 					lazyRender : true,
@@ -604,7 +604,7 @@ tvheadend.autoreceditor = function() {
 					allowBlank : false
 				})
 			}, {
-				header : "Comment",
+				header : 'Comment',
 				dataIndex : 'comment',
 				editor : new Ext.form.TextField({
 					allowBlank : false
@@ -720,12 +720,12 @@ tvheadend.dvr = function() {
 	tvheadend.data.autorec = new Ext.data.JsonStore({
 		root : 'entries',
 		fields : tvheadend.autorecRecord,
-		url : "tablemgr",
+		url : 'tablemgr',
 		autoLoad : true,
 		id : 'id',
 		baseParams : {
-			table : "autorec",
-			op : "get"
+			table : 'autorec',
+			op : 'get'
 		}
 	});
 
@@ -774,7 +774,7 @@ tvheadend.dvrsettings = function() {
 	var delBtn = new Ext.Toolbar.Button({
 		tooltip : 'Delete named configuration',
 		iconCls : 'remove',
-		text : "Delete configuration",
+		text : 'Delete configuration',
 		handler : deleteConfiguration,
 		disabled : true
 	});
@@ -791,10 +791,10 @@ tvheadend.dvrsettings = function() {
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ confcombo, {
-			tooltip : 'Save changes made to dvr configuration below',
+			handler : saveChanges,
 			iconCls : 'save',
-			text : "Save configuration",
-			handler : saveChanges
+			text : 'Save configuration',
+			tooltip : 'Save changes made to dvr configuration below',
 		}, delBtn, '->', helpBtn ]
 	});
 	

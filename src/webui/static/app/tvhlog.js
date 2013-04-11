@@ -39,7 +39,7 @@ tvheadend.tvhlog = function() {
 	 * ***************************************************************/
 
 	var saveButton = new Ext.Button({
-		text : "Save configuration",
+		text : 'Save configuration',
 		tooltip : 'Save changes made to configuration below',
 		iconCls : 'save',
 		handler : saveChanges

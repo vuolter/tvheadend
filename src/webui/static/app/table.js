@@ -5,12 +5,12 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 		store = new Ext.data.JsonStore({
 			root : 'entries',
 			fields : rec,
-			url : "tablemgr",
+			url : 'tablemgr',
 			autoLoad : true,
 			id : 'id',
 			baseParams : {
 				table : dtable,
-				op : "get"
+				op : 'get'
 			}
 		});
 	}
@@ -22,9 +22,9 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 
 	function addRecord() {
 		Ext.Ajax.request({
-			url : "tablemgr",
+			url : 'tablemgr',
 			params : {
-				op : "create",
+				op : 'create',
 				table : dtable
 			},
 			failure : function(response, options) {
@@ -67,9 +67,9 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 			var selectedKeys = grid.selModel.selections.keys;
 
 			Ext.Ajax.request({
-				url : "tablemgr",
+				url : 'tablemgr',
 				params : {
-					op : "delete",
+					op : 'delete',
 					table : dtable,
 					entries : Ext.encode(selectedKeys)
 				},
@@ -92,9 +92,9 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 		}
 
 		Ext.Ajax.request({
-			url : "tablemgr",
+			url : 'tablemgr',
 			params : {
-				op : "update",
+				op : 'update',
 				table : dtable,
 				entries : Ext.encode(out)
 			},
@@ -119,7 +119,7 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 	var saveBtn = new Ext.Toolbar.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders)',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
@@ -127,7 +127,7 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 	var rejectBtn = new Ext.Toolbar.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders)',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			store.rejectChanges();
 		},
@@ -161,12 +161,12 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
-			tooltip : 'Create a new entry on the server. '
-				+ 'The new entry is initially disabled so it must be enabled '
-				+ 'before it start taking effect.',
+			handler : addRecord,
 			iconCls : 'add',
 			text : 'Add entry',
-			handler : addRecord
+			tooltip : 'Create a new entry on the server. '
+				+ 'The new entry is initially disabled so it must be enabled '
+				+ 'before it start taking effect.'
 		}, '-', delBtn, '-', saveBtn, rejectBtn, '->', helpBtn ]
 	});
 	

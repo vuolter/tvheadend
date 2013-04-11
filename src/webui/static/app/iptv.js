@@ -33,7 +33,7 @@ tvheadend.iptv = function(adapterId) {
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'enabled',
-		header : "Enabled",
+		header : 'Enabled',
 		hideable : false,
 		width : 45,
 	});
@@ -46,7 +46,7 @@ tvheadend.iptv = function(adapterId) {
 						r = Ext.util.JSON.decode(response.responseText);
 						tvheadend.showTransportDetails(r);
 					},
-					url : "servicedetails/" + record.id
+					url : 'servicedetails/' + record.id
 				})
 			},
 			iconCls : 'info',
@@ -64,7 +64,7 @@ tvheadend.iptv = function(adapterId) {
 		defaults : { sortable : true },
 		columns : [ enabledColumn, {
 			dataIndex : 'channelname',
-			header : "Channel name",
+			header : 'Channel name',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -75,7 +75,7 @@ tvheadend.iptv = function(adapterId) {
 		}, {
 			dataIndex : 'interface',
 			editor : new Ext.form.TextField({ allowBlank : false }),
-			header : "Interface",
+			header : 'Interface',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
@@ -87,7 +87,7 @@ tvheadend.iptv = function(adapterId) {
 				maxValue : 65535,
 				minValue : 1
 			}),
-			header : "UDP Port",
+			header : 'UDP Port',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-red">Unset</span>';
@@ -96,7 +96,7 @@ tvheadend.iptv = function(adapterId) {
 		}, {
 			dataIndex : 'group',
 			editor : new Ext.form.TextField({ allowBlank : false }),
-			header : "Group",
+			header : 'Group',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value != '::' ? value
 					: '<span class="tvh-grid-red">Unset</span>';
@@ -122,7 +122,7 @@ tvheadend.iptv = function(adapterId) {
 			width : 100
 		}, {
 			dataIndex : 'sid',
-			header : "Service ID",
+			header : 'Service ID',
 			hidden : true,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -131,7 +131,7 @@ tvheadend.iptv = function(adapterId) {
 			width : 50
 		}, {
 			dataIndex : 'pmt',
-			header : "PMT PID",
+			header : 'PMT PID',
 			hidden : true,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -140,7 +140,7 @@ tvheadend.iptv = function(adapterId) {
 			width : 50
 		}, {
 			dataIndex : 'pcr',
-			header : "PCR PID",
+			header : 'PCR PID',
 			hidden : true,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -157,7 +157,7 @@ tvheadend.iptv = function(adapterId) {
 	var store = new Ext.data.JsonStore({
 		autoLoad : true,
 		baseParams : {
-			op : "get"
+			op : 'get'
 		},
 		fields : rec,
 		id : 'id',
@@ -173,7 +173,7 @@ tvheadend.iptv = function(adapterId) {
 			field : 'channelname',
 			direction : 'ASC'
 		},
-		url : "iptv/services"
+		url : 'iptv/services'
 	});
 
 	/*
@@ -188,9 +188,9 @@ tvheadend.iptv = function(adapterId) {
 
 	function addRecord() {
 		Ext.Ajax.request({
-			url : "iptv/services",
+			url : 'iptv/services',
 			params : {
-				op : "create"
+				op : 'create'
 			},
 			failure : function(response, options) {
 				Ext.MessageBox.alert('Server Error',
@@ -232,9 +232,9 @@ tvheadend.iptv = function(adapterId) {
 			var selectedKeys = grid.selModel.selections.keys;
 
 			Ext.Ajax.request({
-				url : "iptv/services",
+				url : 'iptv/services',
 				params : {
-					op : "delete",
+					op : 'delete',
 					entries : Ext.encode(selectedKeys)
 				},
 				failure : function(response, options) {
@@ -257,9 +257,9 @@ tvheadend.iptv = function(adapterId) {
 		}
 
 		Ext.Ajax.request({
-			url : "iptv/services",
+			url : 'iptv/services',
 			params : {
-				op : "update",
+				op : 'update',
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
@@ -282,7 +282,7 @@ tvheadend.iptv = function(adapterId) {
 	var saveBtn = new Ext.Toolbar.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
@@ -290,7 +290,7 @@ tvheadend.iptv = function(adapterId) {
 	var rejectBtn = new Ext.Toolbar.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			store.rejectChanges();
 		},
@@ -309,12 +309,12 @@ tvheadend.iptv = function(adapterId) {
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ {
-			tooltip : 'Create a new entry on the server. '
-				+ 'The new entry is initially disabled so it must be enabled '
-				+ 'before it start taking effect.',
+			handler : addRecord,
 			iconCls : 'add',
 			text : 'Add service',
-			handler : addRecord
+			tooltip : 'Create a new entry on the server. '
+				+ 'The new entry is initially disabled so it must be enabled '
+				+ 'before it start taking effect.'
 		}, '-', delBtn, '-', saveBtn, rejectBtn, '->', helpBtn ]
 	});
 	
@@ -322,7 +322,7 @@ tvheadend.iptv = function(adapterId) {
 		cm : cm,
 		enableColumnMove : false,
 		iconCls : 'iptv',
-		id : "iptvGrid",
+		id : 'iptvGrid',
 		plugins : [ enabledColumn, actions,search ],
 		sm : sm,
 		stateful : true,

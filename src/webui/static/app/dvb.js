@@ -15,7 +15,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	});
 
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
+		header : 'Enabled',
 		dataIndex : 'enabled',
 		width : 40
 	});
@@ -32,7 +32,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var cmlist = Array();
 
 	cmlist.push(sm, enabledColumn, {
-		header : "Play",
+		header : 'Play',
 		dataIndex : 'id',
 		width : 50,
 		renderer : function(value, metadata, record, row, col, store) {
@@ -111,11 +111,11 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var store = new Ext.data.JsonStore({
 		root : 'entries',
 		fields : rec,
-		url : "dvb/muxes/" + adapterId,
+		url : 'dvb/muxes/' + adapterId,
 		autoLoad : true,
 		id : 'id',
 		baseParams : {
-			op : "get"
+			op : 'get'
 		},
 		listeners : {
 			'update' : function(s, r, o) {
@@ -169,9 +169,9 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 			var selectedKeys = grid.selModel.selections.keys;
 
 			Ext.Ajax.request({
-				url : "dvb/muxes/" + adapterId,
+				url : 'dvb/muxes/' + adapterId,
 				params : {
-					op : "delete",
+					op : 'delete',
 					entries : Ext.encode(selectedKeys)
 				},
 				failure : function(response, options) {
@@ -204,7 +204,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 			}
 
 			Ext.Ajax.request({
-				url : "dvb/copymux/" + target,
+				url : 'dvb/copymux/' + target,
 				params : mparams,
 				failure : function(response, options) {
 					Ext.MessageBox.alert('Server Error', 'Unable to copy');
@@ -318,9 +318,9 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		}
 
 		Ext.Ajax.request({
-			url : "dvb/muxes/" + adapterId,
+			url : 'dvb/muxes/' + adapterId,
 			params : {
-				op : "update",
+				op : 'update',
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
@@ -356,7 +356,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var saveBtn = new Ext.Toolbar.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
@@ -364,7 +364,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var rejectBtn = new Ext.Toolbar.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			store.rejectChanges();
 		},
@@ -374,16 +374,16 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
 		items : [ delBtn, copyBtn, '-', saveBtn, rejectBtn, '-', {
-			text : 'Add mux(es) manually...',
-			iconCls : 'add',
 			handler : function() {
 				tvheadend.addMuxManually(adapterData, satConfStore)
-			}
+			},
+			iconCls : 'add',
+			text : 'Add mux(es) manually...'
 		} ]
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({
-		id : "multiplexesGrid",
+		id : 'multiplexesGrid',
 		stripeRows : true,
 		enableColumnMove : false,
 		title : 'Multiplexes',
@@ -417,7 +417,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	});
 
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
+		header : 'Enabled',
 		dataIndex : 'enabled',
 		width : 45
 	});
@@ -457,7 +457,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			width : 150
 		},
 		{
-			header : "Play",
+			header : 'Play',
 			dataIndex : 'id',
 			width : 50,
 			renderer : function(value, metadata, record, row, col, store) {
@@ -604,11 +604,11 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		fields : Ext.data.Record.create([ 'id', 'enabled', 'type', 'sid', 'pmt',
 			'pcr', 'svcname', 'network', 'provider', 'encryption', 'mux', 'satconf',
 			'channelname', 'prefcapid', 'dvb_charset', 'dvb_eit_enable' ]),
-		url : "dvb/services/" + adapterId,
+		url : 'dvb/services/' + adapterId,
 		autoLoad : true,
 		id : 'id',
 		baseParams : {
-			op : "get"
+			op : 'get'
 		},
 		listeners : {
 			'update' : function(s, r, o) {
@@ -656,9 +656,9 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		}
 
 		Ext.Ajax.request({
-			url : "dvb/services/" + adapterId,
+			url : 'dvb/services/' + adapterId,
 			params : {
-				op : "update",
+				op : 'update',
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
@@ -681,7 +681,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	var saveBtn = new Ext.Toolbar.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
@@ -689,7 +689,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	var rejectBtn = new Ext.Toolbar.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			store.rejectChanges();
 		},
@@ -714,7 +714,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	});
 	
 	var grid = new Ext.grid.EditorGridPanel({
-		id : "servicesGrid",
+		id : 'servicesGrid',
 		stripeRows : true,
 		enableColumnMove : false,
 		title : 'Services',
@@ -1444,7 +1444,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns: [ sm, {
-		header : "Name",
+		header : 'Name',
 		dataIndex : 'name',
 		width : 200,
 		editor : new Ext.form.TextField({
@@ -1473,7 +1473,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 			emptyText : 'Select LNB type...'
 		})
 	}, {
-		header : "Comment",
+		header : 'Comment',
 		dataIndex : 'comment',
 		width : 400,
 		editor : new Ext.form.TextField

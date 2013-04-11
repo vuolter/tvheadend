@@ -57,50 +57,50 @@ tvheadend.status_subs = function() {
 		defaults : { sortable : true },
 		columns : [ {
 			dataIndex : 'hostname',
-			header : "Hostname",
+			header : 'Hostname',
 			hideable : false,
 			id : 'hostname',
 			width : 100
 		}, {
 			dataIndex : 'username',
-			header : "Username",
+			header : 'Username',
 			hideable : false,
 			id : 'username',
 			width : 100,
 		}, {
 			dataIndex : 'channel',
-			header : "Channel",
+			header : 'Channel',
 			id : 'channel',
 			width : 100
 		}, {
 			dataIndex : 'service',
-			header : "Service",
+			header : 'Service',
 			id : 'service',			
 			width : 100
 		}, {
 			dataIndex : 'state',
-			header : "Status",
+			header : 'Status',
 			id : 'state',
 			width : 100
 		}, {
 			dataIndex : 'start',
-			header : "Start date",
+			header : 'Start date',
 			id : 'start',
 			renderer : renderDate,
 			width : 150
 		}, {
 			dataIndex : 'title',
-			header : "Type",
+			header : 'Type',
 			id : 'title',
 			width : 100
 		}, {
-			header : "Errors",
+			header : 'Errors',
 			id : 'errors',
 			dataIndex : 'errors',
 			width : 50
 		}, {
 			dataIndex : 'bw',
-			header : "Bandwidth",
+			header : 'Bandwidth',
 			id : 'bw',
 			renderer : renderBw,
 			width : 50
@@ -108,12 +108,13 @@ tvheadend.status_subs = function() {
 	});
 
 	var grid = new Ext.grid.GridPanel({
+		border : false,
 		cm : cm,
 		enableColumnMove : false,
 		disableSelection : true,
 		flex : 1,
 		iconCls : 'transmit-blue',
-		id : "subscriptionsGrid",
+		id : 'subscriptionsGrid',
 		loadMask : true,
 		stateId : this.id,
 		stateful : true,
@@ -139,7 +140,7 @@ tvheadend.status_adapters = function() {
 	var strength = new Ext.ux.grid.ProgressColumn({
 		colored : true,
 		dataIndex : 'signal',
-		header : "Signal Strength",
+		header : 'Signal Strength',
 		textPst : '%',
 		width : 80
 	});
@@ -147,7 +148,7 @@ tvheadend.status_adapters = function() {
 	var quality = new Ext.ux.grid.ProgressColumn({
 		colored : true,
 		dataIndex : 'quality',
-		header : "Signal Quality",
+		header : 'Signal Quality',
 		textPst : '%',
 		width : 80
 	});
@@ -157,36 +158,36 @@ var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
 		columns : [ {
 			dataIndex : 'name',
-			header : "Name",			
+			header : 'Name',			
 			hideable : false,
 			width : 100
 		}, {
 			
 			dataIndex : 'path',
-			header : "Device",
+			header : 'Device',
 			hideable : false,
 			width : 100		
 		}, {
 			dataIndex : 'currentMux',
-			header : "Currently tuned to",
+			header : 'Currently tuned to',
 			hideable : false,
 			width : 100
 		}, {
 			dataIndex : 'bw',
-			header : "Bandwidth (kb/s)",
+			header : 'Bandwidth',
 			renderer: renderBw,
 			width : 100
 		}, {
-			header : "Bit error rate",
+			header : 'Bit error rate',
 			dataIndex : 'ber',
 			width : 50
 		}, {
 			dataIndex : 'uncavg',
-			header : "Uncorrected bit error rate",
+			header : 'Uncorrected bit error rate',
 			width : 50
 		}, {
 			dataIndex : 'snr',
-			header : "SNR",
+			header : 'SNR',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value > 0 ? value.toFixed(1) + " dB"
 								 : '<span class="tvh-grid-gray">Unknown</span>';
@@ -216,12 +217,13 @@ var cm = new Ext.grid.ColumnModel({
 	});
 	
 	var grid = new Ext.grid.GridPanel({
+		border : false,
 		cm : cm,
 		enableColumnMove : false,
 		disableSelection : true,
 		flex : 1,
 		iconCls : 'hardware',
-		id : "adaptersGrid",
+		id : 'adaptersGrid',
 		loadMask : true,
 		stateId : this.id,
 		stateful : true,

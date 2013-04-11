@@ -20,14 +20,14 @@ tvheadend.capmteditor = function() {
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'enabled',
-		header : "Enabled",
+		header : 'Enabled',
 		hideable : false,
 		width : 80
 	});
 	
 	var oscamColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'oscam',
-		header : "OSCam Mode",
+		header : 'OSCam Mode',
 		width : 80
 	});
 	
@@ -41,7 +41,7 @@ tvheadend.capmteditor = function() {
 		columns : [ actions, enabledColumn, {
 			dataIndex : 'camdfilename',
 			editor : new Ext.form.TextField,
-			header : "Camd.socket filename",
+			header : 'Camd.socket filename',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -51,7 +51,7 @@ tvheadend.capmteditor = function() {
 		}, {
 			dataIndex : 'port',
 			editor : new Ext.form.TextField,
-			header : "Listen Port",
+			header : 'Listen Port',
 			hideable : false,
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -62,7 +62,7 @@ tvheadend.capmteditor = function() {
 		oscamColumn, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
-			header : "Comment",
+			header : 'Comment',
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-blue">No comments yet</span>';
@@ -79,14 +79,14 @@ tvheadend.capmteditor = function() {
 		id : 'id',
 		baseParams : {
 			table : 'capmt',
-			op : "get"
+			op : 'get'
 		},
 		root : 'entries',
 		sortInfo : {
 			field : 'camdfilename',
 			direction : 'ASC'
 		},
-		url : "tablemgr"
+		url : 'tablemgr'
 	});
 
 	var grid = new tvheadend.tableEditor('camptGrid', 'Capmt Connections', 'capmt', sm, cm, rec,
