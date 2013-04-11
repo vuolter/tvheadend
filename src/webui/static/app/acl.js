@@ -124,7 +124,7 @@ tvheadend.acleditor = function() {
 			table : 'accesscontrol',
 			op : "get"
 		},
-		fields : records,
+		fields : rec,
 		id : 'id',
 		root : 'entries',
 		sortInfo : {

@@ -73,7 +73,7 @@ tvheadend.iptv = function(adapterId) {
 			width : 150
 		}, {
 			dataIndex : 'interface',
-			editor : new Ext.form.TextField({ allowBlank : false })
+			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : "Interface",
 			renderer : function(value, metadata, record, row, col, store) {
 				return value ? value
@@ -150,7 +150,7 @@ tvheadend.iptv = function(adapterId) {
 		actions ]
 	});
 
-	var rec = Ext.data.Record.create([ 'channelname', 'enabled', 'group', 'id'
+	var rec = Ext.data.Record.create([ 'channelname', 'enabled', 'group', 'id',
 		'interface', 'pcr', 'pmt', 'port', 'sid', 'stype' ]);
 
 	var store = new Ext.data.JsonStore({

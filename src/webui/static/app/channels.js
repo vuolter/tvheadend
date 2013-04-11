@@ -57,7 +57,7 @@ tvheadend.mergeChannel = function(chan) {
 		fieldLabel : 'Target channel',
 		hiddenName : 'targetID',
 		name : 'targetchannel',		
-		store : tvheadend.data.channels2
+		store : tvheadend.data.channels2,
 		triggerAction : 'all',
 		valueField : 'chid',
 		width : 200

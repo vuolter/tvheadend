@@ -580,7 +580,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header: "Preferred CA pid",
 			dataIndex: 'prefcapid',
 			width: 50,
-			editor: new Ext.form.TextField({allowBlank: true})
+			editor: new Ext.form.TextField({ allowBlank: true })
 		}, {
 			header : "PMT PID",
 			dataIndex : 'pmt',

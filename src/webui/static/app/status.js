@@ -5,7 +5,7 @@ tvheadend.status_subs = function() {
 
 	tvheadend.data.subscriptions = new Ext.data.JsonStore({
 		autoLoad : true,
-		fields : [ 'bw', 'channel', 'errors', 'hostname', 'id', 'service', 'state', 'title', 'username'
+		fields : [ 'bw', 'channel', 'errors', 'hostname', 'id', 'service', 'state', 'title', 'username',
 		{
 			name : 'start',
 			dateFormat : 'U', /* unix time */
@@ -197,7 +197,7 @@ var cm = new Ext.grid.ColumnModel({
 	});
 
 	var store = new Ext.data.JsonStore({
-		fields : [ 'ber', 'currentMux', 'freqMax', 'freqMin', 'freqStep' 
+		fields : [ 'ber', 'currentMux', 'freqMax', 'freqMin', 'freqStep', 
 			'deliverySystem', 'devicename', 'hostconnection', 'identifier', 'initialMuxes', 
 			'muxes', 'name', 'path', 'satConf', 'services', 
 			'signal', 'snr', 'symrateMax', 'symrateMin', 'type', 
