@@ -706,7 +706,7 @@ tvheadend.dvr = function() {
 		]);
 				
 	    return new Ext.data.JsonStore({
-			autoLoad : true
+			autoLoad : true,
 			fields : rec,
 			id : 'id',
 			root : 'entries',
