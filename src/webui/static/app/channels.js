@@ -287,7 +287,7 @@ tvheadend.chconf = function() {
 
 	function saveChanges() {
 		var mr = tvheadend.data.channels.getModifiedRecords();
-		var out = new Array();
+		var out = [];
 		for (var x in mr) {
 			v = mr[x].getChanges();
 			out[x] = v;

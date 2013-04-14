@@ -84,7 +84,7 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 
 	function saveChanges() {
 		var mr = store.getModifiedRecords();
-		var out = new Array();
+		var out = [];
 		for (var x in mr) {
 			v = mr[x].getChanges();
 			out[x] = v;

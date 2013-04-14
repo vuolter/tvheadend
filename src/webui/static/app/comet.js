@@ -17,7 +17,7 @@ Ext.extend(tvheadend.Comet = function() {
 	});
 }, Ext.util.Observable);
 
-tvheadend.comet = new tvheadend.Comet();
+tvheadend.comet = new tvheadend.Comet;
 tvheadend.boxid = null;
 
 tvheadend.cometPoller = function() {
