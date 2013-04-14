@@ -11,9 +11,18 @@ tvheadend.BufferView = function() {
 		rowHeight : 29
 	});
 }
-	
+
 /**
- * Dummy maker
+ * CheckboxSelectionModel
+ */
+tvheadend.CheckboxSelectionModel = function() {
+	return new Ext.grid.CheckboxSelectionModel({ 
+		width : 21
+	});
+}
+
+/**
+ * Dummy panel
  */
 tvheadend.dummy = function(title, icon) {
 	return new Ext.Panel({

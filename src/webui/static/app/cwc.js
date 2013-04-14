@@ -37,7 +37,7 @@ tvheadend.cwceditor = function() {
 		width : 120
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
+	var sm = new tvheadend.CheckboxSelectionModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {

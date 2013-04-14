@@ -209,7 +209,7 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		return tvheadend.data.dvrprio.getById(value).data.name;
 	}
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
+	var sm = new tvheadend.CheckboxSelectionModel;
 	
 	var cm = new Ext.grid.ColumnModel([ sm, actions, {
 		width : 250,
@@ -525,7 +525,7 @@ tvheadend.autoreceditor = function() {
 		triggerAction : 'all'
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
+	var sm = new tvheadend.CheckboxSelectionModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },

@@ -125,7 +125,7 @@ tvheadend.chconf = function() {
 		width : 45
 	});
 	
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
+	var sm = new tvheadend.CheckboxSelectionModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },

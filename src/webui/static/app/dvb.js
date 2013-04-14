@@ -28,7 +28,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		colored : true
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
+	var sm = new tvheadend.CheckboxSelectionModel;
 	var cmlist = Array();
 
 	cmlist.push(sm, enabledColumn, {
@@ -447,7 +447,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		} ]
 	});
 
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
+	var sm = new tvheadend.CheckboxSelectionModel;
 	var cmlist = Array();
 
 	cmlist.push(sm, enabledColumn,
@@ -1440,7 +1440,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		width : 250
 	});
 	
-	var sm = new Ext.grid.CheckboxSelectionModel({ width : 21 });
+	var sm = new tvheadend.CheckboxSelectionModel;
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns: [ sm, {
