@@ -98,12 +98,12 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext/ext-base%s.js\"></script>\n"
                      "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/gridsearch/resources/css/gridsearch.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/livegrid/resources/css/ext-ux-livegrid.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/lovcombo/resources/css/Ext.ux.form.LovCombo.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/multiselect/resources/css/multiselect.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/gridsearch/resources/css/gridsearch.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/livegrid/resources/css/ext-ux-livegrid.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/lovcombo/resources/css/Ext.ux.form.LovCombo.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/multiselect/resources/css/multiselect.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\">\n",
                      tvheadend_webui_debug ? "-debug" : "",
                      tvheadend_webui_debug ? "-debug" : "",
@@ -115,13 +115,13 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
    * Load extjs extensions
    */
   extjs_load(hq, "static/app/extensions.js");
-  extjs_load(hq, "static/gridsearch/Ext.ux.grid.Search.js");
-  extjs_load(hq, "static/livegrid/livegrid-all.js");
-  extjs_load(hq, "static/lovcombo/Ext.ux.form.LovCombo.js");
-  extjs_load(hq, "static/multiselect/ddview.js");
-  extjs_load(hq, "static/multiselect/multiselect.js");
-  extjs_load(hq, "static/progresscolumn/Ext.ux.grid.ProgressColumn.js");
-  extjs_load(hq, "static/rowactions/Ext.ux.grid.RowActions.js");
+  extjs_load(hq, "static/extensions/gridsearch/Ext.ux.grid.Search.js");
+  extjs_load(hq, "static/extensions/livegrid/livegrid-all.js");
+  extjs_load(hq, "static/extensions/lovcombo/Ext.ux.form.LovCombo.js");
+  extjs_load(hq, "static/extensions/multiselect/ddview.js");
+  extjs_load(hq, "static/extensions/multiselect/multiselect.js");
+  extjs_load(hq, "static/extensions/progresscolumn/Ext.ux.grid.ProgressColumn.js");
+  extjs_load(hq, "static/extensions/rowactions/Ext.ux.grid.RowActions.js");
 
   /**
    * Create a namespace for our app
