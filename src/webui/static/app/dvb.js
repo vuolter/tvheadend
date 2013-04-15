@@ -5,14 +5,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
 
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	var search = new tvheadend.Search;
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : 'Enabled',
@@ -407,14 +400,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
  
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	var search = new tvheadend.Search;
 
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : 'Enabled',
@@ -1431,14 +1417,7 @@ tvheadend.dvb_adapter_general = function(adapterData, satConfStore) {
  */
 tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 	
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	var search = new tvheadend.Search;
 	
 	var sm = new tvheadend.CheckboxSelectionModel;
 	var cm = new Ext.grid.ColumnModel({

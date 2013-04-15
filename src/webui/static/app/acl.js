@@ -1,13 +1,6 @@
 tvheadend.acleditor = function() {
 
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	var search = new tvheadend.Search;
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		dataIndex : 'enabled',

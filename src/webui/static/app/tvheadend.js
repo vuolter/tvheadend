@@ -86,7 +86,21 @@ tvheadend.log = function(msg, style) {
 }
 
 /**
- * Displays a mediaplayer using VLC plugin
+ * Search
+ */
+tvheadend.Search = function() {
+	return new Ext.ux.grid.Search({
+		iconCls : 'magnifier',
+		minChars : 3,
+		positionX : 'left',
+		positionY : 'top',
+		searchText : '',
+		width : 250
+	});
+}
+
+/**
+ * VLC window
  */
 tvheadend.VLC = function(url) {
 	

@@ -95,14 +95,7 @@ tvheadend.mergeChannel = function(chan) {
  */
 tvheadend.chconf = function() {
 	
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	var search = new tvheadend.Search;
 	
 	var actions = new Ext.ux.grid.RowActions({
 		actions : [ {

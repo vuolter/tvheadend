@@ -2,14 +2,7 @@ tvheadend.cwceditor = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.dummyPanel('Code Word Client','key');
 	
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	var search = new tvheadend.Search;
 	
 	var actions = new Ext.ux.grid.RowActions({
 		actions : { iconIndex : 'connect', qtip : 'Connected' },
