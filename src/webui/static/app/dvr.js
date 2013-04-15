@@ -23,7 +23,6 @@ tvheadend.data.dvrprio = new Ext.data.SimpleStore({
 	fields : [ 'identifier', 'name' ]
 });
 
-
 //For the container configuration
 tvheadend.data.containers = new Ext.data.JsonStore({
 	autoLoad : true,
@@ -33,7 +32,6 @@ tvheadend.data.containers = new Ext.data.JsonStore({
 	root : 'entries',
 	url : 'dvr_containers'
 });
-
 
 /**
  * Configuration names
@@ -58,234 +56,145 @@ tvheadend.comet.on('dvrconfig', function(m) {
 /**
  *
  */
-tvheadend.dvrDetails = function(entry) {
+tvheadend.dvrUpcoming = function() {
 
-	var content = '';
-	var but;
+	function renderTime(value) {
+		dt = new Date(value);
+		return dt.format('H:i');
+	}
+	
+	function renderDay(value) {
+		dt = new Date(value);
+		return dt.format('Y-m-d (D)');
+	}
+	
+	function renderDuration(value) {
+		var value = Math.floor(value / 60);
 
-	if (entry.chicon != null && entry.chicon.length > 0) content += '<img class="x-epg-chicon" src="'
-		+ entry.chicon + '">';
-
-	content += '<div class="x-epg-title">' + entry.title + '</div>';
-	content += '<div class="x-epg-desc">' + entry.description + '</div>';
-	content += '<hr>'
-	content += '<div class="x-epg-meta">Status: ' + entry.status + '</div>';
-
-	if (entry.url != null && entry.filesize > 0) {
-		content += '<div class="x-epg-meta">' + '<a href="' + entry.url
-			+ '" target="_blank">Download</a> '
-			+ parseInt(entry.filesize / 1000000) + ' MB<br>'
-			+ "<a href=\"javascript:tvheadend.VLC('dvrfile/" + entry.id
-			+ "')\">Play</a>" + '</div>';
+		if(value >= 60) {
+			var min = value % 60;
+			var hrs = Math.floor(value / 60)
+			
+			return hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
+		}
+		else 
+			return value + ' min';
 	}
 
-	var win = new Ext.Window({
-		title : entry.title,
-		layout : 'fit',
-		width : 400,
-		height : 300,
-		constrainHeader : true,
-		buttonAlign : 'center',
-		html : content
-	});
-
-	switch (entry.schedstate) {
-		case 'scheduled':
-			win.addBtn({
-				handler : cancelEvent,
-				text : "Remove from schedule"
-			});
-			break;
-
-		case 'recording':
-		case 'recordingError':
-			win.addBtn({
-				handler : cancelEvent,
-				text : "Abort recording"
-			});
-			break;
-		case 'completedError':
-		case 'completed':
-			win.addBtn({
-				handler : deleteEvent,
-				text : "Delete recording"
-			});
-			break;
+	function renderSize(value) {
+		return parseInt(value / 1048576) + 'MiB';
 	}
-
-	win.show();
-
-	function cancelEvent() {
-		Ext.Ajax.request({
-			url : 'dvr',
-			params : {
-				entryId : entry.id,
-				op : 'cancelEntry'
-			},
-
-			success : function(response, options) {
-				win.close();
-			},
-
-			failure : function(response, options) {
-				Ext.MessageBox.alert('DVR', response.statusText);
-			}
-		});
+	
+	function renderPri(value) {
+		return tvheadend.data.dvrprio.getById(value).get("name");
 	}
-
-	function deleteEvent() {
-		Ext.Ajax.request({
-			url : 'dvr',
-			params : {
-				entryId : entry.id,
-				op : 'deleteEntry'
-			},
-
-			success : function(response, options) {
-				win.close();
-			},
-
-			failure : function(response, options) {
-				Ext.MessageBox.alert('DVR', response.statusText);
-			}
-		});
-	}
-
-}
-
-/**
- *
- */
-tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
-
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	
+	var search = new tvheadend.Search;
 	
 	var actions = new Ext.ux.grid.RowActions({
-		header : '',
+		actions : { iconIndex : 'schedstate' },
 		dataIndex : 'actions',
-		width : 45,
-		actions : [ {
-			iconIndex : 'schedstate'
-		} ]
+		hideable : false,
+		width : 45
 	});
-
-	function renderDate(value) {
-		var dt = new Date(value);
-		return dt.format('D j M H:i');
-	}
-
-	function renderDuration(value) {
-		value = value / 60; /* Nevermind the seconds */
-
-		if (value >= 60) {
-			var min = parseInt(value % 60);
-			var hours = parseInt(value / 60);
-
-			if (min == 0) {
-				return hours + ' hrs';
-			}
-			return hours + ' hrs, ' + min + ' min';
-		}
-		else {
-			return parseInt(value) + ' min';
-		}
-	}
-
-	function renderSize(value)
-	{
-		if (value == null)
-			return '';
-		return parseInt(value / 1000000) + ' MB';
-	}
-
-	function renderPri(value) {
-		return tvheadend.data.dvrprio.getById(value).data.name;
-	}
 
 	var sm = new tvheadend.CheckboxSelectionModel;
 	
-	var cm = new Ext.grid.ColumnModel([ sm, actions, {
-		width : 250,
-		id : 'title',
-		header : "Title",
-		dataIndex : 'title'
-	}, {
-		width : 100,
-		id : 'episode',
-		header : "Episode",
-		dataIndex : 'episode'
-	}, {
-		width : 100,
-		id : 'pri',
-		header : "Priority",
-		dataIndex : 'pri',
-		renderer : renderPri,
-		hidden : iconCls != 'clock',
-	}, {
-		width : 100,
-		id : 'start',
-		header : iconCls == 'clock' ? "Start" : "Date/Time",
-		dataIndex : 'start',
-		renderer : renderDate
-	}, {
-		width : 100,
-		hidden : true,
-		id : 'end',
-		header : "End",
-		dataIndex : 'end',
-		renderer : renderDate
-	}, {
-		width : 100,
-		id : 'duration',
-		header : "Duration",
-		dataIndex : 'duration',
-		renderer : renderDuration
-	}, {
-		width : 100,
-		id : 'filesize',
-		header : "Filesize",
-		dataIndex : 'filesize',
-		renderer : renderSize,
-		hidden : iconCls != 'television'
-	}, {
-		width : 250,
-		id : 'channel',
-		header : 'Channel',
-		dataIndex : 'channel'
-	}, {
-		width : 200,
-		id : 'creator',
-		header : "Created by",
-		hidden : true,
-		dataIndex : 'creator'
-	}, {
-		width : 200,
-		id : 'config_name',
-		header : "DVR Configuration",
-		renderer : function(value, meta, rec, row, col, store) {
-			if (!value) {
-				return '<span class="tvh-grid-unset">(default)</span>';
-			}
-			else {
-				return value;
-			}
-		},
-		dataIndex : 'config_name',
-		hidden: iconCls != 'clock'
-	}, {
-		width : 200,
-		id : 'status',
-		header : "Status",
-		dataIndex : 'status',
-		hidden: iconCls != 'exclamation'
-	} ]);
+	var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ sm, actions, {
+			dataIndex : 'status',
+			header : 'Status',
+			id : 'status',
+			width : 200
+		}, {
+			dataIndex : 'start_day',
+			header : 'Start date',
+			id : 'start_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return renderDay(rec.get('start'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'start',
+			header : 'Start time',
+			id : 'start_time',
+			renderer : renderTime,
+			width : 100
+		}, {
+			dataIndex : 'end_day',
+			header : 'End date',
+			id : 'end_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return renderDay(rec.get('end'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'end',
+			header : 'End time',
+			id : 'end_time',
+			renderer : renderTime,
+			width : 100
+		}, {
+			dataIndex : 'channel',
+			header : 'Channel',
+			id : 'channel',
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : 'Title',
+			id : 'title',
+			width : 400
+		}, {
+			dataIndex : 'episode',
+			header : 'Episode',
+			id : 'episode',
+			renderer : function(value, meta, rec, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unknown</span>';
+			},
+			width : 100
+		}, {
+			dataIndex : 'duration',
+			header : 'Duration',
+			id : 'duration',
+			renderer : renderDuration,
+			width : 100
+		}, {
+			dataIndex : 'filesize',
+			header : 'File size',
+			hidden : true,
+			id : 'filesize',
+			renderer : renderSize,
+			width : 100
+		}, {
+			dataIndex : 'creator',
+			header : 'Created by',
+			id : 'creator',
+			renderer : function(value, meta, rec, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unset</span>';
+			},
+			width : 150
+		}, {
+			dataIndex : 'config_name',
+			header : 'DVR Configuration',
+			id : 'config_name',
+			renderer : function(value, meta, rec, row, col, store) {
+				if(!value)
+					return '<span class="tvh-grid-blue">(default profile)</span>';
+				else
+					return value;
+			},
+			width : 150
+		}, {
+			dataIndex : 'pri',
+			header : 'Priority',
+			id : 'pri',
+			renderer : renderPri,
+			width : 150
+		} ]
+	});
 
 	function addEntry() {
 
@@ -394,46 +303,474 @@ tvheadend.dvrschedule = function(id, title, iconCls, dvrStore) {
 		})
 	}
 	
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
+	function delSelected() {
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
+		else {
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
+		}
+	}
+	
+	var addBtn = new Ext.Button({
+		handler : addEntry,
+		iconCls : 'add',
+		text : 'Add entry',
+		tooltip : 'Schedule a new recording session on the server.'
 	});
+	
+	var delBtn = new Ext.Button({
+		disabled : true,
+		handler : delSelected,
+		iconCls : 'remove',
+		text : 'Delete',
+		tooltip : 'Delete one or more selected rows'
+	});
+	
+	var helpBtn = new tvheadend.helpBtn('Digital Video Recorder', 'dvrlog.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
-		items : [ {
-			handler : addEntry,
-			iconCls : 'add',
-			text : 'Add entry',
-			tooltip : 'Schedule a new recording session on the server.'
-		}, '->', helpBtn ]
+		items : [ addBtn, delBtn, '->', helpBtn ]
 	});
 	
 	var grid = new Ext.grid.GridPanel({
 		cm : cm,
 		enableColumnMove : false,
-		iconCls : iconCls,
-		id : id,
-		loadMask : true,
+		iconCls : 'clock',
+		id : 'dvrUpcomingGrid',
 		plugins : [ actions, search ],
 		sm : sm,
 		stateful : true,
 		stateId : this.id,
-		store : dvrStore,
+		store : tvheadend.data.dvrUpcoming,
 		stripeRows : true,
 		tbar : tb,
-		title : title,
+		title : 'Scheduled recordings',
 		view : new tvheadend.BufferView
 	});
+	
+	return grid;
+}
 
-	grid.on('rowclick', rowclicked);
-	function rowclicked(grid, index) {
-		new tvheadend.dvrDetails(grid.getStore().getAt(index).data);
+/**
+ *
+ */
+tvheadend.dvrFinished = function() {
+
+	function renderTime(value) {
+		dt = new Date(value);
+		return dt.format('H:i');
 	}
+	
+	function renderDay(value) {
+		dt = new Date(value);
+		return dt.format('Y-m-d (D)');
+	}
+	
+	function renderDuration(value) {
+		var value = Math.floor(value / 60);
+
+		if(value >= 60) {
+			var min = value % 60;
+			var hrs = Math.floor(value / 60)
+			
+			return hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
+		}
+		else 
+			return value + ' min';
+	}
+
+	function renderSize(value) {
+		return parseInt(value / 1048576) + 'MiB';
+	}
+	
+	function renderPri(value) {
+		return tvheadend.data.dvrprio.getById(value).get("name");
+	}
+	
+	var search = new tvheadend.Search;
+	
+	var actions = new Ext.ux.grid.RowActions({
+		actions : [ {
+			cb : function(grid, rec, action, row, col) {
+				return rec.get('url');
+			},
+			iconCls : 'download',
+			qtip : 'Download this record'
+		}, 
+		' ', {
+			cb : function(grid, rec, action, row, col) {
+				var url = 'dvrfile/' + rec.get('id');
+				tvheadend.VLC(url);
+			},
+			disabled : !tvheadend.accessupdate.streaming,
+			iconCls : 'watch',
+			qtip : 'Watch this record'
+		} ],
+		dataIndex : 'actions',
+		hideable : false,
+		width : 45
+	});
+
+	var sm = new tvheadend.CheckboxSelectionModel;
+	
+	var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ sm, {
+			dataIndex : 'status',
+			header : 'Status',
+			hidden : true,
+			id : 'status',
+			width : 200
+		}, {
+			dataIndex : 'start_day',
+			header : 'Start date',
+			id : 'start_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return renderDay(rec.get('start'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'start',
+			header : 'Start time',
+			id : 'start_time',
+			renderer : renderTime,
+			width : 100
+		}, {
+			dataIndex : 'end_day',
+			header : 'End date',
+			id : 'end_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return renderDay(rec.get('end'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'end',
+			header : 'End time',
+			id : 'end_time',
+			renderer : renderTime,
+			width : 100
+		}, {
+			dataIndex : 'channel',
+			header : 'Channel',
+			id : 'channel',
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : 'Title',
+			id : 'title',
+			width : 400
+		}, {
+			dataIndex : 'episode',
+			header : 'Episode',
+			id : 'episode',
+			renderer : function(value, meta, rec, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unknown</span>';
+			},
+			width : 100
+		}, {
+			dataIndex : 'duration',
+			header : 'Duration',
+			id : 'duration',
+			renderer : renderDuration,
+			width : 100
+		}, {
+			dataIndex : 'filesize',
+			header : 'File size',
+			id : 'filesize',
+			renderer : renderSize,
+			width : 100
+		}, {
+			dataIndex : 'creator',
+			header : 'Created by',
+			id : 'creator',
+			renderer : function(value, meta, rec, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unset</span>';
+			},
+			width : 150
+		}, {
+			dataIndex : 'config_name',
+			header : 'DVR Configuration',
+			hidden : true,
+			id : 'config_name',
+			renderer : function(value, meta, rec, row, col, store) {
+				if(!value)
+					return '<span class="tvh-grid-blue">(default profile)</span>';
+				else
+					return value;
+			},
+			width : 150
+		}, {
+			dataIndex : 'pri',
+			header : 'Priority',
+			hidden : true,
+			id : 'pri',
+			renderer : renderPri,
+			width : 150
+		}, 
+		actions ]
+	});
+	
+	function delSelected() {
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
+		else {
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
+		}
+	}
+	
+	var delBtn = new Ext.Button({
+		disabled : true,
+		handler : delSelected,
+		iconCls : 'remove',
+		text : 'Delete entry',
+		tooltip : 'Delete one or more selected rows'
+	});
+	
+	var helpBtn = new tvheadend.helpBtn('Digital Video Recorder', 'dvrlog.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ delBtn, '->', helpBtn ]
+	});
+	
+	var grid = new Ext.grid.GridPanel({
+		cm : cm,
+		enableColumnMove : false,
+		iconCls : 'tick',
+		id : 'dvrFinishedGrid',
+		plugins : [ actions, search ],
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		store : tvheadend.data.dvrFinished,
+		stripeRows : true,
+		tbar : tb,
+		title : 'Finished recordings',
+		view : new tvheadend.BufferView
+	});
+	
+	return grid;
+}
+
+/**
+ *
+ */
+tvheadend.dvrFailed = function() {
+
+	function renderTime(value) {
+		dt = new Date(value);
+		return dt.format('H:i');
+	}
+	
+	function renderDay(value) {
+		dt = new Date(value);
+		return dt.format('Y-m-d (D)');
+	}
+	
+	function renderDuration(value) {
+		var value = Math.floor(value / 60);
+
+		if(value >= 60) {
+			var min = value % 60;
+			var hrs = Math.floor(value / 60)
+			
+			return hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
+		}
+		else 
+			return value + ' min';
+	}
+
+	function renderSize(value) {
+		return parseInt(value / 1048576) + 'MiB';
+	}
+	
+	function renderPri(value) {
+		return tvheadend.data.dvrprio.getById(value).get("name");
+	}
+	
+	var search = new tvheadend.Search;
+	
+	var actions = new Ext.ux.grid.RowActions({
+		actions : { iconIndex : 'schedstate' },
+		dataIndex : 'actions',
+		hideable : false,
+		width : 45
+	});
+
+	var sm = new tvheadend.CheckboxSelectionModel;
+	
+	var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ sm, actions, {
+			dataIndex : 'status',
+			header : 'Status',
+			id : 'status',
+			width : 200
+		}, {
+			dataIndex : 'start_day',
+			header : 'Start date',
+			id : 'start_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return renderDay(rec.get('start'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'start',
+			header : 'Start time',
+			id : 'start_time',
+			renderer : renderTime,
+			width : 100
+		}, {
+			dataIndex : 'end_day',
+			header : 'End date',
+			id : 'end_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return renderDay(rec.get('end'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'end',
+			header : 'End time',
+			id : 'end_time',
+			renderer : renderTime,
+			width : 100
+		}, {
+			dataIndex : 'channel',
+			header : 'Channel',
+			id : 'channel',
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : 'Title',
+			id : 'title',
+			width : 400
+		}, {
+			dataIndex : 'episode',
+			header : 'Episode',
+			hidden : true,
+			id : 'episode',
+			renderer : function(value, meta, rec, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unknown</span>';
+			},
+			width : 100
+		}, {
+			dataIndex : 'duration',
+			header : 'Duration',
+			id : 'duration',
+			renderer : renderDuration,
+			width : 100
+		}, {
+			dataIndex : 'filesize',
+			header : 'File size',
+			hidden : true,
+			id : 'filesize',
+			renderer : renderSize,
+			width : 100
+		}, {
+			dataIndex : 'creator',
+			header : 'Created by',
+			id : 'creator',
+			renderer : function(value, meta, rec, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-gray">Unset</span>';
+			},
+			width : 150
+		}, {
+			dataIndex : 'config_name',
+			header : 'DVR Configuration',
+			id : 'config_name',
+			renderer : function(value, meta, rec, row, col, store) {
+				if(!value)
+					return '<span class="tvh-grid-blue">(default profile)</span>';
+				else
+					return value;
+			},
+			width : 150
+		}, {
+			dataIndex : 'pri',
+			header : 'Priority',
+			id : 'pri',
+			renderer : renderPri,
+			width : 150
+		} ]
+	});
+
+	function delSelected() {
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
+		else {
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
+		}
+	}
+	
+	var delBtn = new Ext.Button({
+		disabled : true,
+		handler : delSelected,
+		iconCls : 'remove',
+		text : 'Delete entry',
+		tooltip : 'Delete one or more selected rows'
+	});
+	
+	var helpBtn = new tvheadend.helpBtn('Digital Video Recorder', 'dvrlog.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ delBtn, '->', helpBtn ]
+	});
+	
+	var grid = new Ext.grid.GridPanel({
+		cm : cm,
+		enableColumnMove : false,
+		iconCls : 'error',
+		id : 'dvrFailedGrid',
+		plugins : [ actions, search ],
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		store : tvheadend.data.dvrFailed,
+		stripeRows : true,
+		tbar : tb,
+		title : 'Failed recordings',
+		view : new tvheadend.BufferView
+	});
+	
 	return grid;
 }
 
@@ -498,14 +835,7 @@ tvheadend.autoreceditor = function() {
 		if (m.reload != null) tvheadend.data.autorec.reload();
 	});
 	
-	var search = new Ext.ux.grid.Search({
-		iconCls : 'magnifier',
-		minChars : 3,
-		positionX : 'left',
-		positionY : 'top',
-		searchText : '',
-		width : 250
-	});
+	var search = new tvheadend.Search;
 	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
@@ -679,6 +1009,7 @@ tvheadend.autoreceditor = function() {
 		
 	return grid;
 }
+
 /**
  *
  */
@@ -686,22 +1017,22 @@ tvheadend.dvr = function() {
 
 	function datastoreBuilder(url) {
 		var rec = Ext.data.Record.create([
-			{ name : 'id' },
 			{ name : 'channel'},
-			{ name : 'title' },
-			{ name : 'episode' },
-			{ name : 'pri' },
-			{ name : 'description' },
 			{ name : 'chicon' },
-			{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ },
-			{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */ },
 			{ name : 'config_name' },
-			{ name : 'status' },
-			{ name : 'schedstate' },
-			{ name : 'error' },
 			{ name : 'creator' },
+			{ name : 'description' },
 			{ name : 'duration' },
+			{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */ },
+			{ name : 'episode' },
+			{ name : 'error' },
 			{ name : 'filesize' },
+			{ name : 'id' },
+			{ name : 'pri' },
+			{ name : 'schedstate' },
+			{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ },
+			{ name : 'status' },
+			{ name : 'title' },
 			{ name : 'url' }
 		]);
 				
@@ -710,10 +1041,6 @@ tvheadend.dvr = function() {
 			fields : rec,
 			id : 'id',
 			root : 'entries',
-			sortInfo : {
-				field : 'start',
-				direction : 'ASC'
-			},
 			totalProperty : 'totalCount',
 			url : url
 	    });
@@ -722,6 +1049,11 @@ tvheadend.dvr = function() {
 	tvheadend.data.dvrUpcoming = datastoreBuilder('dvrlist_upcoming');
 	tvheadend.data.dvrFinished = datastoreBuilder('dvrlist_finished');
 	tvheadend.data.dvrFailed = datastoreBuilder('dvrlist_failed');
+	
+	tvheadend.data.dvrUpcoming.sort('start', 'ASC');
+	tvheadend.data.dvrFinished.sort('end', 'DESC');
+	tvheadend.data.dvrFailed.sort('start', 'DESC');
+	
     tvheadend.dvrStores = [ tvheadend.data.dvrUpcoming,
 	                        tvheadend.data.dvrFinished,
 	                        tvheadend.data.dvrFailed ];
@@ -765,15 +1097,10 @@ tvheadend.dvr = function() {
 		enableTabScroll : true,
 		iconCls : 'drive',
 		id : 'DVRTab',
-		items : [
-			// new tvheadend.dvrschedule('dvrschedule', 'Scheduled recordings', 'clock', tvh.dvrStoreUpcoming),
-			// new tvheadend.dvrschedule('dvrfinished', 'Finished recordings', 'tick', tvh.dvrStoreFinished),
-			// new tvheadend.dvrschedule('dvrfailed', 'Failed recordings', 'error', tvh.dvrStoreFailed),
-			new tvheadend.dvrUpcoming,
-			new tvheadend.dvrFinished,
-			new tvheadend.dvrFailed,
-			new tvheadend.autoreceditor
-		],
+		items : [ new tvheadend.dvrUpcoming,
+				  new tvheadend.dvrFinished,
+				  new tvheadend.dvrFailed,
+				  new tvheadend.autoreceditor ],
 		title : 'Digital Video Recorder'
 	});
 	
@@ -804,7 +1131,7 @@ tvheadend.dvrsettings = function() {
 		value : ''
 	});
 
-	var delBtn = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Button({
 		tooltip : 'Delete named configuration',
 		iconCls : 'remove',
 		text : 'Delete configuration',
@@ -812,14 +1139,7 @@ tvheadend.dvrsettings = function() {
 		disabled : true
 	});
 
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help('DVR configuration', 'config_dvr.html');
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
-	});
+	var helpBtn = new tvheadend.helpBtn('DVR configuration', 'config_dvr.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
