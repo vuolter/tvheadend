@@ -36,7 +36,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		dataIndex : 'id',
 		width : 50,
 		renderer : function(value, meta, rec, row, col, store) {
-			url = 'stream/mux/' + value
+			var url = 'stream/mux/' + value
 			return '<a href="' + url + '">Play</a>'
 		}
 	}, {
@@ -332,7 +332,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		});
 	}
 
-	var delBtn = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Button({
 		tooltip : 'Delete one or more selected muxes',
 		iconCls : 'remove',
 		text : 'Delete',
@@ -340,7 +340,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var copyBtn = new Ext.Toolbar.Button({
+	var copyBtn = new Ext.Button({
 		tooltip : 'Copy selected multiplexes to other adapter',
 		iconCls : 'clone',
 		text : 'Copy to other adapter...',
@@ -353,7 +353,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		copyBtn.setDisabled(s.getCount() == 0);
 	});
 
-	var saveBtn = new Ext.Toolbar.Button({
+	var saveBtn = new Ext.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
 		text : 'Save changes',
@@ -361,7 +361,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var rejectBtn = new Ext.Toolbar.Button({
+	var rejectBtn = new Ext.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
 		text : 'Revert changes',
@@ -461,7 +461,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			dataIndex : 'id',
 			width : 50,
 			renderer : function(value, meta, rec, row, col, store) {
-				url = 'stream/service/' + value
+				var url = 'stream/service/' + value
 				return '<a href="' + url + '">Play</a>'
 			}
 		},
@@ -678,7 +678,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		});
 	}
 
-	var saveBtn = new Ext.Toolbar.Button({
+	var saveBtn = new Ext.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
 		text : 'Save changes',
@@ -686,7 +686,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var rejectBtn = new Ext.Toolbar.Button({
+	var rejectBtn = new Ext.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
 		text : 'Revert changes',
@@ -696,7 +696,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var mapBtn = new Ext.Toolbar.Button({
+	var mapBtn = new Ext.Button({
 		tooltip : 'Map selected services to channels based on their name. Does nothing if selected item is already mapped.',
 		iconCls : 'clone',
 		text : "Map selected",

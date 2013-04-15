@@ -107,7 +107,7 @@ tvheadend.chconf = function() {
 	var actions = new Ext.ux.grid.RowActions({
 		actions : [ {
 			cb : function(grid, rec, action, row, col) {
-				url = 'playlist/channelid/' + rec.get('chid');
+				var url = 'playlist/channelid/' + rec.get('chid');
 				tvheadend.VLC(url);
 			},
 			iconCls : 'eye',
@@ -309,15 +309,15 @@ tvheadend.chconf = function() {
 		});
 	}
 
-  var addBtn = new Ext.Toolbar.Button({
-    disabled : !tvheadend.accessupdate.admin,
-	tooltop : 'Add a new channel',
-    iconCls : 'add',
-    text    : 'Add channel',
-    handler : addRecord
-  });
+	var addBtn = new Ext.Button({
+		disabled : !tvheadend.accessupdate.admin,
+		tooltip : 'Add a new channel',
+		iconCls : 'add',
+		text    : 'Add channel',
+		handler : addRecord
+	});
 
-	var delBtn = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Button({
 		tooltip : 'Delete one or more selected channels',
 		iconCls : 'remove',
 		text : 'Delete',
@@ -325,7 +325,7 @@ tvheadend.chconf = function() {
 		disabled : true
 	});
 
-	var saveBtn = new Ext.Toolbar.Button({
+	var saveBtn = new Ext.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
 		text : 'Save changes',
@@ -333,7 +333,7 @@ tvheadend.chconf = function() {
 		disabled : true
 	});
 
-	var rejectBtn = new Ext.Toolbar.Button({
+	var rejectBtn = new Ext.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
 		text : 'Revert changes',

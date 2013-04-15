@@ -247,7 +247,7 @@ tvheadend.v4l_services = function(adapterId) {
 		});
 	}
 
-	var delBtn = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
 		text : 'Delete',
@@ -255,7 +255,7 @@ tvheadend.v4l_services = function(adapterId) {
 		disabled : true
 	});
 
-	var saveBtn = new Ext.Toolbar.Button({
+	var saveBtn = new Ext.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
 		text : 'Save changes',
@@ -263,7 +263,7 @@ tvheadend.v4l_services = function(adapterId) {
 		disabled : true
 	});
 
-	var rejectBtn = new Ext.Toolbar.Button({
+	var rejectBtn = new Ext.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
 		text : 'Revert changes',
