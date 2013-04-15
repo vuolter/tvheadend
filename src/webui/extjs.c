@@ -116,6 +116,9 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
    * Load extjs extensions
    */
   extjs_load(hq, "static/app/extensions.js");
+  extjs_load(hq, "static/extensions/BufferView.js");
+  extjs_load(hq, "static/extensions/CheckColumn.js");
+  extjs_load(hq, "static/extensions/LocalStorage.js");
   extjs_load(hq, "static/extensions/gridsearch/Ext.ux.grid.Search.js");
   extjs_load(hq, "static/extensions/livegrid/livegrid-all.js");
   extjs_load(hq, "static/extensions/lovcombo/Ext.ux.form.LovCombo.js");
