@@ -55,17 +55,17 @@ tvheadend.help = function(title, pagename) {
 			var content = new Ext.Panel({
 				autoScroll : true,
 				border : false,
-				layout : 'fit',
-				html : result.responseText
+				html : result.responseText,
+				layout : 'fit'
 			});
 
 			var win = new Ext.Window({
-				title : 'Help for ' + '<span class="x-content-highlight">' + title + '</span>',
-				layout : 'fit',
-				width : 900,
-				height : 400,
 				constrainHeader : true,
-				items : content
+				height : 400,
+				items : content,
+				layout : 'fit',
+				title : 'Help for ' + '<span class="x-content-highlight">' + title + '</span>',
+				width : 900,
 			});
 			
 			win.show();
