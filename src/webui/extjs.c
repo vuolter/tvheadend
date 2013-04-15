@@ -104,6 +104,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/multiselect/resources/css/multiselect.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/spinner/resources/css/Spinner.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\">\n",
                      tvheadend_webui_debug ? "-debug" : "",
                      tvheadend_webui_debug ? "-debug" : "",
@@ -122,6 +123,8 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   extjs_load(hq, "static/extensions/multiselect/multiselect.js");
   extjs_load(hq, "static/extensions/progresscolumn/Ext.ux.grid.ProgressColumn.js");
   extjs_load(hq, "static/extensions/rowactions/Ext.ux.grid.RowActions.js");
+  extjs_load(hq, "static/extensions/spinner/Spinner.js");
+  extjs_load(hq, "static/extensions/spinner/SpinnerStrategy.js");
 
   /**
    * Create a namespace for our app
