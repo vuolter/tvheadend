@@ -1,6 +1,6 @@
 tvheadend.capmteditor = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
-		return new tvheadend.dummy('Capmt Connections','key');
+		return new tvheadend.dummyPanel('Capmt Connections','key');
 
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',

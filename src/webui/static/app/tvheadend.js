@@ -24,7 +24,7 @@ tvheadend.CheckboxSelectionModel = function() {
 /**
  * Dummy panel
  */
-tvheadend.dummy = function(title, icon) {
+tvheadend.dummyPanel = function(title, icon) {
 	return new Ext.Panel({
 		title : title,
 		iconCls : icon,
@@ -35,22 +35,21 @@ tvheadend.dummy = function(title, icon) {
 }
 
 /**
- * Log writer
+ * Help button & popup
  */
-tvheadend.log = function(msg, style) {
-	s = style ? '<div style="' + style + '">' : '<div>'
-
-	sl = Ext.get('systemlog');
-	e = Ext.DomHelper.append(sl, s + '<pre>' + msg + '</pre></div>');
-	e.scrollIntoView('systemlog', false);
+tvheadend.helpBtn = function(title, pagename, tooltip) {
+	return new Ext.Button({
+		handler : function() {
+			new tvheadend.help(title, pagename);
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : tooltip ? tooltip : 'Show help page'
+	});
 }
 
-/**
- * Displays a help popup window
- */
 tvheadend.help = function(title, pagename) {
 	Ext.Ajax.request({
-		url : 'docs/' + pagename,
 		success : function(result, request) {
 
 			var content = new Ext.Panel({
@@ -66,12 +65,24 @@ tvheadend.help = function(title, pagename) {
 				width : 900,
 				height : 400,
 				constrainHeader : true,
-				items : [ content ]
+				items : content
 			});
+			
 			win.show();
-
-		}
+		},
+		url : 'docs/' + pagename
 	});
+}
+
+/**
+ * Log writer
+ */
+tvheadend.log = function(msg, style) {
+	s = style ? '<div style="' + style + '">' : '<div>'
+
+	sl = Ext.get('systemlog');
+	e = Ext.DomHelper.append(sl, s + '<pre>' + msg + '</pre></div>');
+	e.scrollIntoView('systemlog', false);
 }
 
 /**
@@ -319,12 +330,12 @@ tvheadend.app = function() {
 			tvheadend.dvrsettingsPanel = new tvheadend.dvrsettings;
 		}
 		else
-			tvheadend.dvrPanel = tvheadend.dvrsettingsPanel = new tvheadend.dummy('Digital Video Recorder','drive');
+			tvheadend.dvrPanel = tvheadend.dvrsettingsPanel = new tvheadend.dummyPanel('Digital Video Recorder','drive');
 		
 		if(tvheadend.accessupdate.streaming)
 			tvheadend.channelsPanel = new tvheadend.chconf;
 		else
-			tvheadend.channelsPanel = new tvheadend.dummy('Channels','tv');
+			tvheadend.channelsPanel = new tvheadend.dummyPanel('Channels','tv');
 		
 		if(tvheadend.accessupdate.admin) {			
 			tvheadend.tvhlogPanel = new tvheadend.tvhlog;
@@ -353,8 +364,8 @@ tvheadend.app = function() {
 			tvheadend.statusPanel = new tvheadend.status;
 		}
 		else {
-			tvheadend.configPanel = new tvheadend.dummy('Configuration','wrench-blue');
-			tvheadend.statusPanel = new tvheadend.dummy('Status','bulb');
+			tvheadend.configPanel = new tvheadend.dummyPanel('Configuration','wrench-blue');
+			tvheadend.statusPanel = new tvheadend.dummyPanel('Status','bulb');
 		}
 	
 		tvheadend.aboutPanel = new Ext.Panel({

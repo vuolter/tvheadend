@@ -1,6 +1,6 @@
 tvheadend.cwceditor = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
-		return new tvheadend.dummy('Code Word Client','key');
+		return new tvheadend.dummyPanel('Code Word Client','key');
 	
 	var search = new Ext.ux.grid.Search({
 		iconCls : 'magnifier',

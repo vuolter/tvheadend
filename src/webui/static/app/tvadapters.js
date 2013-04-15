@@ -25,7 +25,7 @@ tvheadend.comet.on('tvAdapter', function(m) {
 
 tvheadend.tvadapters = function() {
 	if(tvheadend.capabilities.indexOf('linuxdvb') == -1 && tvheadend.capabilities.indexOf('v4l') == -1)
-		return new tvheadend.dummy('TV Adapters','hardware');
+		return new tvheadend.dummyPanel('TV Adapters','hardware');
 	
 	tvheadend.data.adapters.load();
 
@@ -41,14 +41,7 @@ tvheadend.tvadapters = function() {
 		emptyText : 'Select TV adapter...'
 	});
 	
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help('DVB', 'config_dvb.html');
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
-	});
+	var helpBtn = new tvheadend.helpBtn('DVB', 'config_dvb.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
@@ -60,7 +53,7 @@ tvheadend.tvadapters = function() {
 		iconCls : 'hardware',
 		layout : 'fit',
 		tbar : tb,
-		items : [ new tvheadend.dummy ]
+		items : [ new tvheadend.dummyPanel ]
 	});
 
 	adapterSelection.on('select', function(c, r) {

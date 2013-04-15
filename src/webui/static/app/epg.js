@@ -453,14 +453,7 @@ tvheadend.epg = function() {
 		}
 	});
 
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help('Electronic Program Guide', 'epg.html');
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
-	});
+	var helpBtn = new tvheadend.helpBtn('Electronic Program Guide', 'epg.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

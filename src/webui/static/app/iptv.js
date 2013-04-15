@@ -296,14 +296,7 @@ tvheadend.iptv = function(adapterId) {
 		disabled : true
 	});
 
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help('IPTV', 'config_iptv.html');
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
-	});
+	var helpBtn = new tvheadend.helpBtn('IPTV', 'config_iptv.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

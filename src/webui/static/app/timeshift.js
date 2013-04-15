@@ -1,6 +1,6 @@
 tvheadend.timeshift = function() {
   if(tvheadend.capabilities.indexOf('timeshift') == -1)
-    return new tvheadend.dummy('Timeshift','clock');
+    return new tvheadend.dummyPanel('Timeshift','clock');
 	
   /* ****************************************************************
    * Data
@@ -89,14 +89,7 @@ tvheadend.timeshift = function() {
     handler : saveChanges
   });
 
-  var helpBtn = new Ext.Button({
-    handler : function() {
-      new tvheadend.help('Timeshift Configuration', 'config_timeshift.html');
-    },
-	iconCls : 'help',
-	text : 'Help',
-	tooltip : 'Show help page'
-  });
+	var helpBtn = new tvheadend.helpBtn('Timeshift Configuration', 'config_timeshift.html');
   
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

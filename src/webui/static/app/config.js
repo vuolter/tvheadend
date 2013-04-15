@@ -176,14 +176,7 @@ tvheadend.miscconf = function() {
 		handler : saveChanges
 	});
 
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help('General Configuration', 'config_misc.html');
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
-	});
+	var helpBtn = new tvheadend.helpBtn('General Configuration', 'config_misc.html');
 
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

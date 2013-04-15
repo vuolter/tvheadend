@@ -149,14 +149,7 @@ tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
 		}
 	});
 
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help(title, helpContent);
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
-	});
+	var helpBtn = new tvheadend.helpBtn(title, helpContent);
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

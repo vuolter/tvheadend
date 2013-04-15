@@ -343,14 +343,7 @@ tvheadend.chconf = function() {
 		disabled : true
 	});
 
-	var helpBtn = new Ext.Button({
-		handler : function() {
-			new tvheadend.help('Channels', 'config_channels.html');
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : 'Show help page'
-	});
+	var helpBtn = new tvheadend.helpBtn('Channels', 'config_channels.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
