@@ -98,7 +98,9 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext/ext-base%s.js\"></script>\n"
                      "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/bubble/resources/css/bubble.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/gridsearch/resources/css/gridsearch.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/grouptab/resources/css/GroupTab.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/livegrid/resources/css/ext-ux-livegrid.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/lovcombo/resources/css/Ext.ux.form.LovCombo.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/multiselect/resources/css/multiselect.css\">\n"
@@ -119,7 +121,10 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   extjs_load(hq, "static/extensions/BufferView.js");
   extjs_load(hq, "static/extensions/CheckColumn.js");
   extjs_load(hq, "static/extensions/LocalStorage.js");
+  extjs_load(hq, "static/extensions/bubble/BubblePanel.js");
   extjs_load(hq, "static/extensions/gridsearch/Ext.ux.grid.Search.js");
+  extjs_load(hq, "static/extensions/grouptab/GroupTab.js");
+  extjs_load(hq, "static/extensions/grouptab/GroupTabPanel.js");
   extjs_load(hq, "static/extensions/livegrid/livegrid-all.js");
   extjs_load(hq, "static/extensions/lovcombo/Ext.ux.form.LovCombo.js");
   extjs_load(hq, "static/extensions/multiselect/ddview.js");
