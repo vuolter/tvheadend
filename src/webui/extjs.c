@@ -92,26 +92,25 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   htsbuf_qprintf(hq, "<html>\n");
   htsbuf_qprintf(hq, "<head>\n");
 
-  // Issue #1504 - IE9 temporary fix
-  htsbuf_qprintf(hq, "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=8\">\n");
-
-  htsbuf_qprintf(hq, "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/bubble/resources/css/bubble.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/gridsearch/resources/css/gridsearch.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/grouptab/resources/css/GroupTab.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/livegrid/resources/css/ext-ux-livegrid.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/lovcombo/resources/css/Ext.ux.form.LovCombo.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/multiselect/resources/css/multiselect.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/spinner/resources/css/Spinner.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\">\n",
-                     tvheadend_webui_debug ? ""       : "-min");
-
-  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext-base%s.js\"></script>\n"
-                     "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n",
-                     tvheadend_webui_debug ? "-debug" : "",
+  htsbuf_qprintf(hq, "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all%s.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/bubble/resources/css/bubble.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/gridsearch/resources/css/gridsearch.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/grouptab/resources/css/GroupTab.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/livegrid/resources/css/ext-ux-livegrid.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/lovcombo/resources/css/Ext.ux.form.LovCombo.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/multiselect/resources/css/multiselect.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/rowactions/resources/css/Ext.ux.grid.RowActions.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/spinner/resources/css/Spinner.css\" />\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\" />\n",
                      tvheadend_webui_debug ? "-debug" : "");
+  
+  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\" />\n",
+                     tvheadend_webui_debug ? "-debug" : "");
+  
+  //extjs 3 compatibility layer
+  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext3-core-compat.js\" />\n"
+                     "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext3-compat.js\" />\n");
   
   extjs_exec(hq, "Ext.BLANK_IMAGE_URL = " "'"EXTJSPATH"/resources/images/default/s.png';");
 
