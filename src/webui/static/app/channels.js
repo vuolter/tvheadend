@@ -122,105 +122,100 @@ tvheadend.chconf = function() {
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
-		columns : [
-			sm,
-			{
-				header : 'Number',
-				dataIndex : 'number',
-				sortable : true,
-				width : 65,
-				renderer : function(value, meta, rec, row, col, store) {
-					return !value ? '<span class="tvh-grid-red">Unset</span>'
-								  : value;
-				},
-				editor : new Ext.form.NumberField({
-					minValue : 0,
-					maxValue : 9999
-				}),
-				hideable : false
-			}, {
-				header : 'Name',
-				dataIndex : 'name',
-				width : 200,
-				editor : new Ext.form.TextField({ allowBlank : false }),
-				hideable : false
-			}, {
-				header : 'Tags',
-				dataIndex : 'tags',
-				width : 250,
-				renderer : function(value, meta, rec, row, col, store) {
-					if(typeof value === 'undefined' || value.length < 2)
-						return '<span class="tvh-grid-blue">Unset</span>';
-					else {
-						var ret = [];
-						var tags = value.split(',');
-						for(var i in tags) {
-							tag = tvheadend.data.channelTags.getById(tags[i]);
-							if(typeof tag !== 'undefined')
-								ret.push(tag.data.name);
-						}
-						return ret.join(', ');
-					}
-				},
-				editor : new Ext.ux.form.LovCombo({
-					store : tvheadend.data.channelTags,
-					valueField : 'identifier',
-					displayField : 'name'
-				})
-			}, {
-				header : 'EPG Grab source',
-				dataIndex : 'epggrabsrc',
-				width : 150,
-				renderer : function(value, meta, rec, row, col, store) {
-					return value ? value
-						: '<span class="tvh-grid-blue">Unknown</span>';
-				},
-				editor : new Ext.ux.form.LovCombo({
-					loadingText : 'Loading...',
-					store : tvheadend.data.epggrabChannels,
-					allowBlank : true,
-					typeAhead : true,
-					minChars : 2,
-					lazyRender : true,
-					triggerAction : 'all',
-					mode : 'remote',
-					displayField : 'mod-name',
-					valueField : 'mod-id'
-				})
-			}, {
-				header : 'Icon (URL)',
-				dataIndex : 'ch_icon',
-				width : 200,
-				editor : new Ext.form.TextField,
-				hidden : true,
-				sortable : false
-			}, {
-				header : 'DVR Pre-Start',
-				dataIndex : 'epg_pre_start',
-				width : 85,
-				renderer : function(value, meta, rec, row, col, store) {
-					return !value ? '<span class="tvh-grid-blue">Unset</span>'
-						: value + ' min';
-				},
-				editor : new Ext.form.NumberField({
-					minValue : 0,
-					maxValue : 1440
-				})
-			}, {
-				header : 'DVR Post-End',
-				dataIndex : 'epg_post_end',
-				width : 85,
-				renderer : function(value, meta, rec, row, col, store) {
-					return !value ? '<span class="tvh-grid-blue">Unset</span>'
-						: value + ' min';
-				},
-				editor : new Ext.form.NumberField({
-					minValue : 0,
-					maxValue : 1440
-				})
+		columns : [ sm, {
+			dataIndex : 'number',
+			editor : new Ext.form.NumberField({
+				maxValue : 9999,
+				minValue : 0
+			}),
+			header : 'Number',
+			hideable : false,
+			renderer : function(value, meta, rec, row, col, store) {
+				return !value ? '<span class="tvh-grid-red">Unset</span>'
+							  : value;
 			},
-			actions
-		]
+			width : 65
+		}, {
+			dataIndex : 'name',
+			editor : new Ext.form.TextField({ allowBlank : false }),
+			header : 'Name',
+			hideable : false,
+			width : 200
+		}, {
+			dataIndex : 'tags',
+			editor : new Ext.ux.form.LovCombo({
+				displayField : 'name',
+				store : tvheadend.data.channelTags,
+				valueField : 'identifier'
+			}),
+			header : 'Tags',
+			renderer : function(value, meta, rec, row, col, store) {
+				if(typeof value === 'undefined' || value.length < 2)
+					return '<span class="tvh-grid-blue">Unset</span>';
+				else {
+					var ret = [];
+					var tags = value.split(',');
+					for(var i in tags) {
+						tag = tvheadend.data.channelTags.getById(tags[i]);
+						if(typeof tag !== 'undefined')
+							ret.push(tag.data.name);
+					}
+					return ret.join(', ');
+				}
+			},
+			width : 250
+		}, {
+			dataIndex : 'epggrabsrc',
+			editor : new Ext.ux.form.LovCombo({
+				allowBlank : true,
+				displayField : 'mod-name',
+				lazyRender : true,
+				loadingText : 'Loading...',
+				minChars : 2,
+				mode : 'remote',
+				store : tvheadend.data.epggrabChannels,
+				triggerAction : 'all',
+				typeAhead : true,
+				valueField : 'mod-id'
+			}),
+			header : 'EPG Grab source',
+			renderer : function(value, meta, rec, row, col, store) {
+				return value ? value
+					: '<span class="tvh-grid-blue">Unknown</span>';
+			},
+			width : 150
+		}, {
+			dataIndex : 'ch_icon',
+			editor : new Ext.form.TextField,
+			header : 'Icon (URL)',
+			hidden : true,
+			width : 200
+		}, {
+			dataIndex : 'epg_pre_start',
+			editor : new Ext.form.NumberField({
+				maxValue : 1440,
+				minValue : 0
+			}),
+			header : 'DVR Pre-Start',
+			renderer : function(value, meta, rec, row, col, store) {
+				return !value ? '<span class="tvh-grid-blue">Unset</span>'
+					: value + ' min';
+			},
+			width : 85
+		}, {
+			dataIndex : 'epg_post_end',
+			editor : new Ext.form.NumberField({
+				maxValue : 1440,
+				minValue : 0
+			}),
+			header : 'DVR Post-End',
+			renderer : function(value, meta, rec, row, col, store) {
+				return !value ? '<span class="tvh-grid-blue">Unset</span>'
+					: value + ' min';
+			},
+			width : 85
+		},
+		actions ]
 	});
 
 	function delSelected() {
