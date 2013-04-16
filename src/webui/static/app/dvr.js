@@ -1101,7 +1101,7 @@ tvheadend.dvr = function() {
 				  new tvheadend.dvrFinished,
 				  new tvheadend.dvrFailed,
 				  new tvheadend.autoreceditor ],
-		title : 'Digital Video Recorder'
+		title : 'DVR'
 	});
 	
 	return panel;
@@ -1153,7 +1153,7 @@ tvheadend.dvrsettings = function() {
 	
 	var panel = new Ext.form.FormPanel({
 		autoScroll : true,
-		title : 'Digital Video Recorder',
+		title : 'DVR Settings',
 		iconCls : 'drive',
 		bodyStyle : 'padding:15px',
 		anchor : '100% 50%',

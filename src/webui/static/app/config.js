@@ -188,7 +188,7 @@ tvheadend.miscconf = function() {
 		autoScroll : true,
 		bodyStyle : 'padding:15px',
 		defaultType : 'textfield',
-		iconCls : 'wrench-orange',
+		iconCls : 'wrench-blue',
 		items : [ language, dvbscanPath, imagecachePanel, tvhtimePanel, theme ],
 		labelAlign : 'left',
 		labelWidth : 200,

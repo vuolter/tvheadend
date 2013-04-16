@@ -36,14 +36,14 @@ tvheadend.cometPoller = function() {
 				parse_comet_response(result.responseText);
 
 				if (failures > 1) {
-					tvheadend.log('Reconnected to Tvheadend', 'font-weight: bold; color: #080');
+					tvheadend.logW('Reconnected to Tvheadend', 'font-weight: bold; color: #080');
 				}
 				failures = 0;
 			},
 			failure : function(result, request) {
 				cometRequest.delay(failures ? 1000 : 1);
 				if (failures == 1) {
-					tvheadend.log('There seems to be a problem with the '
+					tvheadend.logW('There seems to be a problem with the '
 						+ 'live update feed from Tvheadend. '
 						+ 'Trying to reconnect...',
 						'font-weight: bold; color: #f00');

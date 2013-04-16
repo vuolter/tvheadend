@@ -75,17 +75,6 @@ tvheadend.help = function(title, pagename) {
 }
 
 /**
- * Log writer
- */
-tvheadend.log = function(msg, style) {
-	s = style ? '<div style="' + style + '">' : '<div>'
-
-	sl = Ext.get('systemlog');
-	e = Ext.DomHelper.append(sl, s + '<pre>' + msg + '</pre></div>');
-	e.scrollIntoView('systemlog', false);
-}
-
-/**
  * Search
  */
 tvheadend.Search = function() {
@@ -321,7 +310,8 @@ tvheadend.app = function() {
 		
 		Ext.TaskMgr.start({
 			run : function() {
-				tvheadend.header.setTitle('Welcome ' + '<span class="x-content-highlight">' + tvheadend.accessupdate.username + '</span>' + '<div style="float : right">' + new Date().format('l j F Y , H:i (P') + ' UTC) </div>');
+				tvheadend.header.setTitle('Welcome ' + '<span class="x-content-highlight">' + tvheadend.accessupdate.username + '</span>' + 
+										  '<div style="float : right">' + new Date().format('l j F Y , H:i (P') + ' UTC) </div>');
 			},
 			interval : 1000
 		});
@@ -344,15 +334,14 @@ tvheadend.app = function() {
 			tvheadend.dvrsettingsPanel = new tvheadend.dvrsettings;
 		}
 		else
-			tvheadend.dvrPanel = tvheadend.dvrsettingsPanel = new tvheadend.dummyPanel('Digital Video Recorder','drive');
+			tvheadend.dvrPanel = tvheadend.dvrsettingsPanel = new tvheadend.dummyPanel('DVR','drive');
 		
 		if(tvheadend.accessupdate.streaming)
 			tvheadend.channelsPanel = new tvheadend.chconf;
 		else
 			tvheadend.channelsPanel = new tvheadend.dummyPanel('Channels','tv');
 		
-		if(tvheadend.accessupdate.admin) {			
-			tvheadend.tvhlogPanel = new tvheadend.tvhlog;
+		if(tvheadend.accessupdate.admin) {
 			tvheadend.miscconfPanel = new tvheadend.miscconf;
 			tvheadend.tvadaptersPanel = new tvheadend.tvadapters;
 			tvheadend.timeshiftPanel = new tvheadend.timeshift;
@@ -362,81 +351,46 @@ tvheadend.app = function() {
 			tvheadend.aclPanel = new tvheadend.acleditor;
 			tvheadend.cwcPanel = new tvheadend.cwceditor;
 			tvheadend.capmtPanel = new tvheadend.capmteditor;
-			
-			tvheadend.configPanel = new Ext.TabPanel({
-				activeTab : 0,
-				defaults : { border : false },
-				enableTabScroll : true,
-				iconCls : 'wrench-blue',
-				id : 'configTab',
-				items : [ tvheadend.tvhlogPanel, tvheadend.miscconfPanel, tvheadend.tvadaptersPanel, tvheadend.timeshiftPanel,
-						  tvheadend.epggrabPanel, tvheadend.dvrsettingsPanel, tvheadend.ctagPanel,
-						  tvheadend.iptvPanel, tvheadend.aclPanel, tvheadend.cwcPanel, tvheadend.capmtPanel ],
-				title : 'Configuration'
-			});
-			
+			tvheadend.logsettingsPanel = new tvheadend.logsettings;
 			tvheadend.statusPanel = new tvheadend.status;
 		}
 		else {
 			tvheadend.configPanel = new tvheadend.dummyPanel('Configuration','wrench-blue');
 			tvheadend.statusPanel = new tvheadend.dummyPanel('Status','bulb');
 		}
-	
+		
+		tvheadend.logPanel = new tvheadend.log;
+		
 		tvheadend.aboutPanel = new Ext.Panel({
-			autoScroll : true,
-			border : false,
-			layout : 'fit',
-			title : 'About',
-			iconCls : 'info',
 			autoLoad : 'about.html'
+			iconCls : 'info',
+			layout : 'fit',
+			title : 'About'
 		});
 		
-		tvheadend.tabsPanel = new Ext.TabPanel({
-			activeTab : 0,
-			defaults : { border : false },
-			enableTabScroll : true,
-			id : 'rootTab',
-			items : [ tvheadend.epgPanel, tvheadend.dvrPanel, tvheadend.channelsPanel,
-					  tvheadend.configPanel, tvheadend.statusPanel, tvheadend.aboutPanel ],
-			region : 'center'
-		});
-		
-		tvheadend.logPanel = new Ext.Panel({
-			region : 'south',
-			contentEl : 'systemlog',
-			autoScroll : true,
-			collapsible : true,
-			collapsed : true,
-			split : true,
-			height : 150,
-			minSize : 100,
-			maxSize : 630,
-			title : 'System log',
-			iconCls : 'cog',
-			margins : '0 0 0 0',
-			tools : [ {
-				id : 'gear',
-				qtip : 'Enable debug output',
-				handler : function(event, toolEl, panel){
-					Ext.Ajax.request({
-						url : 'comet/debug',
-						params : { boxid : tvheadend.boxid }
-					});
-				}
-			} ]
+		tvheadend.tabsPanel = new Ext.ux.GroupTabPanel({
+			activeGroup : 0,
+			defaults : { defaults : { style : 'padding: 10px;', border : true, bodyBorder : false } },
+			items : [
+				{ items : [ tvheadend.epgPanel, tvheadend.epggrabPanel ] },
+				{ items : [ tvheadend.dvrPanel, tvheadend.dvrsettingsPanel, tvheadend.timeshiftPanel ] },
+				{ items : [ tvheadend.channelsPanel, tvheadend.ctagPanel ] },
+				{ items : [ tvheadend.tvadaptersPanel, tvheadend.iptvPanel ] },
+				{ items : [ tvheadend.miscconfPanel, tvheadend.aclPanel ] },
+				{ items : [ tvheadend.cwcPanel, tvheadend.capmtPanel ] },
+				{ items : [ tvheadend.statusPanel ] },
+				{ items : [ tvheadend.logPanel, tvheadend.logsettingsPanel ] },
+				{ items : [ tvheadend.aboutPanel ] }
+			],
+			region : 'center',
+			tabWidth : 150
 		});
 		
 		tvheadend.viewport = new Ext.Viewport({
 			region : 'center',
 			layout : 'border',
 			bufferResize : 150,
-			items : [ tvheadend.header, 
-					  tvheadend.tabsPanel,
-					  tvheadend.logPanel ]
-		});
-			
-		tvheadend.comet.on('logmessage', function(m) {
-			tvheadend.log(m.logtxt);
+			items : [ tvheadend.header, tvheadend.tabsPanel ]
 		});
 	}
 	
@@ -449,13 +403,10 @@ tvheadend.app = function() {
 		return 'rtsp : //' + tvheadend.serverIp + ' : ' + tvheadend.serverPort + '/';
 	}
 */
-	// public space
 	return {
 		
-		// public methods
 		init : function() {
 			
-			//load a extjs theme
 			new Ext.data.JsonStore({
 				url : 'config',
 				root : 'config',

@@ -1,4 +1,57 @@
-tvheadend.tvhlog = function() {
+/**
+ * Log writer
+ */
+tvheadend.logW = function(msg, style) {
+	s = style ? '<div style="' + style + '">' : '<div>'
+
+	sl = Ext.get('systemlog');
+	e = Ext.DomHelper.append(sl, s + '<pre>' + msg + '</pre></div>');
+	e.scrollIntoView('systemlog', false);
+}
+
+/**
+ * Log panel
+ */
+tvheadend.log = function() {
+	
+	var debugBtn = new Ext.Button({
+		handler : function(){
+			Ext.Ajax.request({
+				params : { boxid : tvheadend.boxid },
+				url : 'comet/debug'
+			});
+		},
+		iconCls : 'cog',
+		text : 'Debug log',
+		tooltip : 'Enable/disable debug output'		
+	});
+	
+	var helpBtn = new tvheadend.helpBtn('System log', 'log.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ debugBtn, '->', helpBtn ]
+	});
+	
+	var panel = new Ext.Panel({
+		autoScroll : true,
+		contentEl : 'systemlog',
+		iconCls : 'cog',
+		title : 'System log',
+		tbar : tb
+	});
+	
+	tvheadend.comet.on('logmessage', function(m) {
+		tvheadend.logW(m.logtxt);
+	});
+		
+	return panel;
+}
+
+/**
+ * Log settings panel
+ */
+tvheadend.logsettings = function() {
 	/*
 	 * Basic Config
 	 */

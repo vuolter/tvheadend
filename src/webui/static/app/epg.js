@@ -498,7 +498,7 @@ tvheadend.epg = function() {
 		stateId : this.id,
 		stripeRows : true,
 		tbar : tb,
-		title : 'Electronic Program Guide',
+		title : 'EPG',
 		view : view
 	});
 
