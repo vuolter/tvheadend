@@ -243,7 +243,7 @@ tvheadend.adapters = function() {
 
 tvheadend.panel.status = function() {
 	
-	var helpBtn = new tvheadend.helpBtn('Status', 'status.html');
+	var helpBtn = new tvheadend.button.help('Status', 'status.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

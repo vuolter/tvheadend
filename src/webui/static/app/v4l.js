@@ -112,7 +112,7 @@ tvheadend.v4l_services = function(adapterId) {
 		width : 45
 	});
 
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,

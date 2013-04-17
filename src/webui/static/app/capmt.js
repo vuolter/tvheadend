@@ -24,7 +24,7 @@ tvheadend.panel.capmt = function() {
 		width : 80
 	});
 	
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {

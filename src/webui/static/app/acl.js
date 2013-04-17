@@ -59,7 +59,7 @@ tvheadend.panel.acl = function() {
 		width : 120
 	});
 
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {

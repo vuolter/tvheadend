@@ -330,7 +330,7 @@ tvheadend.panel.epggrab = function() {
 		handler : saveChanges
 	});
 
-	var helpBtn = new tvheadend.helpBtn('EPG Grab Configuration', 'config_epggrab.html');
+	var helpBtn = new tvheadend.button.help('EPG Grab Configuration', 'config_epggrab.html');
 
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

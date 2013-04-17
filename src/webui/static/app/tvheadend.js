@@ -15,7 +15,7 @@ tvheadend.BufferView = function() {
 /**
  * CheckboxSelectionModel
  */
-tvheadend.CheckboxSelectionModel = function() {
+tvheadend.selection.CheckboxModel = function() {
 	return new Ext.grid.CheckboxSelectionModel({ 
 		width : 21
 	});
@@ -37,7 +37,7 @@ tvheadend.panel.dummy = function(title, icon) {
 /**
  * Help button & popup
  */
-tvheadend.helpBtn = function(title, pagename, tooltip) {
+tvheadend.button.help = function(title, pagename, tooltip) {
 	return new Ext.Button({
 		handler : function() {
 			new tvheadend.help(title, pagename);

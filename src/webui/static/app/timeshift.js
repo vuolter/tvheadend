@@ -89,7 +89,7 @@ tvheadend.panel.timeshift = function() {
     handler : saveChanges
   });
 
-	var helpBtn = new tvheadend.helpBtn('Timeshift Configuration', 'config_timeshift.html');
+	var helpBtn = new tvheadend.button.help('Timeshift Configuration', 'config_timeshift.html');
   
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

@@ -133,7 +133,7 @@ tvheadend.panel.channels = function() {
 		width : 45
 	});
 	
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -328,7 +328,7 @@ tvheadend.panel.channels = function() {
 		disabled : true
 	});
 
-	var helpBtn = new tvheadend.helpBtn('Channels', 'config_channels.html');
+	var helpBtn = new tvheadend.button.help('Channels', 'config_channels.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

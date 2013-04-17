@@ -26,7 +26,7 @@ tvheadend.panel.log = function() {
 		tooltip : 'Enable/disable debug output'		
 	});
 	
-	var helpBtn = new tvheadend.helpBtn('System log', 'log.html');
+	var helpBtn = new tvheadend.button.help('System log', 'log.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

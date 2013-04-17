@@ -41,7 +41,7 @@ tvheadend.panel.adapters = function() {
 		emptyText : 'Select TV adapter...'
 	});
 	
-	var helpBtn = new tvheadend.helpBtn('DVB', 'config_dvb.html');
+	var helpBtn = new tvheadend.button.help('DVB', 'config_dvb.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

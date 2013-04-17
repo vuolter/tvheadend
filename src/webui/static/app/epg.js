@@ -448,7 +448,7 @@ tvheadend.panel.epg = function() {
 		}
 	});
 
-	var helpBtn = new tvheadend.helpBtn('Electronic Program Guide', 'epg.html');
+	var helpBtn = new tvheadend.button.help('Electronic Program Guide', 'epg.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

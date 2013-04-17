@@ -67,7 +67,7 @@ tvheadend.dvrUpcoming = function() {
 		width : 45
 	});
 
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -299,7 +299,7 @@ tvheadend.dvrUpcoming = function() {
 		tooltip : 'Delete one or more selected rows'
 	});
 	
-	var helpBtn = new tvheadend.helpBtn('Digital Video Recorder', 'dvrlog.html');
+	var helpBtn = new tvheadend.button.help('Digital Video Recorder', 'dvrlog.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
@@ -354,7 +354,7 @@ tvheadend.dvrFinished = function() {
 		width : 45
 	});
 
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -475,7 +475,7 @@ tvheadend.dvrFinished = function() {
 		tooltip : 'Delete one or more selected rows'
 	});
 	
-	var helpBtn = new tvheadend.helpBtn('Digital Video Recorder', 'dvrlog.html');
+	var helpBtn = new tvheadend.button.help('Digital Video Recorder', 'dvrlog.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
@@ -515,7 +515,7 @@ tvheadend.dvrFailed = function() {
 		width : 45
 	});
 
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -634,7 +634,7 @@ tvheadend.dvrFailed = function() {
 		tooltip : 'Delete one or more selected rows'
 	});
 	
-	var helpBtn = new tvheadend.helpBtn('Digital Video Recorder', 'dvrlog.html');
+	var helpBtn = new tvheadend.button.help('Digital Video Recorder', 'dvrlog.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
@@ -708,7 +708,7 @@ tvheadend.autoreceditor = function() {
 		triggerAction : 'all'
 	});
 
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -1019,7 +1019,7 @@ tvheadend.panel.dvrsettings = function() {
 		disabled : true
 	});
 
-	var helpBtn = new tvheadend.helpBtn('DVR configuration', 'config_dvr.html');
+	var helpBtn = new tvheadend.button.help('DVR configuration', 'config_dvr.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

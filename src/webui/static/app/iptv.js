@@ -51,7 +51,7 @@ tvheadend.panel.iptv = function(adapterId) {
 		width : 45
 	});
 
-	var sm = new tvheadend.CheckboxSelectionModel;
+	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -274,7 +274,7 @@ tvheadend.panel.iptv = function(adapterId) {
 		disabled : true
 	});
 
-	var helpBtn = new tvheadend.helpBtn('IPTV', 'config_iptv.html');
+	var helpBtn = new tvheadend.button.help('IPTV', 'config_iptv.html');
 	
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,

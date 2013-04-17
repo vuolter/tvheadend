@@ -176,7 +176,7 @@ tvheadend.panel.config = function() {
 		handler : saveChanges
 	});
 
-	var helpBtn = new tvheadend.helpBtn('General Configuration', 'config_misc.html');
+	var helpBtn = new tvheadend.button.help('General Configuration', 'config_misc.html');
 
 	var tb = new Ext.Toolbar({
 		enableOverflow : true,
