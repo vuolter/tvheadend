@@ -1,6 +1,6 @@
-tvheadend.capmteditor = function() {
+tvheadend.panel.capmt = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
-		return new tvheadend.dummyPanel('Capmt Connections','key');
+		return new tvheadend.panel.dummy('Capmt Connections','key');
 
 	var search = new tvheadend.Search;
 	

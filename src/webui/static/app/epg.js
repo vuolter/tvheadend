@@ -177,7 +177,7 @@ tvheadend.epgDetails = function(event) {
 	});
 }
 
-tvheadend.epg = function() {
+tvheadend.panel.epg = function() {
 	
 	var actions = new Ext.ux.grid.RowActions({
 		actions : { iconIndex : 'schedstate' },

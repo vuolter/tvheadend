@@ -12,7 +12,7 @@ tvheadend.logW = function(msg, style) {
 /**
  * Log panel
  */
-tvheadend.log = function() {
+tvheadend.panel.log = function() {
 	
 	var debugBtn = new Ext.Button({
 		handler : function(){
@@ -51,7 +51,7 @@ tvheadend.log = function() {
 /**
  * Log settings panel
  */
-tvheadend.logsettings = function() {
+tvheadend.panel.logsettings = function() {
 	/*
 	 * Basic Config
 	 */

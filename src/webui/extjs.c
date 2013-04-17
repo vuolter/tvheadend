@@ -148,7 +148,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   extjs_load(hq, "static/app/acl.js");
   extjs_load(hq, "static/app/cwc.js");
   extjs_load(hq, "static/app/capmt.js");
-  extjs_load(hq, "static/app/tvadapters.js");
+  extjs_load(hq, "static/app/adapters.js");
 #if ENABLE_LINUXDVB
   extjs_load(hq, "static/app/dvb.js");
 #endif

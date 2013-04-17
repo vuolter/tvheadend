@@ -241,7 +241,7 @@ tvheadend.adapters = function() {
 	return grid;
 }
 
-tvheadend.status = function() {
+tvheadend.panel.status = function() {
 	
 	var helpBtn = new tvheadend.helpBtn('Status', 'status.html');
 	

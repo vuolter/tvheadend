@@ -5,7 +5,7 @@ tvheadend.data.epggrabChannels = new Ext.data.JsonStore({
 	fields : [ 'id', 'mod', 'name', 'icon', 'number', 'channel', 'mod-id', 'mod-name' ]
 });
 
-tvheadend.epggrab = function() {
+tvheadend.panel.epggrab = function() {
 
 	/* ****************************************************************
 	 * Data

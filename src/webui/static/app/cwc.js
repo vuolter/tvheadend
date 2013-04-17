@@ -1,6 +1,6 @@
-tvheadend.cwceditor = function() {
+tvheadend.panel.cwc = function() {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
-		return new tvheadend.dummyPanel('Code Word Client','key');
+		return new tvheadend.panel.dummy('Code Word Client','key');
 	
 	var search = new tvheadend.Search;
 	

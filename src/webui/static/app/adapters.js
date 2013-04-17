@@ -23,9 +23,9 @@ tvheadend.comet.on('tvAdapter', function(m) {
 	tvheadend.data.adapters.commitChanges();
 });
 
-tvheadend.tvadapters = function() {
+tvheadend.panel.adapters = function() {
 	if(tvheadend.capabilities.indexOf('linuxdvb') == -1 && tvheadend.capabilities.indexOf('v4l') == -1)
-		return new tvheadend.dummyPanel('TV Adapters','hardware');
+		return new tvheadend.panel.dummy('TV Adapters','hardware');
 	
 	tvheadend.data.adapters.load();
 
@@ -53,7 +53,7 @@ tvheadend.tvadapters = function() {
 		iconCls : 'hardware',
 		layout : 'fit',
 		tbar : tb,
-		items : [ new tvheadend.dummyPanel ]
+		items : [ new tvheadend.panel.dummy ]
 	});
 
 	adapterSelection.on('select', function(c, r) {

@@ -37,7 +37,7 @@ tvheadend.comet.on('channeltags', function(m) {
 /**
  * 
  */
-tvheadend.cteditor = function() {
+tvheadend.panel.ctag = function() {
 	
 	var search = new tvheadend.Search;
 	

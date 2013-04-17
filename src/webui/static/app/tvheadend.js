@@ -24,7 +24,7 @@ tvheadend.CheckboxSelectionModel = function() {
 /**
  * Dummy panel
  */
-tvheadend.dummyPanel = function(title, icon) {
+tvheadend.panel.dummy = function(title, icon) {
 	return new Ext.Panel({
 		title : title,
 		iconCls : icon,
@@ -351,6 +351,7 @@ tvheadend.app = function() {
 		window.localStorage ? Ext.state.Manager.setProvider(new Ext.ux.state.LocalStorage({ namePrefix : 'tvh-' }))
 							: tvhlog(LOG_NOTICE, "webui", "HTML5 localStorage not supported by browser");
 		
+		//TEST
 		Ext.QuickTips.init();
 		Ext.apply(Ext.QuickTips.getQuickTip(), {
 			autoHide: false,
@@ -358,60 +359,58 @@ tvheadend.app = function() {
 			draggable:true
 		});
 		
-		tvheadend.epgPanel = new tvheadend.epg;
+		tvheadend.epg = new tvheadend.panel.epg;
 		
 		if(tvheadend.accessupdate.dvr) {
-			tvheadend.dvrPanel = new tvheadend.dvr;
-			tvheadend.dvrsettingsPanel = new tvheadend.dvrsettings;
+			tvheadend.dvr = new tvheadend.panel.dvr;
+			tvheadend.dvrsettings = new tvheadend.panel.dvrsettings;
 		}
 		else
-			tvheadend.dvrPanel = tvheadend.dvrsettingsPanel = new tvheadend.dummyPanel('DVR','drive');
+			tvheadend.dvr = tvheadend.dvrsettings = new tvheadend.panel.dummy('DVR','drive');
 		
 		if(tvheadend.accessupdate.streaming)
-			tvheadend.channelsPanel = new tvheadend.chconf;
+			tvheadend.channels = new tvheadend.panel.channels;
 		else
-			tvheadend.channelsPanel = new tvheadend.dummyPanel('Channels','tv');
+			tvheadend.channels = new tvheadend.panel.dummy('Channels','tv');
 		
 		if(tvheadend.accessupdate.admin) {
-			tvheadend.miscconfPanel = new tvheadend.miscconf;
-			tvheadend.tvadaptersPanel = new tvheadend.tvadapters;
-			tvheadend.timeshiftPanel = new tvheadend.timeshift;
-			tvheadend.epggrabPanel = new tvheadend.epggrab;
-			tvheadend.ctagPanel = new tvheadend.cteditor;
-			tvheadend.iptvPanel = new tvheadend.iptv;
-			tvheadend.aclPanel = new tvheadend.acleditor;
-			tvheadend.cwcPanel = new tvheadend.cwceditor;
-			tvheadend.capmtPanel = new tvheadend.capmteditor;
-			tvheadend.logsettingsPanel = new tvheadend.logsettings;
-			tvheadend.statusPanel = new tvheadend.status;
+			tvheadend.config = new tvheadend.panel.config;
+			tvheadend.adapters = new tvheadend.panel.adapters;
+			tvheadend.timeshift = new tvheadend.panel.timeshift;
+			tvheadend.epggrab = new tvheadend.panel.epggrab;
+			tvheadend.ctag = new tvheadend.panel.ctag;
+			tvheadend.iptv = new tvheadend.panel.iptv;
+			tvheadend.acl = new tvheadend.panel.acl;
+			tvheadend.cwc = new tvheadend.panel.cwc;
+			tvheadend.capmt = new tvheadend.panel.capmt;
+			tvheadend.logsettings = new tvheadend.panel.logsettings;
+			tvheadend.status = new tvheadend.panel.status;
 		}
-		else {
-			tvheadend.configPanel = new tvheadend.dummyPanel('Configuration','wrench-blue');
-			tvheadend.statusPanel = new tvheadend.dummyPanel('Status','bulb');
-		}
+		else
+			tvheadend.status = new tvheadend.panel.dummy('Status','bulb');
 		
-		tvheadend.logPanel = new tvheadend.log;
+		tvheadend.log = new tvheadend.panel.log;
 		
-		tvheadend.aboutPanel = new Ext.Panel({
+		tvheadend.about = new Ext.Panel({
 			autoLoad : 'about.html'
 			iconCls : 'info',
 			layout : 'fit',
 			title : 'About'
 		});
 		
-		tvheadend.tabsPanel = new Ext.ux.GroupTabPanel({
+		tvheadend.tabs = new Ext.ux.GroupTabPanel({
 			activeGroup : 0,
 			defaults : { defaults : { style : 'padding: 10px;', border : true, bodyBorder : false } },
 			items : [
-				{ items : [ tvheadend.epgPanel, tvheadend.epggrabPanel ] },
-				{ items : [ tvheadend.dvrPanel, tvheadend.dvrsettingsPanel, tvheadend.timeshiftPanel ] },
-				{ items : [ tvheadend.channelsPanel, tvheadend.ctagPanel ] },
-				{ items : [ tvheadend.tvadaptersPanel, tvheadend.iptvPanel ] },
-				{ items : [ tvheadend.miscconfPanel, tvheadend.aclPanel ] },
-				{ items : [ tvheadend.cwcPanel, tvheadend.capmtPanel ] },
-				{ items : [ tvheadend.statusPanel ] },
-				{ items : [ tvheadend.logPanel, tvheadend.logsettingsPanel ] },
-				{ items : [ tvheadend.aboutPanel ] }
+				{ items : [ tvheadend.epg, tvheadend.epggrab ] },
+				{ items : [ tvheadend.dvr, tvheadend.dvrsettings, tvheadend.timeshift ] },
+				{ items : [ tvheadend.channels, tvheadend.ctag ] },
+				{ items : [ tvheadend.adapters, tvheadend.iptv ] },
+				{ items : [ tvheadend.config, tvheadend.acl ] },
+				{ items : [ tvheadend.cwc, tvheadend.capmt ] },
+				{ items : [ tvheadend.status ] },
+				{ items : [ tvheadend.log, tvheadend.logsettings ] },
+				{ items : [ tvheadend.about ] }
 			],
 			region : 'center',
 			tabWidth : 150
@@ -421,7 +420,7 @@ tvheadend.app = function() {
 			region : 'center',
 			layout : 'border',
 			bufferResize : 150,
-			items : [ tvheadend.header, tvheadend.tabsPanel ]
+			items : [ tvheadend.header, tvheadend.tabs ]
 		});
 	}
 	

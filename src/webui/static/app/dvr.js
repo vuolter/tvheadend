@@ -846,7 +846,7 @@ tvheadend.autoreceditor = function() {
 /**
  *
  */
-tvheadend.dvr = function() {
+tvheadend.panel.dvr = function() {
 
 	function renderDay(value, meta, rec, row, col, store) {
 		dt = new Date(value);
@@ -990,7 +990,7 @@ tvheadend.dvr = function() {
 /**
  * Configuration panel (located under configuration)
  */
-tvheadend.dvrsettings = function() {
+tvheadend.panel.dvrsettings = function() {
 
 	var confreader = new Ext.data.JsonReader({
 		root : 'dvrSettings'

@@ -1,7 +1,7 @@
 /**
  * IPTV service grid
  */
-tvheadend.iptv = function(adapterId) {
+tvheadend.panel.iptv = function(adapterId) {
 
 	var channelsCombo = new Ext.form.ComboBox({
 		allowBlank : true,

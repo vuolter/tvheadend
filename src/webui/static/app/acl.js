@@ -1,4 +1,4 @@
-tvheadend.acleditor = function() {
+tvheadend.panel.acl = function() {
 
 	var search = new tvheadend.Search;
 	

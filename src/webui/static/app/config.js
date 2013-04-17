@@ -31,7 +31,7 @@ tvheadend.comet.on('config', function(m) {
     }
 });
 
-tvheadend.miscconf = function() {
+tvheadend.panel.config = function() {
 	/*
 	 * Basic Config
 	 */

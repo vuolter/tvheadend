@@ -93,7 +93,7 @@ tvheadend.mergeChannel = function(chan) {
 /**
  *
  */
-tvheadend.chconf = function() {
+tvheadend.panel.channels = function() {
 	
 	function renderTags(value, meta, rec, row, col, store) {
 		if(typeof value === 'undefined' || value.length < 2)
