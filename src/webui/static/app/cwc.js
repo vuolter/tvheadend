@@ -42,9 +42,7 @@ tvheadend.cwceditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'Username',
 			hideable : false,
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
+			renderer : tvheadend.renderEntry
 			},
 			width : 200
 		}, {
@@ -53,8 +51,7 @@ tvheadend.cwceditor = function() {
 			header : 'Password',
 			hideable : false,
 			renderer : function(value, meta, rec, row, col, store) {
-				return value ? '<span class="tvh-grid-green">Hidden</span>'
-					: '<span class="tvh-grid-red">Unset</span>';
+				tvheadend.renderEntry(value, meta, 'Unset', 'Hidden');
 			},
 			width : 200
 		}, {
@@ -62,19 +59,13 @@ tvheadend.cwceditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'Hostname',
 			hideable : false,
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 200
 		}, {
 			dataIndex : 'port',
 			header : 'Port',
 			hideable : false,
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			editor : new Ext.form.TextField,
 			width : 120
 		}, {
@@ -83,19 +74,15 @@ tvheadend.cwceditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'DES Key',
 			renderer : function(value, meta, rec, row, col, store) {
-				return value == '00:00:00:00:00:00:00:00:00:00:00:00:00:00' ? '<span class="tvh-grid-blue">' + value + '</span>'
-				: '<span class="tvh-grid-green">Hidden</span>';
+				tvheadend.renderEntry(value, meta, 'Hidden', value, '00:00:00:00:00:00:00:00:00:00:00:00:00:00');
 			},
 			width : 400
-		}, 
+		},
 		emmColumn, emmexColumn, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-blue">No comments yet</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 250
 		} ]
 	});

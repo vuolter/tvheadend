@@ -3,6 +3,15 @@
  */
 tvheadend.subscriptions = function() {
 
+	function renderBw(value, meta, rec, row, col, store) {
+		value = parseInt(value / 125) + ' KiB/s';
+	}
+	
+	function renderDate(value, meta, rec, row, col, store) {
+		var dt = new Date(value);
+		value = dt.format('Y-m-d , H:i');
+	}
+	
 	var rec = Ext.data.Record.create([
 		{ name : 'bw' },
 		{ name : 'channel' },
@@ -50,15 +59,6 @@ tvheadend.subscriptions = function() {
 				Ext.data.Record.COMMIT);
 		}
 	});
-
-	function renderDate(value) {
-		var dt = new Date(value);
-		return dt.format('Y-m-d , H:i');
-	}
-
-	function renderBw(value) {
-		return parseInt(value / 125) + ' KiB/s';
-	}
 
 	cm = new Ext.grid.ColumnModel({
 		defaults : { sortable : true },
@@ -139,8 +139,8 @@ tvheadend.subscriptions = function() {
  */
 tvheadend.adapters = function() {
 
-	function renderBw(value) {
-		return parseInt(value / 125) + ' KiB/s';
+	function renderBw(value, meta, rec, row, col, store) {
+		value = parseInt(value / 125) + ' KiB/s';
 	}
 	
 	var strength = new Ext.ux.grid.ProgressColumn({
@@ -195,8 +195,7 @@ tvheadend.adapters = function() {
 			dataIndex : 'snr',
 			header : 'SNR',
 			renderer : function(value, meta, rec, row, col, store) {
-				return value > 0 ? value.toFixed(1) + " dB"
-								 : '<span class="tvh-grid-gray">Unknown</span>';
+				renderEntry(value, meta, 'Unknown', value.toFixed(1) + ' dB');
 			},
 			width : 50
 		},

@@ -36,30 +36,21 @@ tvheadend.capmteditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'Camd.socket filename',
 			hideable : false,
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 400					
 		}, {
 			dataIndex : 'port',
 			editor : new Ext.form.TextField,
 			header : 'Listen Port',
 			hideable : false,
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 100
 		}, 
 		oscamColumn, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-blue">No comments yet</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 250
 		} ]
 	});

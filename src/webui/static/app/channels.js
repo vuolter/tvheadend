@@ -95,6 +95,21 @@ tvheadend.mergeChannel = function(chan) {
  */
 tvheadend.chconf = function() {
 	
+	function renderTags(value, meta, rec, row, col, store) {
+		if(typeof value === 'undefined' || value.length < 2)
+			return '<span class="tvh-grid-blue">Unset</span>';
+		else {
+			var ret = [];
+			var tags = value.split(',');
+			for(var i in tags) {
+				tag = tvheadend.data.channelTags.getById(tags[i]);
+				if(typeof tag !== 'undefined' && tag.length > 3)
+					ret.push(tag.data.name);
+			}
+			return ret.join(', ');
+		}
+	}
+	
 	var search = new tvheadend.Search;
 	
 	var actions = new Ext.ux.grid.RowActions({
@@ -130,9 +145,7 @@ tvheadend.chconf = function() {
 			}),
 			header : 'Number',
 			hideable : false,
-			renderer : function(value, meta, rec, row, col, store) {
-				return !value ? '<span class="tvh-grid-red">Unset</span>'
-							  : value;
+			renderer : tvheadend.renderEntry
 			},
 			width : 65
 		}, {
@@ -149,20 +162,7 @@ tvheadend.chconf = function() {
 				valueField : 'identifier'
 			}),
 			header : 'Tags',
-			renderer : function(value, meta, rec, row, col, store) {
-				if(typeof value === 'undefined' || value.length < 2)
-					return '<span class="tvh-grid-blue">Unset</span>';
-				else {
-					var ret = [];
-					var tags = value.split(',');
-					for(var i in tags) {
-						tag = tvheadend.data.channelTags.getById(tags[i]);
-						if(typeof tag !== 'undefined')
-							ret.push(tag.data.name);
-					}
-					return ret.join(', ');
-				}
-			},
+			renderer : renderTags,
 			width : 250
 		}, {
 			dataIndex : 'epggrabsrc',
@@ -180,8 +180,7 @@ tvheadend.chconf = function() {
 			}),
 			header : 'EPG Grab source',
 			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-blue">Unknown</span>';
+				tvheadend.renderEntry(value, meta, 'Unknown');
 			},
 			width : 150
 		}, {
@@ -198,8 +197,7 @@ tvheadend.chconf = function() {
 			}),
 			header : 'DVR Pre-Start',
 			renderer : function(value, meta, rec, row, col, store) {
-				return !value ? '<span class="tvh-grid-blue">Unset</span>'
-					: value + ' min';
+				tvheadend.renderEntry(value, meta, 'Unset', value + 'min');
 			},
 			width : 85
 		}, {
@@ -210,8 +208,7 @@ tvheadend.chconf = function() {
 			}),
 			header : 'DVR Post-End',
 			renderer : function(value, meta, rec, row, col, store) {
-				return !value ? '<span class="tvh-grid-blue">Unset</span>'
-					: value + ' min';
+				tvheadend.renderEntry(value, meta, 'Unset', value + 'min');
 			},
 			width : 85
 		},

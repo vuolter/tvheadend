@@ -59,20 +59,14 @@ tvheadend.iptv = function(adapterId) {
 			dataIndex : 'channelname',
 			header : 'Channel name',
 			hideable : false,
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			editor : channelsCombo,
 			width : 150
 		}, {
 			dataIndex : 'interface',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Interface',
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 100
 		}, {
 			dataIndex : 'port',
@@ -81,18 +75,14 @@ tvheadend.iptv = function(adapterId) {
 				minValue : 1
 			}),
 			header : 'UDP Port',
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 60
 		}, {
 			dataIndex : 'group',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Group',
 			renderer : function(value, meta, rec, row, col, store) {
-				return value != '::' ? value
-					: '<span class="tvh-grid-red">Unset</span>';
+				renderEntry(value, meta, value, 'Unset', '::');
 			},
 			width : 100
 		}, {
@@ -109,9 +99,7 @@ tvheadend.iptv = function(adapterId) {
 			header : 'Service Type',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				var val = value ? servicetypeStore.getById(value) : null;
-				return val ? val.get('str')
-					 : '<span class="tvh-grid-red">Unset</span>';
+				renderEntry(value, meta, 'Unset', servicetypeStore.getById(value).get('str'));
 			},
 			width : 100
 		}, {
@@ -119,8 +107,7 @@ tvheadend.iptv = function(adapterId) {
 			header : 'Service ID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-gray">Unknown</span>';
+				tvheadend.renderEntry(value, meta, 'Unknown');
 			},
 			width : 50
 		}, {
@@ -128,8 +115,7 @@ tvheadend.iptv = function(adapterId) {
 			header : 'PMT PID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-gray">Unknown</span>';
+				tvheadend.renderEntry(value, meta, 'Unknown');
 			},
 			width : 50
 		}, {
@@ -137,8 +123,7 @@ tvheadend.iptv = function(adapterId) {
 			header : 'PCR PID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-gray">Unknown</span>';
+				tvheadend.renderEntry(value, meta, 'Unknown');
 			},
 			width : 50,
 		},

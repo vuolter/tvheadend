@@ -16,10 +16,8 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 
 tvheadend.contentGroupLookupName = function(code) {
 	var index = tvheadend.ContentGroupStore.find('code', (code & 0xF0));
-	var name = index != -1 ? tvheadend.contentGroupLookupName.getAt(index).get('name')
+	return index != -1 ? tvheadend.contentGroupLookupName.getAt(index).get('name')
 					   : null;
-	return !name ? '<span class="tvh-grid-gray">Unknown</span>'
-				 : name;
 }
 
 tvheadend.epgDetails = function(event) {
@@ -227,9 +225,7 @@ tvheadend.epg = function() {
 	}
 	
 	function renderDay(value, meta, rec, row, col, store){
-        setMetaAttr(meta, rec);
-		
-		var start = rec.get('start');
+        var start = rec.get('start');
 		var now = new Date();
 		var tomorrow = new Date().add(Date.DAY, 2).clearTime();
 		var today = new Date().add(Date.DAY, 1).clearTime();
@@ -246,34 +242,32 @@ tvheadend.epg = function() {
 			value = 'Today';
 		else
 			value = '<img class="x-icon-airing" src="static/icons/transmit_orange.png" />' + 'Now';
-
-		return value;
+		
+		setMetaAttr(meta, rec);
     }
 	
-    function renderTime(value, meta, rec, row, col, store){
-        setMetaAttr(meta, rec);
-		return new Date(value).format('H:i');
+	function renderTime(value, meta, rec, row, col, store){
+        value = new Date(value).format('H:i');
+		setMetaAttr(meta, rec);
     }
 
 	function renderDuration(value, meta, rec, row, col, store){
-		setMetaAttr(meta, rec);
-
-		var value = Math.floor(value / 60);
+		value = Math.floor(value / 60);
 
 		if(value >= 60) {
 			var min = value % 60;
-			var hrs = Math.floor(value / 60)
-			
-			return hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
+			var hrs = Math.floor(value / 60);			
+			value = hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
 		}
 		else 
-			return value + ' min';
+			value = value + ' min';
+		
+		setMetaAttr(meta, rec);
     }
 
 	function renderText(value, meta, rec, row, col, store) {
+		renderEntry(value, meta, 'Unknown');
 		setMetaAttr(meta, rec);
-		return value ? value
-					 : '<span class="tvh-grid-gray">Unknown</span>';
 	}
 
 	var cm = new Ext.grid.ColumnModel({
@@ -343,8 +337,9 @@ tvheadend.epg = function() {
 			header : 'Genre',
 			id : 'contenttype',
 			renderer : function(value, meta, rec, row, col, store) {
+				value = tvheadend.contentGroupLookupName(value);
+				renderEntry(value, meta, 'Unknown');
 				setMetaAttr(meta, rec);
-				return tvheadend.contentGroupLookupName(value);
 			},
 			width : 150
 		}, {

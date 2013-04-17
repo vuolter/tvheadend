@@ -1,6 +1,6 @@
 tvheadend.accessupdate = null;
-tvheadend.capabilities  = null;
-
+tvheadend.capabilities  = null;	
+	
 /**
  * BufferView
  */
@@ -72,6 +72,37 @@ tvheadend.help = function(title, pagename) {
 		},
 		url : 'docs/' + pagename
 	});
+}
+
+/**
+ * Render entry
+ */
+tvheadend.renderEntry = function(value, meta, fvalue, tvalue, cvalue, reverse) {
+	var fval = 'Unset';
+	var tval = value;
+	var cval = true;
+	var rev = false;
+	
+	if(fvalue !== 'object') {
+		if(fvalue !== 'undefined') fval = fvalue;
+		if(tvalue !== 'undefined') tval = tvalue;
+		if(cvalue !== 'undefined') {
+			cval = cvalue;
+			rev = true;
+		}
+		if(reverse !== 'undefined') rev = reverse;
+	}
+	
+	if(value == cval) {
+		value = tval;
+		if(rev)
+			meta.attr = 'class="tvh-grid-gray"';
+	}
+	else {
+		value = fval;
+		if(!rev)
+			meta.attr = 'class="tvh-grid-gray"';
+	}	
 }
 
 /**

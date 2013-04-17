@@ -72,8 +72,7 @@ tvheadend.acleditor = function() {
 			header : 'Username',
 			hideable : false,
 			renderer : function(value, meta, rec, row, col, store) {
-				return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
-									: value;
+				tvheadend.renderEntry(value, meta, value, 'Any user', '*');
 			},
 			width : 200
 		}, {
@@ -82,8 +81,7 @@ tvheadend.acleditor = function() {
 			header : 'Password',
 			hideable : false,
 			renderer : function(value, meta, rec, row, col, store) {
-				return value == '*' ? '<span class="tvh-grid-red">NOT CHECKED</span>'
-									: '<span class="tvh-grid-green">Hidden</span>';
+				tvheadend.renderEntry(value, meta, 'Hidden', 'Any pass', '*');
 			},
 			width : 200
 		}, {
@@ -91,8 +89,7 @@ tvheadend.acleditor = function() {
 			editor : new Ext.form.TextField,
 			header : 'IP allowed',
 			renderer : function(value, meta, rec, row, col, store) {
-				return value != '0.0.0.0/0' ? value
-											: '<span class="tvh-grid-blue">Any IP address</span>';
+				tvheadend.renderEntry(value, meta, value, 'Any IP address', '0.0.0.0/0');
 			},
 			width : 120
 		},
@@ -102,8 +99,7 @@ tvheadend.acleditor = function() {
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
 			renderer : function(value, meta, rec, row, col, store) {
-				return value != "New entry" ? value
-							 : '<span class="tvh-grid-blue">No comments yet</span>';
+				tvheadend.renderEntry(value, meta, value, 'Unset', 'New entry');
 			},
 			width : 250
 		} ]

@@ -72,10 +72,7 @@ tvheadend.cteditor = function() {
 			dataIndex : 'name',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Name',
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-red">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			hideable : false,
 			width : 150
 		}, 
@@ -83,18 +80,14 @@ tvheadend.cteditor = function() {
 			dataIndex : 'icon',
 			editor : new Ext.form.TextField,
 			header : 'Icon URL (absolute)',
-			renderer : function(value, meta, rec, row, col, store) {
-				return value ? value
-					: '<span class="tvh-grid-blue">Unset</span>';
-			},
+			renderer : tvheadend.renderEntry,
 			width : 300
 		}, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField,
 			header : 'Comment',
 			renderer : function(value, meta, rec, row, col, store) {
-				return value != "New tag" ? value
-					: '<span class="tvh-grid-blue">No comments yet</span>';
+				tvheadend.renderEntry(value, meta, value, 'Unset', 'New tag');
 			},
 			width : 300
 		} ]
