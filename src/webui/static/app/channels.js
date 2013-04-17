@@ -110,6 +110,7 @@ tvheadend.panel.channels = function() {
 		}
 	}
 	
+	var validator = new Ext.ux.plugins.GridValidator;
 	var search = new tvheadend.Search;
 	
 	var actions = new Ext.ux.grid.RowActions({
@@ -340,7 +341,7 @@ tvheadend.panel.channels = function() {
 		iconCls : 'television',
 		id : 'channelsGrid',
 		enableColumnMove : false,
-		plugins : [ actions, search ],
+		plugins : [ actions, search, validator ],
 		sm : sm,
 		stateful : true,
 		stateId : this.id,

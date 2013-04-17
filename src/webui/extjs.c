@@ -120,6 +120,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   extjs_load(hq, "static/app/extensions.js");
   extjs_load(hq, "static/extensions/BufferView.js");
   extjs_load(hq, "static/extensions/CheckColumn.js");
+  extjs_load(hq, "static/extensions/GridValidator.js");
   extjs_load(hq, "static/extensions/LocalStorage.js");
   extjs_load(hq, "static/extensions/bubble/BubblePanel.js");
   extjs_load(hq, "static/extensions/gridsearch/Ext.ux.grid.Search.js");
