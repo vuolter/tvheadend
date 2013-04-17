@@ -94,10 +94,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   // Issue #1504 - IE9 temporary fix
   htsbuf_qprintf(hq, "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=8\">\n");
 
-  
-  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext/ext-base%s.js\"></script>\n"
-                     "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
+  htsbuf_qprintf(hq, "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/bubble/resources/css/bubble.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/gridsearch/resources/css/gridsearch.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/grouptab/resources/css/GroupTab.css\">\n"
@@ -108,9 +105,12 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/spinner/resources/css/Spinner.css\">\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\">\n",
-                     tvheadend_webui_debug ? "-debug" : "",
-                     tvheadend_webui_debug ? "-debug" : "",
                      tvheadend_webui_debug ? ""       : "-min");
+
+  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext-base%s.js\"></script>\n"
+                     "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n",
+                     tvheadend_webui_debug ? "-debug" : "",
+                     tvheadend_webui_debug ? "-debug" : "");
   
   extjs_exec(hq, "Ext.BLANK_IMAGE_URL = " "'"EXTJSPATH"/resources/images/default/s.png';");
 
