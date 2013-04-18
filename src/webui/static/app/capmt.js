@@ -73,7 +73,7 @@ tvheadend.panel.capmt = function() {
 		url : 'tablemgr'
 	});
 
-	var grid = new tvheadend.tableEditor('camptGrid', 'Capmt Connections', 'capmt', sm, cm, rec,
+	var grid = new tvheadend.panel.table('camptGrid', 'Capmt Connections', 'capmt', sm, cm, rec,
 		[ enabledColumn, oscamColumn, search ], store, 'config_capmt.html', 'key');
 		
 	tvheadend.comet.on('capmtStatus', function(server) {

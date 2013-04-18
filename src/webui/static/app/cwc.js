@@ -106,7 +106,7 @@ tvheadend.panel.cwc = function() {
 		url : 'tablemgr'
 	});
 
-	var grid = new tvheadend.tableEditor('cwcGrid', 'Code Word Client', 'cwc', sm, cm, rec, 
+	var grid = new tvheadend.panel.table('cwcGrid', 'Code Word Client', 'cwc', sm, cm, rec, 
 		[ actions, emmColumn, emmexColumn, enabledColumn, search ], store, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {

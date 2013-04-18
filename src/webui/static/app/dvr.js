@@ -837,7 +837,7 @@ tvheadend.autoreceditor = function() {
 		} ]
 	});
 	
-	var grid = new tvheadend.tableEditor('autorecGrid', 'Automatic Recorder', 'autorec', sm, cm, rec, 
+	var grid = new tvheadend.panel.table('autorecGrid', 'Automatic Recorder', 'autorec', sm, cm, rec, 
 										 [ enabledColumn, search ], store, 'autorec.html', 'wand');
 		
 	return grid;

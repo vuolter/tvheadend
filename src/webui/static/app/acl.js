@@ -124,7 +124,7 @@ tvheadend.panel.acl = function() {
 		url : 'tablemgr'
 	});
 
-	var grid = new tvheadend.tableEditor('aclGrid', 'Access control', 'accesscontrol', sm, cm,
+	var grid = new tvheadend.panel.table('aclGrid', 'Access control', 'accesscontrol', sm, cm,
 		rec, [ adminColumn, enabledColumn, /*introColumn,*/ dvrColumn, 
 		dvrcfgColumn, search, streamingColumn, webuiColumn ], store, 'config_access.html', 'group');
 			

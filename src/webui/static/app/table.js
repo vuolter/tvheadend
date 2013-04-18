@@ -1,4 +1,4 @@
-tvheadend.tableEditor = function(id, title, dtable, sm, cm, rec, plugins, store,
+tvheadend.panel.table = function(id, title, dtable, sm, cm, rec, plugins, store,
 	helpContent, icon) {
 
 	if (store == null) {

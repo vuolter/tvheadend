@@ -95,7 +95,7 @@ tvheadend.panel.ctag = function() {
 
 	var rec = Ext.data.Record.create([ 'comment', 'enabled', 'icon', 'internal', 'name', 'titledIcon' ]);
 
-	var grid = new tvheadend.tableEditor('ctagGrid', 'Channel Tags', 'channeltags', sm, cm,
+	var grid = new tvheadend.panel.table('ctagGrid', 'Channel Tags', 'channeltags', sm, cm,
 		rec, [ enabledColumn, internalColumn, search, titledIconColumn ],
 		tvheadend.data.channelTags, 'config_tags.html', 'tag');
 		
