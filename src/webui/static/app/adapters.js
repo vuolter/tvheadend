@@ -24,7 +24,7 @@ tvheadend.comet.on('tvAdapter', function(m) {
 });
 
 tvheadend.panel.adapters = function() {
-	if(tvheadend.capabilities.indexOf('linuxdvb') == -1 && tvheadend.capabilities.indexOf('v4l') == -1)
+	if (tvheadend.capabilities.indexOf('linuxdvb') == -1 && tvheadend.capabilities.indexOf('v4l') == -1)
 		return new tvheadend.panel.dummy('TV Adapters','hardware');
 	
 	tvheadend.data.adapters.load();
@@ -57,7 +57,7 @@ tvheadend.panel.adapters = function() {
 	});
 
 	adapterSelection.on('select', function(c, r) {
-		if(c.isDirty()) {
+		if (c.isDirty()) {
 			panel.removeAll(false);
 
 			if (r.data.type == 'dvb') 

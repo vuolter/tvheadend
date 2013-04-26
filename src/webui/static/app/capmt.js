@@ -1,5 +1,5 @@
-tvheadend.panel.capmt = function(id) {
-	if(tvheadend.capabilities.indexOf('cwc') == -1)
+tvheadend.grid.capmt = function(id) {
+	if (tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.panel.dummy('Capmt Connections','key');
 
 	var search = new tvheadend.Search;
@@ -29,6 +29,7 @@ tvheadend.panel.capmt = function(id) {
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {
 			sortable : true,
+			renderer : tvheadend.renderer.text,
 			allowBlank : false
 		},
 		columns : [ actions, enabledColumn, {
@@ -36,21 +37,18 @@ tvheadend.panel.capmt = function(id) {
 			editor : new Ext.form.TextField,
 			header : 'Camd.socket filename',
 			hideable : false,
-			renderer : tvheadend.renderer.Value,
 			width : 400					
 		}, {
 			dataIndex : 'port',
 			editor : new Ext.form.TextField,
 			header : 'Listen Port',
 			hideable : false,
-			renderer : tvheadend.renderer.Value,
 			width : 100
 		}, 
 		oscamColumn, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
-			renderer : tvheadend.renderer.Value,
 			width : 250
 		} ]
 	});
@@ -66,15 +64,15 @@ tvheadend.panel.capmt = function(id) {
 			op : 'get'
 		},
 		root : 'entries',
-		sortInfo : {
-			field : 'camdfilename',
-			direction : 'ASC'
+		sorters : {
+			direction : 'ASC',
+			property : 'camdfilename'
 		},
 		url : 'tablemgr'
 	});
 
 	var grid = new tvheadend.panel.table(id, 'Capmt Connections', 'capmt', sm, cm, rec,
-		[ enabledColumn, oscamColumn, search ], store, 'config_capmt.html', 'key');
+		[ 'bufferedrenderer', enabledColumn, oscamColumn, search ], store, 'config_capmt.html', 'key');
 		
 	tvheadend.comet.on('capmtStatus', function(server) {
 		var rec = store.getById(server.id);

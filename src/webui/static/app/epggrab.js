@@ -221,7 +221,7 @@ tvheadend.panel.epggrab = function() {
 	/*
 	 * External modules
 	 */
-	var externalSm = new Ext.grid.CheckboxSelectionModel({
+	var externalSm = new tvheadend.selection.CheckboxModel({
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
@@ -229,8 +229,7 @@ tvheadend.panel.epggrab = function() {
 			'rowdeselect' : function(s, ri, r) {
 				moduleSelect(r, 0);
 			}
-		},
-		width : 21
+		}
 	});
 
 	var externalCm = new Ext.grid.ColumnModel([ externalSm,
@@ -254,8 +253,8 @@ tvheadend.panel.epggrab = function() {
 		width : 600,
 		height : 150,
 		frame : false,
-		stateful : true,
 		stateId : this.id,
+		stateful : true,
 		viewConfig : {
 			forceFit : true
 		},
@@ -275,7 +274,7 @@ tvheadend.panel.epggrab = function() {
 	 * OTA modules
 	 */
 
-	var otaSm = new Ext.grid.CheckboxSelectionModel({
+	var otaSm = new tvheadend.selection.CheckboxModel({
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
@@ -283,8 +282,7 @@ tvheadend.panel.epggrab = function() {
 			'rowdeselect' : function(s, ri, r) {
 				moduleSelect(r, 0);
 			}
-		},
-		width : 21
+		}
 	});
 
 	var otaCm = new Ext.grid.ColumnModel([ otaSm, {
@@ -302,8 +300,8 @@ tvheadend.panel.epggrab = function() {
 		width : 600,
 		height : 150,
 		frame : false,
-		stateful : true,
 		stateId : this.id,
+		stateful : true,
 		viewConfig : {
 			forceFit : true
 		},

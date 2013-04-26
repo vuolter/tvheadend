@@ -20,9 +20,9 @@ tvheadend.panel.subscriptions = function(id) {
 		fields : rec,
 		id : 'id',
 		root : 'entries',
-		sortInfo : {
+		sorters : {
 			direction : 'ASC',
-			field : 'username'
+			property : 'username'
 		},
 		totalProperty : 'totalCount',
 		url : 'subscriptions'	
@@ -52,7 +52,10 @@ tvheadend.panel.subscriptions = function(id) {
 	});
 
 	cm = new Ext.grid.ColumnModel({
-		defaults : { sortable : true },
+		defaults : {
+			renderer : tvheadend.renderer.text,
+			sortable : true
+		},
 		columns : [ {
 			dataIndex : 'hostname',
 			header : 'Hostname',
@@ -84,7 +87,7 @@ tvheadend.panel.subscriptions = function(id) {
 			dataIndex : 'start',
 			header : 'Start date',
 			id : 'start',
-			renderer : tvheadend.renderer.Date,
+			renderer : tvheadend.renderer.date,
 			width : 150
 		}, {
 			dataIndex : 'title',
@@ -100,7 +103,7 @@ tvheadend.panel.subscriptions = function(id) {
 			dataIndex : 'bw',
 			header : 'Bandwidth',
 			id : 'bw',
-			renderer : tvheadend.renderer.Bandwidth,
+			renderer : tvheadend.renderer.bandwidth,
 			width : 50
 		} ]
 	});
@@ -113,12 +116,12 @@ tvheadend.panel.subscriptions = function(id) {
 		flex : 1,
 		iconCls : 'transmit-blue',
 		id : id ? id : Ext.id,
+		plugins : [ 'bufferedrenderer' ]
 		stateId : this.id,
 		stateful : true,
 		store : tvheadend.data.subscriptions,
 		stripeRows : true,		
-		title : 'Subscriptions',
-		view : new tvheadend.BufferView
+		title : 'Subscriptions'
 	});
 	
 	return grid;
@@ -148,7 +151,10 @@ tvheadend.panel.adapterstatus = function(id) {
 */
 
 	var cm = new Ext.grid.ColumnModel({
-		defaults : { sortable : true },
+		defaults : {
+			renderer : tvheadend.renderer.text,
+			sortable : true
+		},
 		columns : [ {
 			dataIndex : 'name',
 			header : 'Name',			
@@ -168,7 +174,7 @@ tvheadend.panel.adapterstatus = function(id) {
 		}, {
 			dataIndex : 'bw',
 			header : 'Bandwidth',
-			renderer: tvheadend.renderer.Bandwidth,
+			renderer: tvheadend.renderer.bandwidth,
 			width : 100
 		}, {
 			header : 'Bit error rate',
@@ -182,7 +188,7 @@ tvheadend.panel.adapterstatus = function(id) {
 			dataIndex : 'snr',
 			header : 'SNR',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unknown', value.toFixed(1) + ' dB');
+				tvheadend.renderer.text(value, meta, 'Unknown', value.toFixed(1) + ' dB');
 			},
 			width : 50
 		},
@@ -198,9 +204,9 @@ tvheadend.panel.adapterstatus = function(id) {
 		fields : rec,
 		id : 'identifier',
 		root : 'entries',
-		sortInfo : {
+		sorters : {
 			direction : 'ASC',
-			field : 'path'
+			property : 'path'
 		},
 		url : 'tv/adapter'
 	});
@@ -217,12 +223,12 @@ tvheadend.panel.adapterstatus = function(id) {
 		flex : 1,
 		iconCls : 'hardware',
 		id : id ? id : Ext.id,
+		plugins : [ 'bufferedrenderer' ]
 		stateId : this.id,
 		stateful : true,
 		store : store,
 		stripeRows : true,		
-		title : 'Adapters',
-		view : new tvheadend.BufferView
+		title : 'Adapters'
 	});
 	
 	return grid;

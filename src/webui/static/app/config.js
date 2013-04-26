@@ -5,9 +5,9 @@ tvheadend.data.languages = new Ext.data.JsonStore({
 	fields : ['identifier','name'],
 	id : 'identifier',
 	root : 'entries',
-	sortInfo : {
-		field : 'name',
-		direction : 'ASC'
+	sorters : {
+		direction : 'ASC',
+		property : 'name'
 	},
 	url : 'languages'
 });
@@ -25,7 +25,7 @@ tvheadend.data.configLanguages = new Ext.data.JsonStore({
 });
 
 tvheadend.comet.on('config', function(m) {
-    if(m.reload != null) {
+    if (m.reload != null) {
         tvheadend.data.languages.reload();
         tvheadend.data.configLanguages.reload();
     }
@@ -147,7 +147,7 @@ tvheadend.panel.config = function() {
 		lazyRender : true,
 		listeners : {
 			'select' : function(c){ 
-				if(c.isDirty())
+				if (c.isDirty())
 					Ext.util.CSS.swapStyleSheet('theme', c.getValue());
 			}
 		},

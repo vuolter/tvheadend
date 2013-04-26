@@ -186,13 +186,13 @@ tvheadend.v4l_services = function(adapterId) {
 	function delSelected() {
 		var keys = grid.selModel.selections.keys.length;
 		
-		if(!keys)
+		if (!keys)
 			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
 			var msg = 'Do you really want to delete this entry?';
 			
-			if(keys > 1) {
-				if(keys == grid.store.getTotalCount())
+			if (keys > 1) {
+				if (keys == grid.store.getTotalCount())
 					msg = 'Do you really want to delete all entries?';
 				else
 					msg = 'Do you really want to delete selected ' + keys + ' entries?';
@@ -290,14 +290,13 @@ tvheadend.v4l_services = function(adapterId) {
 		stripeRows : true,
 		enableColumnMove : false,
 		title : 'Services',
-		plugins : [ enabledColumn ],
+		plugins : [ enabledColumn, 'bufferedrenderer' ],
 		store : store,
 		cm : cm,
 		sm : sm,
-		stateful : true,
 		stateId : this.id,
-		tbar : tb,
-		view : new tvheadend.BufferView
+		stateful : true,
+		tbar : tb
 	});
 
 	store.on('update', function(s, r, o) {

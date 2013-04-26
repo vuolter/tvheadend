@@ -121,7 +121,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 
 	tvheadend.comet.on('dvbMux', function(m) {
 
-		if(m.adapterId !== adapterId)
+		if (m.adapterId !== adapterId)
 			return;
 
 		r = store.getById(m.id)
@@ -140,13 +140,13 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	function delSelected() {
 		var keys = grid.selModel.selections.keys.length;
 		
-		if(!keys)
+		if (!keys)
 			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
 			var msg = 'Do you really want to delete this entry?';
 			
-			if(keys > 1) {
-				if(keys == grid.store.getTotalCount())
+			if (keys > 1) {
+				if (keys == grid.store.getTotalCount())
 					msg = 'Do you really want to delete all entries?';
 				else
 					msg = 'Do you really want to delete selected ' + keys + ' entries?';
@@ -380,14 +380,13 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		stripeRows : true,
 		enableColumnMove : false,
 		title : 'Multiplexes',
-		plugins : [ enabledColumn, qualityColumn, search ],
+		plugins : [ 'bufferedrenderer', enabledColumn, qualityColumn, search ],
 		store : store,
 		cm : cm,
 		sm : sm,
-		stateful : true,
 		stateId : this.id,
-		tbar : tb,
-		view : new tvheadend.BufferView
+		stateful : true,
+		tbar : tb
 	});
 
 	return grid;
@@ -616,13 +615,13 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	function delSelected() {
 		var keys = grid.selModel.selections.keys.length;
 		
-		if(!keys)
+		if (!keys)
 			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
 			var msg = 'Do you really want to delete this entry?';
 			
-			if(keys > 1) {
-				if(keys == grid.store.getTotalCount())
+			if (keys > 1) {
+				if (keys == grid.store.getTotalCount())
 					msg = 'Do you really want to delete all entries?';
 				else
 					msg = 'Do you really want to delete selected ' + keys + ' entries?';
@@ -658,7 +657,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 
 	function mapSelected() {
 		grid.selModel.each(function(rec) {
-			if(!rec.get('channelname'))
+			if (!rec.get('channelname'))
 				rec.set('channelname', rec.get('svcname'));
 			return true;
 		});
@@ -704,14 +703,13 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		stripeRows : true,
 		enableColumnMove : false,
 		title : 'Services',
-		plugins : [ actions, eitColumn, enabledColumn, search ],
+		plugins : [ actions, 'bufferedrenderer', eitColumn, enabledColumn, search ],
 		store : store,
 		cm : cm,
 		sm : sm,
-		stateful : true,
 		stateId : this.id,
-		tbar : tb,
-		view : new tvheadend.BufferView
+		stateful : true,
+		tbar : tb
 	});
 	return grid;
 }

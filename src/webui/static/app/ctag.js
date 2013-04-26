@@ -8,9 +8,9 @@ tvheadend.data.channelTags = new Ext.data.JsonStore({
 	id : 'identifier',
 	url : 'channeltags',
 	baseParams : { op : 'listTags' },
-	sortInfo : {
-		field : 'name',
-		direction : 'ASC'
+	sorters : {
+		direction : 'ASC',
+		property : 'name'
 	}
 });
 
@@ -20,9 +20,9 @@ tvheadend.data.channelTags2 = new Ext.data.JsonStore({
 	id : 'identifier',
 	url : 'channeltags',
 	baseParams : { op : 'listTags' },
-	sortInfo : {
-		field : 'name',
-		direction : 'ASC'
+	sorters : {
+		direction : 'ASC',
+		property : 'name'
 	}
 });
 
@@ -37,7 +37,7 @@ tvheadend.comet.on('channeltags', function(m) {
 /**
  * 
  */
-tvheadend.panel.ctag = function(id) {
+tvheadend.grid.ctag = function(id) {
 	
 	var search = new tvheadend.Search;
 	
@@ -67,12 +67,14 @@ tvheadend.panel.ctag = function(id) {
 	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
-		defaults : { sortable : true },
+		defaults : {
+			renderer : tvheadend.renderer.text,
+			sortable : true
+		},
 		columns : [ sm, enabledColumn, {
 			dataIndex : 'name',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Name',
-			renderer : tvheadend.renderer.Value,
 			hideable : false,
 			width : 150
 		}, 
@@ -80,14 +82,13 @@ tvheadend.panel.ctag = function(id) {
 			dataIndex : 'icon',
 			editor : new Ext.form.TextField,
 			header : 'Icon URL (absolute)',
-			renderer : tvheadend.renderer.Value,
 			width : 300
 		}, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField,
 			header : 'Comment',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, value, 'Unset', 'New tag');
+				tvheadend.renderer.text(value, meta, value, 'Unset', 'New tag');
 			},
 			width : 300
 		} ]
@@ -96,7 +97,7 @@ tvheadend.panel.ctag = function(id) {
 	var rec = Ext.data.Record.create([ 'comment', 'enabled', 'icon', 'internal', 'name', 'titledIcon' ]);
 
 	var grid = new tvheadend.panel.table(id, 'Channel Tags', 'channeltags', sm, cm,
-		rec, [ enabledColumn, internalColumn, search, titledIconColumn ],
+		rec, [ 'bufferedrenderer', enabledColumn, internalColumn, search, titledIconColumn ],
 		tvheadend.data.channelTags, 'config_tags.html', 'tag');
 		
 	return grid;

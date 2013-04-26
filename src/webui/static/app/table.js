@@ -45,13 +45,13 @@ tvheadend.panel.table = function(id, title, dtable, sm, cm, rec, plugins, store,
 	function delSelected() {
 		var keys = grid.selModel.selections.keys.length;
 		
-		if(!keys)
+		if (!keys)
 			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
 			var msg = 'Do you really want to delete this entry?';
 			
-			if(keys > 1) {
-				if(keys == grid.store.getTotalCount())
+			if (keys > 1) {
+				if (keys == grid.store.getTotalCount())
 					msg = 'Do you really want to delete all entries?';
 				else
 					msg = 'Do you really want to delete selected ' + keys + ' entries?';
@@ -170,13 +170,12 @@ tvheadend.panel.table = function(id, title, dtable, sm, cm, rec, plugins, store,
 		id : id ? id : Ext.id,
 		plugins : plugins,
 		sm : sm,
-		stateful : true,
 		stateId : this.id,
+		stateful : true,
 		store : store,
 		stripeRows : true,
 		tbar : tb,
-		title : title,
-		view : new tvheadend.BufferView
+		title : title
 	});
 	
 	return grid;

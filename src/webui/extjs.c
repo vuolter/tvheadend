@@ -93,15 +93,6 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   htsbuf_qprintf(hq, "<head>\n");
 
   htsbuf_qprintf(hq, "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all%s.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/bubble/resources/css/bubble.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/gridsearch/resources/css/gridsearch.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/grouptab/resources/css/GroupTab.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/livegrid/resources/css/ext-ux-livegrid.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/lovcombo/resources/css/Ext.ux.form.LovCombo.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/multiselect/resources/css/multiselect.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/rowactions/resources/css/Ext.ux.grid.RowActions.css\" />\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/spinner/resources/css/Spinner.css\" />\n"
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\" />\n",
                      tvheadend_webui_debug ? "-debug" : "");
   
@@ -115,62 +106,43 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   extjs_exec(hq, "Ext.BLANK_IMAGE_URL = " "'"EXTJSPATH"/resources/images/default/s.png';");
 
   /**
-   * Load extjs extensions
-   */
-  extjs_load(hq, "static/app/extensions.js");
-  extjs_load(hq, "static/extensions/BufferView.js");
-  extjs_load(hq, "static/extensions/CheckColumn.js");
-  extjs_load(hq, "static/extensions/GridValidator.js");
-  extjs_load(hq, "static/extensions/LocalStorage.js");
-  extjs_load(hq, "static/extensions/bubble/BubblePanel.js");
-  extjs_load(hq, "static/extensions/gridsearch/Ext.ux.grid.Search.js");
-  extjs_load(hq, "static/extensions/grouptab/GroupTab.js");
-  extjs_load(hq, "static/extensions/grouptab/GroupTabPanel.js");
-  extjs_load(hq, "static/extensions/livegrid/livegrid-all.js");
-  extjs_load(hq, "static/extensions/lovcombo/Ext.ux.form.LovCombo.js");
-  extjs_load(hq, "static/extensions/multiselect/ddview.js");
-  extjs_load(hq, "static/extensions/multiselect/multiselect.js");
-  extjs_load(hq, "static/extensions/progresscolumn/Ext.ux.grid.ProgressColumn.js");
-  extjs_load(hq, "static/extensions/rowactions/Ext.ux.grid.RowActions.js");
-  extjs_load(hq, "static/extensions/spinner/Spinner.js");
-  extjs_load(hq, "static/extensions/spinner/SpinnerStrategy.js");
-
-  /**
    * Create namespaces for our app
    */
   extjs_exec(hq, "Ext.namespace('tvheadend.button');\n"
                  "Ext.namespace('tvheadend.data');\n"
+                 "Ext.namespace('tvheadend.grid');\n"
                  "Ext.namespace('tvheadend.panel');\n"
                  "Ext.namespace('tvheadend.renderer');\n"
-                 "Ext.namespace('tvheadend.selection');\n");
+                 "Ext.namespace('tvheadend.selection');\n"
+                 "Ext.namespace('tvheadend.tab');\n");
 
   /**
    * Load all components
    */
   extjs_load(hq, "static/app/comet.js");
-  extjs_load(hq, "static/app/table.js");
-  extjs_load(hq, "static/app/ctag.js");
-  extjs_load(hq, "static/app/acl.js");
-  extjs_load(hq, "static/app/cwc.js");
-  extjs_load(hq, "static/app/capmt.js");
-  extjs_load(hq, "static/app/adapters.js");
+  // extjs_load(hq, "static/app/table.js");
+  // extjs_load(hq, "static/app/ctag.js");
+  // extjs_load(hq, "static/app/acl.js");
+  // extjs_load(hq, "static/app/cwc.js");
+  // extjs_load(hq, "static/app/capmt.js");
+  // extjs_load(hq, "static/app/adapters.js");
 #if ENABLE_LINUXDVB
-  extjs_load(hq, "static/app/dvb.js");
+  // extjs_load(hq, "static/app/dvb.js");
 #endif
-  extjs_load(hq, "static/app/iptv.js");
+  // extjs_load(hq, "static/app/iptv.js");
 #if ENABLE_V4L
-  extjs_load(hq, "static/app/v4l.js");
+  // extjs_load(hq, "static/app/v4l.js");
 #endif
 #if ENABLE_TIMESHIFT
-  extjs_load(hq, "static/app/timeshift.js");
+  // extjs_load(hq, "static/app/timeshift.js");
 #endif
-  extjs_load(hq, "static/app/channels.js");
+  // extjs_load(hq, "static/app/channels.js");
   extjs_load(hq, "static/app/epg.js");
-  extjs_load(hq, "static/app/dvr.js");
-  extjs_load(hq, "static/app/epggrab.js");
-  extjs_load(hq, "static/app/config.js");
-  extjs_load(hq, "static/app/log.js");
-  extjs_load(hq, "static/app/status.js");
+  // extjs_load(hq, "static/app/dvr.js");
+  // extjs_load(hq, "static/app/epggrab.js");
+  // extjs_load(hq, "static/app/config.js");
+  // extjs_load(hq, "static/app/log.js");
+  // extjs_load(hq, "static/app/status.js");
 
   /**
    * Finally, the app itself
@@ -198,7 +170,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
 		 "\tmargin:5px;\n"
 		 "}\n"
 		 "</style>\n"
-		 "<title>HTS Tvheadend %s</title>\n"
+		 "<title>Tvheadend %s</title>\n"
 		 "</head>\n"
 		 "<body>\n"
 		 "<div id=\"systemlog\"></div>\n"

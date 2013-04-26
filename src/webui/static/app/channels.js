@@ -10,9 +10,9 @@ tvheadend.data.channels = new Ext.data.JsonStore({
 	fields : tvheadend.channelRec,
 	url : 'channels',
 	baseParams : { op : 'list' },
-	sortInfo : {
-		field : 'number',
-		direction : 'ASC'
+	sorters : {
+		direction : 'ASC',
+		property : 'number'
 	}
 });
 
@@ -21,9 +21,9 @@ tvheadend.data.channels2 = new Ext.data.JsonStore({
 	fields : tvheadend.channelRec,
 	url : 'channels',
 	baseParams : { op : 'list' },
-	sortInfo : {
-		field : 'name',
-		direction : 'ASC'
+	sorters : {
+		direction : 'ASC',
+		property : 'name'
 	}
 });
 
@@ -93,7 +93,7 @@ tvheadend.mergeChannel = function(chan) {
 /**
  *
  */
-tvheadend.panel.channels = function(id) {
+tvheadend.grid.channels = function(id) {
 	
 	var validator = new Ext.ux.plugins.GridValidator;
 	var search = new tvheadend.Search;
@@ -122,7 +122,10 @@ tvheadend.panel.channels = function(id) {
 	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
-		defaults : { sortable : true },
+		defaults : {
+			renderer : tvheadend.renderer.text,
+			sortable : true
+		},
 		columns : [ sm, {
 			dataIndex : 'number',
 			editor : new Ext.form.NumberField({
@@ -131,7 +134,6 @@ tvheadend.panel.channels = function(id) {
 			}),
 			header : 'Number',
 			hideable : false,
-			renderer : tvheadend.renderer.Value,
 			width : 65
 		}, {
 			dataIndex : 'name',
@@ -147,7 +149,7 @@ tvheadend.panel.channels = function(id) {
 				valueField : 'identifier'
 			}),
 			header : 'Tags',
-			renderer : tvheadend.renderer.Tags,
+			renderer : tvheadend.renderer.tags,
 			width : 250
 		}, {
 			dataIndex : 'epggrabsrc',
@@ -165,7 +167,7 @@ tvheadend.panel.channels = function(id) {
 			}),
 			header : 'EPG Grab source',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unknown');
+				tvheadend.renderer.text(value, meta, 'Unknown');
 			},
 			width : 150
 		}, {
@@ -182,7 +184,7 @@ tvheadend.panel.channels = function(id) {
 			}),
 			header : 'DVR Pre-Start',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unset', value + 'min');
+				tvheadend.renderer.text(value, meta, 'Unset', value + 'min');
 			},
 			width : 85
 		}, {
@@ -193,7 +195,7 @@ tvheadend.panel.channels = function(id) {
 			}),
 			header : 'DVR Post-End',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unset', value + 'min');
+				tvheadend.renderer.text(value, meta, 'Unset', value + 'min');
 			},
 			width : 85
 		},
@@ -203,13 +205,13 @@ tvheadend.panel.channels = function(id) {
 	function delSelected() {
 		var keys = grid.selModel.selections.keys.length;
 		
-		if(!keys)
+		if (!keys)
 			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
 			var msg = 'Do you really want to delete this entry?';
 			
-			if(keys > 1) {
-				if(keys == grid.store.getTotalCount())
+			if (keys > 1) {
+				if (keys == grid.store.getTotalCount())
 					msg = 'Do you really want to delete all entries?';
 				else
 					msg = 'Do you really want to delete selected ' + keys + ' entries?';
@@ -325,18 +327,17 @@ tvheadend.panel.channels = function(id) {
 		iconCls : 'television',
 		id : id ? id : Ext.id,
 		enableColumnMove : false,
-		plugins : [ actions, search, validator ],
+		plugins : [ actions, 'bufferedrenderer', search, validator ],
 		sm : sm,
-		stateful : true,
 		stateId : this.id,
+		stateful : true,
 		store : tvheadend.data.channels,
 		stripeRows : true,
 		tbar : tb,
-		title : 'Channels',
-		view : new tvheadend.BufferView
+		title : 'Channels'
 	});
 	
-	if(tvheadend.accessupdate.admin) {
+	if (tvheadend.accessupdate.admin) {
 		sm.on('selectionchange', function(s) {
 			delBtn.setDisabled(s.getCount() == 0);
 		});

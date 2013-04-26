@@ -1,3 +1,7 @@
+/**
+ * @author Walter Purcaro
+ */
+
 tvheadend.data.contentGroup = new Ext.data.JsonStore({
 	autoLoad : {
 		callback : function(rec, opts, succ) {
@@ -7,9 +11,9 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 	},
 	fields : [ 'name', 'code' ],
 	root : 'entries',
-	sortInfo : {
-		field : 'name',
-		direction : 'ASC'
+	sorters : {
+		direction : 'ASC',
+		property : 'name'
 	},
 	url : 'ecglist'
 });
@@ -55,7 +59,7 @@ tvheadend.epgDetails = function(event) {
 	content += '<div id="altbcast"></div>';
 
 	var confcombo = new Ext.form.ComboBox({
-		store : tvheadend.data.configNames,
+		// store : tvheadend.data.configNames,
 		triggerAction : 'all',
 		mode : 'local',
 		valueField : 'identifier',
@@ -177,7 +181,57 @@ tvheadend.epgDetails = function(event) {
 	});
 }
 
-tvheadend.panel.epg = function(id) {
+tvheadend.grid.epg = function(id) {
+
+	/**
+	 * Renderers
+	 */
+	var setMetaAttr = function(meta, rec) {
+		var now = new Date;
+		var start = rec.get('start');
+		
+		if (now.getTime() >= start.getTime()) 
+			meta.attr = 'style="font-weight : bold;"';
+	}
+	
+	var renderDay = function(value, meta, rec, row, col, store){
+        var start = rec.get('start');
+		var now = new Date();
+		var tomorrow = new Date().add(Date.DAY, 2).clearTime();
+		var today = new Date().add(Date.DAY, 1).clearTime();
+
+		if (start >= tomorrow) {
+			if (start.getMonth() == now.getMonth())
+				value = start.format('D j');
+			else
+				value = start.format('D j (M)');
+		}
+		else if (start >= today)
+			value = 'Tomorrow';
+		else if (start > now)
+			value = 'Today';
+		else
+			value = '<img class="x-icon-airing" src="static/icons/transmit_orange.png" />' + 'Now';
+		
+		setMetaAttr(meta, rec);
+		return value;
+    }
+	
+	var renderTime = function(value, meta, rec, row, col, store){
+        setMetaAttr(meta, rec);
+		return tvheadend.renderer.time(value, meta, rec, row, col, store);
+    }
+
+	var renderDuration = function(value, meta, rec, row, col, store){
+		setMetaAttr(meta, rec);
+		return tvheadend.renderer.duration(value, meta, rec, row, col, store);
+    }
+
+	var renderText = function(value, meta, rec, row, col, store) {
+		setMetaAttr(meta, rec);
+		return tvheadend.renderer.text(value, meta, 'Unknown');
+	}
+
 	
 	var actions = new Ext.ux.grid.RowActions({
 		actions : { iconIndex : 'schedstate' },
@@ -185,7 +239,7 @@ tvheadend.panel.epg = function(id) {
 		hideable : false,
 		width : 20
 	});
-
+	
 	var rec = Ext.data.Record.create([
 		{ name : 'channel' },
 		{ name : 'channelid' },
@@ -206,63 +260,26 @@ tvheadend.panel.epg = function(id) {
 	
 	var store = new Ext.ux.grid.livegrid.Store({
 		autoLoad : true,
-		bufferSize : 300,
 		reader : new Ext.ux.grid.livegrid.JsonReader({
 			fields : rec,
 			id : 'id',
 			root : 'entries',
 			totalProperty : 'totalCount'
 		}),
+		sorters : {
+			property : 'day',
+			direction : 'DESC'
+		},
 		url : 'epg'
 	});
-
-	function setMetaAttr(meta, rec) {
-		var now = new Date;
-		var start = rec.get('start');
-
-		if(now.getTime() >= start.getTime()) 
-			meta.attr = 'style="font-weight : bold;"';
-	}
 	
-	function renderDay(value, meta, rec, row, col, store){
-        var start = rec.get('start');
-		var now = new Date();
-		var tomorrow = new Date().add(Date.DAY, 2).clearTime();
-		var today = new Date().add(Date.DAY, 1).clearTime();
-
-		if(start >= tomorrow) {
-			if(start.getMonth() == now.getMonth())
-				value = start.format('D j');
-			else
-				value = start.format('D j (M)');
-		}
-		else if(start >= today)
-			value = 'Tomorrow';
-		else if(start > now)
-			value = 'Today';
-		else
-			value = '<img class="x-icon-airing" src="static/icons/transmit_orange.png" />' + 'Now';
-		
-		setMetaAttr(meta, rec);
-    }
+	var sm = new Ext.selection.RowModel({ pruneRemoved : false });
 	
-	function renderTime(value, meta, rec, row, col, store){
-        tvheadend.renderer.Time(value, meta, rec, row, col, store);
-		setMetaAttr(meta, rec);
-    }
-
-	function renderDuration(value, meta, rec, row, col, store){
-		tvheadend.renderer.Duration(value, meta, rec, row, col, store);
-		setMetaAttr(meta, rec);
-    }
-
-	function renderText(value, meta, rec, row, col, store) {
-		tvheadend.renderer.Value(value, meta, 'Unknown');
-		setMetaAttr(meta, rec);
-	}
-
 	var cm = new Ext.grid.ColumnModel({
-		defaults : { sortable : false },
+		defaults : {
+			renderer : renderText,
+			sortable : false
+		},
 		columns : [ actions, {
 			dataIndex : 'day',
 			header : 'Airing',
@@ -288,40 +305,34 @@ tvheadend.panel.epg = function(id) {
 			width : 150,
 			id : 'channel',
 			header : 'Channel',
-			dataIndex : 'channel',
-			renderer : renderText,
+			dataIndex : 'channel'
 		}, {
 			dataIndex : 'number',
 			header : 'Ch. #',
 			hidden : true,
-			id : 'number',
-			renderer : renderText,
+			id : 'number'
 			width : 55
 		}, {
 			dataIndex : 'title',
 			header : 'Title',
 			hideable : false,
-			id : 'title',
-			renderer : renderText,
+			id : 'title'
 			width : 400
 		}, {
 			dataIndex : 'subtitle',
 			header : 'Subtitle',
-			id : 'subtitle',
-			renderer : renderText,
+			id : 'subtitle'
 			width : 300
 		}, {
 			dataIndex : 'episode',
 			header : 'Episode',
-			id : 'episode',
-			renderer : renderText,
+			id : 'episode'
 			width : 85
 		}, {
 			dataIndex : 'description',
 			header : 'Description',
 			hidden : true,
-			id : 'description',
-			renderer : renderText,
+			id : 'description'
 			width : 400
 		}, {
 			dataIndex : 'contenttype',
@@ -329,7 +340,7 @@ tvheadend.panel.epg = function(id) {
 			id : 'contenttype',
 			renderer : function(value, meta, rec, row, col, store) {
 				value = tvheadend.contentGroupLookupName(value);
-				tvheadend.renderer.Value(value, meta, 'Unknown');
+				tvheadend.renderer.text(value, meta, 'Unknown');
 				setMetaAttr(meta, rec);
 			},
 			width : 150
@@ -355,7 +366,7 @@ tvheadend.panel.epg = function(id) {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.data.channels2,
+		// store : tvheadend.data.channels2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -369,7 +380,7 @@ tvheadend.panel.epg = function(id) {
 	var epgFilterChannelTags = new Ext.form.ComboBox({
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.data.channelTags2,
+		// store : tvheadend.data.channelTags2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -466,26 +477,19 @@ tvheadend.panel.epg = function(id) {
 		'-', helpBtn ]
 	});
 	
-	var view = new Ext.ux.grid.livegrid.GridView({
-		forceFit : true,
-		loadMask : { msg : 'Buffering. Please wait...' },
-		nearLimit : 100
-	});
-	
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
 		enableColumnMove : false,
 		id : id ? id : Ext.id,
 		cm : cm,
 		iconCls : 'bell',
-		plugins : [ actions ],
-		sm : new Ext.ux.grid.livegrid.RowSelectionModel(),
+		plugins : [ actions, 'bufferedrenderer' ],
+		sm : sm,
 		store : store,
-		stateful : true,
 		stateId : this.id,
+		stateful : true,
 		stripeRows : true,
 		tbar : tb,
-		title : 'EPG',
-		view : view
+		title : 'EPG'
 	});
 
 	grid.on('rowclick', rowclicked);

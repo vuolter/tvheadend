@@ -1,7 +1,7 @@
 /**
  * IPTV service grid
  */
-tvheadend.panel.iptv = function(id) {
+tvheadend.grid.iptv = function(id) {
 
 	var channelsCombo = new Ext.form.ComboBox({
 		allowBlank : true,
@@ -54,19 +54,20 @@ tvheadend.panel.iptv = function(id) {
 	var sm = new tvheadend.selection.CheckboxModel;
 	
 	var cm = new Ext.grid.ColumnModel({
-		defaults : { sortable : true },
+		defaults : {
+			renderer : tvheadend.renderer.text,
+			sortable : true
+		},
 		columns : [ enabledColumn, {
 			dataIndex : 'channelname',
 			header : 'Channel name',
 			hideable : false,
-			renderer : tvheadend.renderer.Value,
 			editor : channelsCombo,
 			width : 150
 		}, {
 			dataIndex : 'interface',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Interface',
-			renderer : tvheadend.renderer.Value,
 			width : 100
 		}, {
 			dataIndex : 'port',
@@ -75,14 +76,13 @@ tvheadend.panel.iptv = function(id) {
 				minValue : 1
 			}),
 			header : 'UDP Port',
-			renderer : tvheadend.renderer.Value,
 			width : 60
 		}, {
 			dataIndex : 'group',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Group',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, value, 'Unset', '::');
+				tvheadend.renderer.text(value, meta, value, 'Unset', '::');
 			},
 			width : 100
 		}, {
@@ -99,7 +99,7 @@ tvheadend.panel.iptv = function(id) {
 			header : 'Service Type',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unset', servicetypeStore.getById(value).get('str'));
+				tvheadend.renderer.text(value, meta, 'Unset', servicetypeStore.getById(value).get('str'));
 			},
 			width : 100
 		}, {
@@ -107,7 +107,7 @@ tvheadend.panel.iptv = function(id) {
 			header : 'Service ID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unknown');
+				tvheadend.renderer.text(value, meta, 'Unknown');
 			},
 			width : 50
 		}, {
@@ -115,7 +115,7 @@ tvheadend.panel.iptv = function(id) {
 			header : 'PMT PID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unknown');
+				tvheadend.renderer.text(value, meta, 'Unknown');
 			},
 			width : 50
 		}, {
@@ -123,7 +123,7 @@ tvheadend.panel.iptv = function(id) {
 			header : 'PCR PID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unknown');
+				tvheadend.renderer.text(value, meta, 'Unknown');
 			},
 			width : 50,
 		},
@@ -146,9 +146,9 @@ tvheadend.panel.iptv = function(id) {
 			}
 		},
 		root : 'entries',
-		sortInfo : {
-			field : 'channelname',
-			direction : 'ASC'
+		sorters : {
+			direction : 'ASC',
+			property : 'channelname'
 		},
 		url : 'iptv/services'
 	});
@@ -187,13 +187,13 @@ tvheadend.panel.iptv = function(id) {
 	function delSelected() {
 		var keys = grid.selModel.selections.keys.length;
 		
-		if(!keys)
+		if (!keys)
 			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
 			var msg = 'Do you really want to delete this entry?';
 			
-			if(keys > 1) {
-				if(keys == grid.store.getTotalCount())
+			if (keys > 1) {
+				if (keys == grid.store.getTotalCount())
 					msg = 'Do you really want to delete all entries?';
 				else
 					msg = 'Do you really want to delete selected ' + keys + ' entries?';
@@ -293,15 +293,14 @@ tvheadend.panel.iptv = function(id) {
 		enableColumnMove : false,
 		iconCls : 'iptv',
 		id : id ? id : Ext.id,
-		plugins : [ enabledColumn, actions,search ],
+		plugins : [ actions, 'bufferedrenderer', enabledColumn, search ],
 		sm : sm,
-		stateful : true,
 		stateId : this.id,
+		stateful : true,
 		store : store,
 		stripeRows : true,
 		tbar : tb,
-		title : 'IPTV',
-		view : new tvheadend.BufferView
+		title : 'IPTV'
 	});
 
 	store.on('update', function(s, r, o) {

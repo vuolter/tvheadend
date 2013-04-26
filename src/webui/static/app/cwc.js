@@ -1,5 +1,5 @@
-tvheadend.panel.cwc = function(id) {
-	if(tvheadend.capabilities.indexOf('cwc') == -1)
+tvheadend.grid.cwc = function(id) {
+	if (tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.panel.dummy('Code Word Client','key');
 	
 	var search = new tvheadend.Search;
@@ -35,6 +35,7 @@ tvheadend.panel.cwc = function(id) {
 	var cm = new Ext.grid.ColumnModel({
 		defaults : {
 			allowBlank : false,
+			renderer : tvheadend.renderer.text,
 			sortable : true
 		},
 		columns : [ actions, enabledColumn, {
@@ -42,7 +43,6 @@ tvheadend.panel.cwc = function(id) {
 			editor : new Ext.form.TextField,
 			header : 'Username',
 			hideable : false,
-			renderer : tvheadend.renderer.Value,
 			width : 200
 		}, {
 			dataIndex : 'password',
@@ -50,7 +50,7 @@ tvheadend.panel.cwc = function(id) {
 			header : 'Password',
 			hideable : false,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Unset', 'Hidden');
+				tvheadend.renderer.text(value, meta, 'Unset', 'Hidden');
 			},
 			width : 200
 		}, {
@@ -58,13 +58,11 @@ tvheadend.panel.cwc = function(id) {
 			editor : new Ext.form.TextField,
 			header : 'Hostname',
 			hideable : false,
-			renderer : tvheadend.renderer.Value,
 			width : 200
 		}, {
 			dataIndex : 'port',
 			header : 'Port',
 			hideable : false,
-			renderer : tvheadend.renderer.Value,
 			editor : new Ext.form.TextField,
 			width : 120
 		}, {
@@ -73,7 +71,7 @@ tvheadend.panel.cwc = function(id) {
 			editor : new Ext.form.TextField,
 			header : 'DES Key',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderer.Value(value, meta, 'Hidden', value, '00:00:00:00:00:00:00:00:00:00:00:00:00:00');
+				tvheadend.renderer.text(value, meta, 'Hidden', value, '00:00:00:00:00:00:00:00:00:00:00:00:00:00');
 			},
 			width : 400
 		},
@@ -81,7 +79,6 @@ tvheadend.panel.cwc = function(id) {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
-			renderer : tvheadend.renderer.Value,
 			width : 250
 		} ]
 	});
@@ -98,15 +95,15 @@ tvheadend.panel.cwc = function(id) {
 		fields : rec,
 		id : 'id',
 		root : 'entries',
-		sortInfo : {
-			field : 'username',
+		sorters : {
 			direction : 'ASC'
+			property : 'username'
 		},
 		url : 'tablemgr'
 	});
 
 	var grid = new tvheadend.panel.table(id, 'Code Word Client', 'cwc', sm, cm, rec, 
-		[ actions, emmColumn, emmexColumn, enabledColumn, search ], store, 'config_cwc.html', 'key');
+		[ actions, 'bufferedrenderer', emmColumn, emmexColumn, enabledColumn, search ], store, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {
 		var rec = store.getById(msg.id);
