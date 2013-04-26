@@ -93,22 +93,7 @@ tvheadend.mergeChannel = function(chan) {
 /**
  *
  */
-tvheadend.panel.channels = function() {
-	
-	function renderTags(value, meta, rec, row, col, store) {
-		if(typeof value === 'undefined' || value.length < 2)
-			return '<span class="tvh-grid-blue">Unset</span>';
-		else {
-			var ret = [];
-			var tags = value.split(',');
-			for(var i in tags) {
-				tag = tvheadend.data.channelTags.getById(tags[i]);
-				if(typeof tag !== 'undefined' && tag.length > 3)
-					ret.push(tag.data.name);
-			}
-			return ret.join(', ');
-		}
-	}
+tvheadend.panel.channels = function(id) {
 	
 	var validator = new Ext.ux.plugins.GridValidator;
 	var search = new tvheadend.Search;
@@ -146,8 +131,7 @@ tvheadend.panel.channels = function() {
 			}),
 			header : 'Number',
 			hideable : false,
-			renderer : tvheadend.renderEntry
-			},
+			renderer : tvheadend.renderer.Value,
 			width : 65
 		}, {
 			dataIndex : 'name',
@@ -163,7 +147,7 @@ tvheadend.panel.channels = function() {
 				valueField : 'identifier'
 			}),
 			header : 'Tags',
-			renderer : renderTags,
+			renderer : tvheadend.renderer.Tags,
 			width : 250
 		}, {
 			dataIndex : 'epggrabsrc',
@@ -181,7 +165,7 @@ tvheadend.panel.channels = function() {
 			}),
 			header : 'EPG Grab source',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 150
 		}, {
@@ -198,7 +182,7 @@ tvheadend.panel.channels = function() {
 			}),
 			header : 'DVR Pre-Start',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unset', value + 'min');
+				tvheadend.renderer.Value(value, meta, 'Unset', value + 'min');
 			},
 			width : 85
 		}, {
@@ -209,7 +193,7 @@ tvheadend.panel.channels = function() {
 			}),
 			header : 'DVR Post-End',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unset', value + 'min');
+				tvheadend.renderer.Value(value, meta, 'Unset', value + 'min');
 			},
 			width : 85
 		},
@@ -339,7 +323,7 @@ tvheadend.panel.channels = function() {
 	var grid = new Ext.grid.EditorGridPanel({
 		cm : cm,
 		iconCls : 'television',
-		id : 'channelsGrid',
+		id : id ? id : Ext.id,
 		enableColumnMove : false,
 		plugins : [ actions, search, validator ],
 		sm : sm,

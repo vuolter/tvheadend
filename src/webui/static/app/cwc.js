@@ -1,4 +1,4 @@
-tvheadend.panel.cwc = function() {
+tvheadend.panel.cwc = function(id) {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.panel.dummy('Code Word Client','key');
 	
@@ -42,8 +42,7 @@ tvheadend.panel.cwc = function() {
 			editor : new Ext.form.TextField,
 			header : 'Username',
 			hideable : false,
-			renderer : tvheadend.renderEntry
-			},
+			renderer : tvheadend.renderer.Value,
 			width : 200
 		}, {
 			dataIndex : 'password',
@@ -51,7 +50,7 @@ tvheadend.panel.cwc = function() {
 			header : 'Password',
 			hideable : false,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unset', 'Hidden');
+				tvheadend.renderer.Value(value, meta, 'Unset', 'Hidden');
 			},
 			width : 200
 		}, {
@@ -59,13 +58,13 @@ tvheadend.panel.cwc = function() {
 			editor : new Ext.form.TextField,
 			header : 'Hostname',
 			hideable : false,
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 200
 		}, {
 			dataIndex : 'port',
 			header : 'Port',
 			hideable : false,
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			editor : new Ext.form.TextField,
 			width : 120
 		}, {
@@ -74,7 +73,7 @@ tvheadend.panel.cwc = function() {
 			editor : new Ext.form.TextField,
 			header : 'DES Key',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Hidden', value, '00:00:00:00:00:00:00:00:00:00:00:00:00:00');
+				tvheadend.renderer.Value(value, meta, 'Hidden', value, '00:00:00:00:00:00:00:00:00:00:00:00:00:00');
 			},
 			width : 400
 		},
@@ -82,7 +81,7 @@ tvheadend.panel.cwc = function() {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 250
 		} ]
 	});
@@ -106,7 +105,7 @@ tvheadend.panel.cwc = function() {
 		url : 'tablemgr'
 	});
 
-	var grid = new tvheadend.panel.table('cwcGrid', 'Code Word Client', 'cwc', sm, cm, rec, 
+	var grid = new tvheadend.panel.table(id, 'Code Word Client', 'cwc', sm, cm, rec, 
 		[ actions, emmColumn, emmexColumn, enabledColumn, search ], store, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {

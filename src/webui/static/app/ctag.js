@@ -37,7 +37,7 @@ tvheadend.comet.on('channeltags', function(m) {
 /**
  * 
  */
-tvheadend.panel.ctag = function() {
+tvheadend.panel.ctag = function(id) {
 	
 	var search = new tvheadend.Search;
 	
@@ -72,7 +72,7 @@ tvheadend.panel.ctag = function() {
 			dataIndex : 'name',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Name',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			hideable : false,
 			width : 150
 		}, 
@@ -80,14 +80,14 @@ tvheadend.panel.ctag = function() {
 			dataIndex : 'icon',
 			editor : new Ext.form.TextField,
 			header : 'Icon URL (absolute)',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 300
 		}, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField,
 			header : 'Comment',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, value, 'Unset', 'New tag');
+				tvheadend.renderer.Value(value, meta, value, 'Unset', 'New tag');
 			},
 			width : 300
 		} ]
@@ -95,7 +95,7 @@ tvheadend.panel.ctag = function() {
 
 	var rec = Ext.data.Record.create([ 'comment', 'enabled', 'icon', 'internal', 'name', 'titledIcon' ]);
 
-	var grid = new tvheadend.panel.table('ctagGrid', 'Channel Tags', 'channeltags', sm, cm,
+	var grid = new tvheadend.panel.table(id, 'Channel Tags', 'channeltags', sm, cm,
 		rec, [ enabledColumn, internalColumn, search, titledIconColumn ],
 		tvheadend.data.channelTags, 'config_tags.html', 'tag');
 		

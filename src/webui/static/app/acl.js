@@ -1,4 +1,4 @@
-tvheadend.panel.acl = function() {
+tvheadend.panel.acl = function(id) {
 
 	var search = new tvheadend.Search;
 	
@@ -72,7 +72,7 @@ tvheadend.panel.acl = function() {
 			header : 'Username',
 			hideable : false,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, value, 'Any user', '*');
+				tvheadend.renderer.Value(value, meta, value, 'Any user', '*');
 			},
 			width : 200
 		}, {
@@ -81,7 +81,7 @@ tvheadend.panel.acl = function() {
 			header : 'Password',
 			hideable : false,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Hidden', 'Any pass', '*');
+				tvheadend.renderer.Value(value, meta, 'Hidden', 'Any pass', '*');
 			},
 			width : 200
 		}, {
@@ -89,7 +89,7 @@ tvheadend.panel.acl = function() {
 			editor : new Ext.form.TextField,
 			header : 'IP allowed',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, value, 'Any IP address', '0.0.0.0/0');
+				tvheadend.renderer.Value(value, meta, value, 'Any IP address', '0.0.0.0/0');
 			},
 			width : 120
 		},
@@ -99,7 +99,7 @@ tvheadend.panel.acl = function() {
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, value, 'Unset', 'New entry');
+				tvheadend.renderer.Value(value, meta, value, 'Unset', 'New entry');
 			},
 			width : 250
 		} ]
@@ -124,7 +124,7 @@ tvheadend.panel.acl = function() {
 		url : 'tablemgr'
 	});
 
-	var grid = new tvheadend.panel.table('aclGrid', 'Access control', 'accesscontrol', sm, cm,
+	var grid = new tvheadend.panel.table(id, 'Access control', 'accesscontrol', sm, cm,
 		rec, [ adminColumn, enabledColumn, /*introColumn,*/ dvrColumn, 
 		dvrcfgColumn, search, streamingColumn, webuiColumn ], store, 'config_access.html', 'group');
 			

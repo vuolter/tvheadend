@@ -106,7 +106,7 @@ tvheadend.panel.logsettings = function() {
 	});
 
 	var confpanel = new Ext.form.FormPanel({
-		title : 'Debugging',
+		title : 'Log Settings',
 		iconCls : 'bug',
 		border : false,
 		bodyStyle : 'padding:15px',

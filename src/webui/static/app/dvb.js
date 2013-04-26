@@ -1460,7 +1460,7 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 
 	var rec = Ext.data.Record.create([ 'name', 'port', 'comment', 'lnb' ]);
 
-	var grid = new tvheadend.panel.table('dvbsatconfGrid', 'Satellite config', 'dvbsatconf/'
+	var grid = new tvheadend.panel.table('dvbsatconf', 'Satellite config', 'dvbsatconf/'
 		+ adapterId, sm, cm, search, null, null, null);
 	
 	return grid;

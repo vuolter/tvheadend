@@ -177,7 +177,7 @@ tvheadend.epgDetails = function(event) {
 	});
 }
 
-tvheadend.panel.epg = function() {
+tvheadend.panel.epg = function(id) {
 	
 	var actions = new Ext.ux.grid.RowActions({
 		actions : { iconIndex : 'schedstate' },
@@ -247,26 +247,17 @@ tvheadend.panel.epg = function() {
     }
 	
 	function renderTime(value, meta, rec, row, col, store){
-        value = new Date(value).format('H:i');
+        tvheadend.renderer.Time(value, meta, rec, row, col, store);
 		setMetaAttr(meta, rec);
     }
 
 	function renderDuration(value, meta, rec, row, col, store){
-		value = Math.floor(value / 60);
-
-		if(value >= 60) {
-			var min = value % 60;
-			var hrs = Math.floor(value / 60);			
-			value = hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
-		}
-		else 
-			value = value + ' min';
-		
+		tvheadend.renderer.Duration(value, meta, rec, row, col, store);
 		setMetaAttr(meta, rec);
     }
 
 	function renderText(value, meta, rec, row, col, store) {
-		renderEntry(value, meta, 'Unknown');
+		tvheadend.renderer.Value(value, meta, 'Unknown');
 		setMetaAttr(meta, rec);
 	}
 
@@ -338,7 +329,7 @@ tvheadend.panel.epg = function() {
 			id : 'contenttype',
 			renderer : function(value, meta, rec, row, col, store) {
 				value = tvheadend.contentGroupLookupName(value);
-				renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 				setMetaAttr(meta, rec);
 			},
 			width : 150
@@ -483,7 +474,7 @@ tvheadend.panel.epg = function() {
 	
 	var grid = new Ext.ux.grid.livegrid.GridPanel({
 		enableColumnMove : false,
-		id : 'epgGrid',
+		id : id ? id : Ext.id,
 		cm : cm,
 		iconCls : 'bell',
 		plugins : [ actions ],

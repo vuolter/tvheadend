@@ -1,7 +1,7 @@
 /**
  * IPTV service grid
  */
-tvheadend.panel.iptv = function(adapterId) {
+tvheadend.panel.iptv = function(id) {
 
 	var channelsCombo = new Ext.form.ComboBox({
 		allowBlank : true,
@@ -59,14 +59,14 @@ tvheadend.panel.iptv = function(adapterId) {
 			dataIndex : 'channelname',
 			header : 'Channel name',
 			hideable : false,
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			editor : channelsCombo,
 			width : 150
 		}, {
 			dataIndex : 'interface',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Interface',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 100
 		}, {
 			dataIndex : 'port',
@@ -75,14 +75,14 @@ tvheadend.panel.iptv = function(adapterId) {
 				minValue : 1
 			}),
 			header : 'UDP Port',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 60
 		}, {
 			dataIndex : 'group',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Group',
 			renderer : function(value, meta, rec, row, col, store) {
-				renderEntry(value, meta, value, 'Unset', '::');
+				tvheadend.renderer.Value(value, meta, value, 'Unset', '::');
 			},
 			width : 100
 		}, {
@@ -99,7 +99,7 @@ tvheadend.panel.iptv = function(adapterId) {
 			header : 'Service Type',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				renderEntry(value, meta, 'Unset', servicetypeStore.getById(value).get('str'));
+				tvheadend.renderer.Value(value, meta, 'Unset', servicetypeStore.getById(value).get('str'));
 			},
 			width : 100
 		}, {
@@ -107,7 +107,7 @@ tvheadend.panel.iptv = function(adapterId) {
 			header : 'Service ID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 50
 		}, {
@@ -115,7 +115,7 @@ tvheadend.panel.iptv = function(adapterId) {
 			header : 'PMT PID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 50
 		}, {
@@ -123,7 +123,7 @@ tvheadend.panel.iptv = function(adapterId) {
 			header : 'PCR PID',
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 50,
 		},
@@ -292,7 +292,7 @@ tvheadend.panel.iptv = function(adapterId) {
 		cm : cm,
 		enableColumnMove : false,
 		iconCls : 'iptv',
-		id : 'iptvGrid',
+		id : id ? id : Ext.id,
 		plugins : [ enabledColumn, actions,search ],
 		sm : sm,
 		stateful : true,

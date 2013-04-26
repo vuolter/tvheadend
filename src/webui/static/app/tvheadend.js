@@ -1,14 +1,26 @@
 tvheadend.accessupdate = null;
-tvheadend.capabilities  = null;	
-	
+tvheadend.capabilities = null;
+
+/**
+ * About panel
+ */
+tvheadend.panel.about = function() {
+	return new Ext.Panel({
+		autoLoad : 'about.html',
+		iconCls : 'info',
+		layout : 'fit',
+		title : 'About'
+	});
+}
+
 /**
  * BufferView
  */
 tvheadend.BufferView = function() {
 	return new Ext.ux.grid.BufferView({
 		forceFit : true,
-		scrollDelay : false,
-		rowHeight : 29
+		rowHeight : 29,
+		scrollDelay : false
 	});
 }
 
@@ -26,28 +38,17 @@ tvheadend.selection.CheckboxModel = function() {
  */
 tvheadend.panel.dummy = function(title, icon) {
 	return new Ext.Panel({
-		title : title,
+		disabled : true,
+		hidden : !title && !icon,
 		iconCls : icon,
 		items : { hidden : true },
-		disabled : true,
-		hidden : !title && !icon
+		title : title
 	});
 }
 
 /**
- * Help button & popup
+ * Help popup & button
  */
-tvheadend.button.help = function(title, pagename, tooltip) {
-	return new Ext.Button({
-		handler : function() {
-			new tvheadend.help(title, pagename);
-		},
-		iconCls : 'help',
-		text : 'Help',
-		tooltip : tooltip ? tooltip : 'Show help page'
-	});
-}
-
 tvheadend.help = function(title, pagename) {
 	Ext.Ajax.request({
 		success : function(result, request) {
@@ -74,35 +75,114 @@ tvheadend.help = function(title, pagename) {
 	});
 }
 
+tvheadend.button.help = function(title, pagename, tooltip) {
+	return new Ext.Button({
+		handler : function() {
+			new tvheadend.help(title, pagename);
+		},
+		iconCls : 'help',
+		text : 'Help',
+		tooltip : tooltip ? tooltip : 'Show help page'
+	});
+}
+
 /**
- * Render entry
+ * Renderers
  */
-tvheadend.renderEntry = function(value, meta, fvalue, tvalue, cvalue, reverse) {
+tvheadend.renderer.Bandwidth = function(value, meta, rec, row, col, store) {
+	value = parseInt(value / 125) + ' KiB/s';
+}
+
+tvheadend.renderer.Date = function(value, meta, rec, row, col, store) {
+	value = new Date(value).format('Y-m-d , H:i');
+}	
+
+tvheadend.renderer.Day = function(value, meta, rec, row, col, store) {
+	value = new Date(value).format('Y-m-d (D)');
+}
+
+tvheadend.renderer.Duration = function(value, meta, rec, row, col, store) {
+	value = Math.floor(value / 60);
+	if(value >= 60) {
+		var min = value % 60;
+		var hrs = Math.floor(value / 60);
+		value = hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
+	}
+	else 
+		value = value + ' min';
+}
+
+tvheadend.renderer.Priority = function(value, meta, rec, row, col, store) {
+	value = tvheadend.data.dvrprio.getById(value).get("name");
+}
+
+tvheadend.renderer.Size = function(value, meta, rec, row, col, store) {
+	value = parseInt(value / 1048576) + 'MiB';
+}
+
+tvheadend.renderer.Tags = function(value, meta, rec, row, col, store) {
+	if(typeof value === 'undefined' || value.length < 2)
+		return '<span class="tvh-grid-blue">Unset</span>';
+	else {
+		var ret = [];
+		var tags = value.split(',');
+		for(var i in tags) {
+			tag = tvheadend.data.channelTags.getById(tags[i]);
+			if(typeof tag !== 'undefined' && tag.length > 3)
+				ret.push(tag.data.name);
+		}
+		return ret.join(', ');
+	}
+}
+
+tvheadend.renderer.Time = function(value, meta, rec, row, col, store) {
+	value = new Date(value).format('H:i');
+}
+
+tvheadend.renderer.Value = function(value, meta, fvalue, tvalue, cvalue, reverse, color) {
 	var fval = 'Unset';
 	var tval = value;
 	var cval = true;
 	var rev = false;
+	var attr = 'class="tvh-grid-' + (color ? color : 'gray') + '"';
 	
 	if(fvalue !== 'object') {
-		if(fvalue !== 'undefined') fval = fvalue;
-		if(tvalue !== 'undefined') tval = tvalue;
+		fvalue !== 'undefined' ? fval = fvalue : null;
+		tvalue !== 'undefined' ? tval = tvalue : null;
 		if(cvalue !== 'undefined') {
 			cval = cvalue;
 			rev = true;
 		}
-		if(reverse !== 'undefined') rev = reverse;
+		reverse !== 'undefined' ? rev = reverse : null;
 	}
 	
 	if(value == cval) {
 		value = tval;
 		if(rev)
-			meta.attr = 'class="tvh-grid-gray"';
+			meta.attr = attr;
 	}
 	else {
 		value = fval;
 		if(!rev)
-			meta.attr = 'class="tvh-grid-gray"';
+			meta.attr = attr;
 	}	
+}
+
+tvheadend.renderer.Week = function(value, meta, rec, row, col, store) {
+	if(typeof value === 'undefined' || value.length < 1)
+		return 'No days';
+	else if(value == '1,2,3,4,5,6,7')
+		return 'All days';
+	else {
+		var ret = [];
+		var tags = value.split(',');
+		for(var i in tags) {
+			tag = tvheadend.data.weekdays.getById(tags[i]);
+			if(typeof tag !== 'undefined')
+				ret.push(tag.get("name"));
+		}
+		return ret.join(', ');
+	}
 }
 
 /**
@@ -359,17 +439,19 @@ tvheadend.app = function() {
 			draggable:true
 		});
 		
-		tvheadend.epg = new tvheadend.panel.epg;
+		tvheadend.epg = new tvheadend.panel.epg('epg');
 		
 		if(tvheadend.accessupdate.dvr) {
-			tvheadend.dvr = new tvheadend.panel.dvr;
+			tvheadend.dvr = new tvheadend.panel.dvr('dvrUpcoming', 'dvrFinished', 'dvrFailed', 'dvrAutorec');
 			tvheadend.dvrsettings = new tvheadend.panel.dvrsettings;
 		}
-		else
-			tvheadend.dvr = tvheadend.dvrsettings = new tvheadend.panel.dummy('DVR','drive');
+		else {
+			tvheadend.dvr = new tvheadend.panel.dummy('DVR','drive');
+			tvheadend.dvrsettings = new tvheadend.panel.dummy('DVR Settings','drive');
+		}
 		
 		if(tvheadend.accessupdate.streaming)
-			tvheadend.channels = new tvheadend.panel.channels;
+			tvheadend.channels = new tvheadend.panel.channels('channels');
 		else
 			tvheadend.channels = new tvheadend.panel.dummy('Channels','tv');
 		
@@ -378,25 +460,20 @@ tvheadend.app = function() {
 			tvheadend.adapters = new tvheadend.panel.adapters;
 			tvheadend.timeshift = new tvheadend.panel.timeshift;
 			tvheadend.epggrab = new tvheadend.panel.epggrab;
-			tvheadend.ctag = new tvheadend.panel.ctag;
-			tvheadend.iptv = new tvheadend.panel.iptv;
-			tvheadend.acl = new tvheadend.panel.acl;
-			tvheadend.cwc = new tvheadend.panel.cwc;
-			tvheadend.capmt = new tvheadend.panel.capmt;
+			tvheadend.ctag = new tvheadend.panel.ctag('ctag');
+			tvheadend.iptv = new tvheadend.panel.iptv('iptv');
+			tvheadend.acl = new tvheadend.panel.acl('acl');
+			tvheadend.cwc = new tvheadend.panel.cwc('cwc');
+			tvheadend.capmt = new tvheadend.panel.capmt('capmt');
 			tvheadend.logsettings = new tvheadend.panel.logsettings;
-			tvheadend.status = new tvheadend.panel.status;
+			tvheadend.status = new tvheadend.panel.status('subscriptions', 'adapterstatus');
 		}
 		else
 			tvheadend.status = new tvheadend.panel.dummy('Status','bulb');
 		
 		tvheadend.log = new tvheadend.panel.log;
 		
-		tvheadend.about = new Ext.Panel({
-			autoLoad : 'about.html'
-			iconCls : 'info',
-			layout : 'fit',
-			title : 'About'
-		});
+		tvheadend.about = new tvheadend.panel.about;
 		
 		tvheadend.tabs = new Ext.ux.GroupTabPanel({
 			activeGroup : 0,

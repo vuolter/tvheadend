@@ -1,17 +1,8 @@
 /**
  *
  */
-tvheadend.subscriptions = function() {
+tvheadend.panel.subscriptions = function(id) {
 
-	function renderBw(value, meta, rec, row, col, store) {
-		value = parseInt(value / 125) + ' KiB/s';
-	}
-	
-	function renderDate(value, meta, rec, row, col, store) {
-		var dt = new Date(value);
-		value = dt.format('Y-m-d , H:i');
-	}
-	
 	var rec = Ext.data.Record.create([
 		{ name : 'bw' },
 		{ name : 'channel' },
@@ -93,7 +84,7 @@ tvheadend.subscriptions = function() {
 			dataIndex : 'start',
 			header : 'Start date',
 			id : 'start',
-			renderer : renderDate,
+			renderer : tvheadend.renderer.Date,
 			width : 150
 		}, {
 			dataIndex : 'title',
@@ -109,7 +100,7 @@ tvheadend.subscriptions = function() {
 			dataIndex : 'bw',
 			header : 'Bandwidth',
 			id : 'bw',
-			renderer : renderBw,
+			renderer : tvheadend.renderer.Bandwidth,
 			width : 50
 		} ]
 	});
@@ -121,7 +112,7 @@ tvheadend.subscriptions = function() {
 		disableSelection : true,
 		flex : 1,
 		iconCls : 'transmit-blue',
-		id : 'subscriptionsGrid',
+		id : id ? id : Ext.id,
 		stateId : this.id,
 		stateful : true,
 		store : tvheadend.data.subscriptions,
@@ -137,12 +128,8 @@ tvheadend.subscriptions = function() {
 /**
  *
  */
-tvheadend.adapters = function() {
+tvheadend.panel.adapterstatus = function(id) {
 
-	function renderBw(value, meta, rec, row, col, store) {
-		value = parseInt(value / 125) + ' KiB/s';
-	}
-	
 	var strength = new Ext.ux.grid.ProgressColumn({
 		colored : true,
 		dataIndex : 'signal',
@@ -181,7 +168,7 @@ tvheadend.adapters = function() {
 		}, {
 			dataIndex : 'bw',
 			header : 'Bandwidth',
-			renderer: renderBw,
+			renderer: tvheadend.renderer.Bandwidth,
 			width : 100
 		}, {
 			header : 'Bit error rate',
@@ -195,7 +182,7 @@ tvheadend.adapters = function() {
 			dataIndex : 'snr',
 			header : 'SNR',
 			renderer : function(value, meta, rec, row, col, store) {
-				renderEntry(value, meta, 'Unknown', value.toFixed(1) + ' dB');
+				tvheadend.renderer.Value(value, meta, 'Unknown', value.toFixed(1) + ' dB');
 			},
 			width : 50
 		},
@@ -229,7 +216,7 @@ tvheadend.adapters = function() {
 		disableSelection : true,
 		flex : 1,
 		iconCls : 'hardware',
-		id : 'adaptersGrid',
+		id : id ? id : Ext.id,
 		stateId : this.id,
 		stateful : true,
 		store : store,
@@ -241,7 +228,7 @@ tvheadend.adapters = function() {
 	return grid;
 }
 
-tvheadend.panel.status = function() {
+tvheadend.panel.status = function(idSubs, idAdapt) {
 	
 	var helpBtn = new tvheadend.button.help('Status', 'status.html');
 	
@@ -252,7 +239,8 @@ tvheadend.panel.status = function() {
 	
 	var panel = new Ext.Panel({
 		iconCls : 'bulb',		
-		items : [ new tvheadend.subscriptions, new tvheadend.adapters ],
+		items : [ new tvheadend.panel.subscriptions(idSubs ? idSubs : Ext.id),
+				  new tvheadend.panel.adapterstatus(idAdapt ? idAdapt : Ext.id) ],
 		layout : 'vbox',
 		tbar : tb,
 		title : 'Status'

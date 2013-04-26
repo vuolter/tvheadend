@@ -136,9 +136,13 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   extjs_load(hq, "static/extensions/spinner/SpinnerStrategy.js");
 
   /**
-   * Create a namespace for our app
+   * Create namespaces for our app
    */
-  extjs_exec(hq, "Ext.namespace('tvheadend.data');");
+  extjs_exec(hq, "Ext.namespace('tvheadend.button');\n"
+                 "Ext.namespace('tvheadend.data');\n"
+                 "Ext.namespace('tvheadend.panel');\n"
+                 "Ext.namespace('tvheadend.renderer');\n"
+                 "Ext.namespace('tvheadend.selection');\n");
 
   /**
    * Load all components

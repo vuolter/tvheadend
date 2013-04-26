@@ -1,4 +1,4 @@
-tvheadend.panel.capmt = function() {
+tvheadend.panel.capmt = function(id) {
 	if(tvheadend.capabilities.indexOf('cwc') == -1)
 		return new tvheadend.panel.dummy('Capmt Connections','key');
 
@@ -36,21 +36,21 @@ tvheadend.panel.capmt = function() {
 			editor : new Ext.form.TextField,
 			header : 'Camd.socket filename',
 			hideable : false,
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 400					
 		}, {
 			dataIndex : 'port',
 			editor : new Ext.form.TextField,
 			header : 'Listen Port',
 			hideable : false,
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 100
 		}, 
 		oscamColumn, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Comment',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 250
 		} ]
 	});
@@ -73,7 +73,7 @@ tvheadend.panel.capmt = function() {
 		url : 'tablemgr'
 	});
 
-	var grid = new tvheadend.panel.table('camptGrid', 'Capmt Connections', 'capmt', sm, cm, rec,
+	var grid = new tvheadend.panel.table(id, 'Capmt Connections', 'capmt', sm, cm, rec,
 		[ enabledColumn, oscamColumn, search ], store, 'config_capmt.html', 'key');
 		
 	tvheadend.comet.on('capmtStatus', function(server) {

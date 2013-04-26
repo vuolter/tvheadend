@@ -54,9 +54,9 @@ tvheadend.comet.on('dvrconfig', function(m) {
 });
 
 /**
- *
+ * Upcoming dvr panel
  */
-tvheadend.dvrUpcoming = function() {
+tvheadend.panel.dvrUpcoming = function(id) {
 	
 	var search = new tvheadend.Search;
 	
@@ -81,28 +81,28 @@ tvheadend.dvrUpcoming = function() {
 			header : 'Start date',
 			id : 'start_day',
 			renderer : function(value, meta, rec, row, col, store) {
-				return renderDay(rec.get('start'));
+				return tvheadend.renderer.Day(rec.get('start'));
 			},
 			width : 150
 		}, {
 			dataIndex : 'start',
 			header : 'Start time',
 			id : 'start_time',
-			renderer : renderTime,
+			renderer : tvheadend.renderer.Time,
 			width : 100
 		}, {
 			dataIndex : 'end_day',
 			header : 'End date',
 			id : 'end_day',
 			renderer : function(value, meta, rec, row, col, store) {
-				return renderDay(rec.get('end'));
+				return tvheadend.renderer.Day(rec.get('end'));
 			},
 			width : 150
 		}, {
 			dataIndex : 'end',
 			header : 'End time',
 			id : 'end_time',
-			renderer : renderTime,
+			renderer : tvheadend.renderer.Time,
 			width : 100
 		}, {
 			dataIndex : 'channel',
@@ -119,41 +119,41 @@ tvheadend.dvrUpcoming = function() {
 			header : 'Episode',
 			id : 'episode',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 100
 		}, {
 			dataIndex : 'duration',
 			header : 'Duration',
 			id : 'duration',
-			renderer : renderDuration,
+			renderer : tvheadend.renderer.Duration,
 			width : 100
 		}, {
 			dataIndex : 'filesize',
 			header : 'File size',
 			hidden : true,
 			id : 'filesize',
-			renderer : renderSize,
+			renderer : tvheadend.renderer.Size,
 			width : 100
 		}, {
 			dataIndex : 'creator',
 			header : 'Created by',
 			id : 'creator',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 150
 		}, {
 			dataIndex : 'config_name',
 			header : 'DVR Configuration',
 			id : 'config_name',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, '(default profile)');
+				tvheadend.renderer.Value(value, meta, '(default profile)');
 			},
 			width : 150
 		}, {
 			dataIndex : 'pri',
 			header : 'Priority',
 			id : 'pri',
-			renderer : renderPri,
+			renderer : tvheadend.renderer.Priority,
 			width : 150
 		} ]
 	});
@@ -310,7 +310,7 @@ tvheadend.dvrUpcoming = function() {
 		cm : cm,
 		enableColumnMove : false,
 		iconCls : 'clock',
-		id : 'dvrUpcomingGrid',
+		id : id ? id : Ext.id,
 		plugins : [ actions, search ],
 		sm : sm,
 		stateful : true,
@@ -326,9 +326,9 @@ tvheadend.dvrUpcoming = function() {
 }
 
 /**
- *
+ * Finished dvr panel
  */
-tvheadend.dvrFinished = function() {
+tvheadend.panel.dvrFinished = function(id) {
 	
 	var search = new tvheadend.Search;
 	
@@ -369,28 +369,28 @@ tvheadend.dvrFinished = function() {
 			header : 'Start date',
 			id : 'start_day',
 			renderer : function(value, meta, rec, row, col, store) {
-				return renderDay(rec.get('start'));
+				return tvheadend.renderer.Day(rec.get('start'));
 			},
 			width : 150
 		}, {
 			dataIndex : 'start',
 			header : 'Start time',
 			id : 'start_time',
-			renderer : renderTime,
+			renderer : tvheadend.renderer.Time,
 			width : 100
 		}, {
 			dataIndex : 'end_day',
 			header : 'End date',
 			id : 'end_day',
 			renderer : function(value, meta, rec, row, col, store) {
-				return renderDay(rec.get('end'));
+				return tvheadend.renderer.Day(rec.get('end'));
 			},
 			width : 150
 		}, {
 			dataIndex : 'end',
 			header : 'End time',
 			id : 'end_time',
-			renderer : renderTime,
+			renderer : tvheadend.renderer.Time,
 			width : 100
 		}, {
 			dataIndex : 'channel',
@@ -407,26 +407,26 @@ tvheadend.dvrFinished = function() {
 			header : 'Episode',
 			id : 'episode',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 100
 		}, {
 			dataIndex : 'duration',
 			header : 'Duration',
 			id : 'duration',
-			renderer : renderDuration,
+			renderer : tvheadend.renderer.Duration,
 			width : 100
 		}, {
 			dataIndex : 'filesize',
 			header : 'File size',
 			id : 'filesize',
-			renderer : renderSize,
+			renderer : tvheadend.renderer.Size,
 			width : 100
 		}, {
 			dataIndex : 'creator',
 			header : 'Created by',
 			id : 'creator',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 150
 		}, {
 			dataIndex : 'config_name',
@@ -434,7 +434,7 @@ tvheadend.dvrFinished = function() {
 			hidden : true,
 			id : 'config_name',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, '(default profile)');
+				tvheadend.renderer.Value(value, meta, '(default profile)');
 			},
 			width : 150
 		}, {
@@ -442,7 +442,7 @@ tvheadend.dvrFinished = function() {
 			header : 'Priority',
 			hidden : true,
 			id : 'pri',
-			renderer : renderPri,
+			renderer : tvheadend.renderer.Priority,
 			width : 150
 		}, 
 		actions ]
@@ -486,7 +486,7 @@ tvheadend.dvrFinished = function() {
 		cm : cm,
 		enableColumnMove : false,
 		iconCls : 'tick',
-		id : 'dvrFinishedGrid',
+		id : id ? id : Ext.id,
 		plugins : [ actions, search ],
 		sm : sm,
 		stateful : true,
@@ -502,9 +502,9 @@ tvheadend.dvrFinished = function() {
 }
 
 /**
- *
+ * Failed dvr panel
  */
-tvheadend.dvrFailed = function() {
+tvheadend.panel.dvrFailed = function(id) {
 	
 	var search = new tvheadend.Search;
 	
@@ -529,28 +529,28 @@ tvheadend.dvrFailed = function() {
 			header : 'Start date',
 			id : 'start_day',
 			renderer : function(value, meta, rec, row, col, store) {
-				return renderDay(rec.get('start'));
+				return tvheadend.renderer.Day(rec.get('start'));
 			},
 			width : 150
 		}, {
 			dataIndex : 'start',
 			header : 'Start time',
 			id : 'start_time',
-			renderer : renderTime,
+			renderer : tvheadend.renderer.Time,
 			width : 100
 		}, {
 			dataIndex : 'end_day',
 			header : 'End date',
 			id : 'end_day',
 			renderer : function(value, meta, rec, row, col, store) {
-				return renderDay(rec.get('end'));
+				return tvheadend.renderer.Day(rec.get('end'));
 			},
 			width : 150
 		}, {
 			dataIndex : 'end',
 			header : 'End time',
 			id : 'end_time',
-			renderer : renderTime,
+			renderer : tvheadend.renderer.Time,
 			width : 100
 		}, {
 			dataIndex : 'channel',
@@ -568,41 +568,41 @@ tvheadend.dvrFailed = function() {
 			hidden : true,
 			id : 'episode',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 100
 		}, {
 			dataIndex : 'duration',
 			header : 'Duration',
 			id : 'duration',
-			renderer : renderDuration,
+			renderer : tvheadend.renderer.Duration,
 			width : 100
 		}, {
 			dataIndex : 'filesize',
 			header : 'File size',
 			hidden : true,
 			id : 'filesize',
-			renderer : renderSize,
+			renderer : tvheadend.renderer.Size,
 			width : 100
 		}, {
 			dataIndex : 'creator',
 			header : 'Created by',
 			id : 'creator',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 150
 		}, {
 			dataIndex : 'config_name',
 			header : 'DVR Configuration',
 			id : 'config_name',
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, '(default profile)');
+				tvheadend.renderer.Value(value, meta, '(default profile)');
 			},
 			width : 150
 		}, {
 			dataIndex : 'pri',
 			header : 'Priority',
 			id : 'pri',
-			renderer : renderPri,
+			renderer : tvheadend.renderer.Priority,
 			width : 150
 		} ]
 	});
@@ -645,7 +645,7 @@ tvheadend.dvrFailed = function() {
 		cm : cm,
 		enableColumnMove : false,
 		iconCls : 'error',
-		id : 'dvrFailedGrid',
+		id : id ? id : Ext.id,
 		plugins : [ actions, search ],
 		sm : sm,
 		stateful : true,
@@ -663,7 +663,7 @@ tvheadend.dvrFailed = function() {
 /**
  *
  */
-tvheadend.autoreceditor = function() {
+tvheadend.panel.dvrAutorec = function(id) {
 	
 	var rec = Ext.data.Record.create([ 'approx_time', 'channel', 'comment', 'config_name', 'contenttype',
 									   'creator', 'enabled', 'pri', 'serieslink', 'tag', 'title','weekdays' ]);
@@ -716,13 +716,13 @@ tvheadend.autoreceditor = function() {
 			dataIndex : 'title',
 			editor : new Ext.form.TextField({ allowBlank : true }),
 			header : 'Title (regexp)',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 400
 		}, {
 			dataIndex : 'channel',
 			editor : channelsCombo,
 			header : 'Channel',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 150
 		}, {
 			dataIndex : 'tag',
@@ -736,7 +736,7 @@ tvheadend.autoreceditor = function() {
 				triggerAction : 'all'
 			}),
 			header : 'Channel Tags',
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 250,
 		}, {
 			dataIndex : 'contenttype',
@@ -755,7 +755,7 @@ tvheadend.autoreceditor = function() {
 			hidden : true,
 			renderer : function(value, meta, rec, row, col, store) {
 				value = tvheadend.contentGroupLookupName(value);
-				renderEntry(value, meta, 'Unknown');
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
 			width : 150
 		}, {
@@ -767,19 +767,19 @@ tvheadend.autoreceditor = function() {
 				valueField : 'identifier'
 			}),
 			header : 'Weekdays',
-			renderer : renderWeek,
+			renderer : tvheadend.renderer.Week,
 			width : 150
 		}, {
 			header : 'Starting Around',
 			dataIndex : 'approx_time',
 			width : 150,
-			renderer : renderTime,
+			renderer : tvheadend.renderer.Time,
 			editor : new Ext.form.TimeField({
 				allowBlank : true,
 				format : 'H:i',
 				increment : 5
 			}),
-			renderer : tvheadend.renderEntry
+			renderer : tvheadend.renderer.Value
 		}, {
 			dataIndex : 'serieslink',
 			header : "Series Link",
@@ -802,7 +802,7 @@ tvheadend.autoreceditor = function() {
 				valueField : 'identifier'
 			}),
 			renderer : function(value, meta, rec, row, col, store) {
-				tvheadend.renderEntry(value, meta, '(default profile)');
+				tvheadend.renderer.Value(value, meta, '(default profile)');
 			},
 			width : 150
 		}, {
@@ -825,19 +825,19 @@ tvheadend.autoreceditor = function() {
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Created by',
 			hidden : true,
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 150
 		}, {
 			dataIndex : 'comment',
 			editor : new Ext.form.TextField({ allowBlank : false }),
 			header : 'Comment',
 			hidden : true,
-			renderer : tvheadend.renderEntry,
+			renderer : tvheadend.renderer.Value,
 			width : 150
 		} ]
 	});
 	
-	var grid = new tvheadend.panel.table('autorecGrid', 'Automatic Recorder', 'autorec', sm, cm, rec, 
+	var grid = new tvheadend.panel.table(id, 'Automatic Recorder', 'autorec', sm, cm, rec, 
 										 [ enabledColumn, search ], store, 'autorec.html', 'wand');
 		
 	return grid;
@@ -846,55 +846,8 @@ tvheadend.autoreceditor = function() {
 /**
  *
  */
-tvheadend.panel.dvr = function() {
+tvheadend.panel.dvr = function(idUpcoming, idFinished, idFailed, idAutorec) {
 
-	function renderDay(value, meta, rec, row, col, store) {
-		dt = new Date(value);
-		value = dt.format('Y-m-d (D)');
-	}
-	
-	function renderDuration(value, meta, rec, row, col, store) {
-		value = Math.floor(value / 60);
-		if(value >= 60) {
-			var min = value % 60;
-			var hrs = Math.floor(value / 60);
-			value = hrs + ' hrs' + min > 0 ? ' ' + min + ' min' : '';
-		}
-		else 
-			value = value + ' min';
-	}
-
-	function renderPri(value, meta, rec, row, col, store) {
-		value = tvheadend.data.dvrprio.getById(value).get("name");
-	}
-	
-	function renderSize(value, meta, rec, row, col, store) {
-		value = parseInt(value / 1048576) + 'MiB';
-	}
-	
-	function renderTime(value, meta, rec, row, col, store) {
-		dt = new Date(value);
-		value = dt.format('H:i');
-	}
-	
-	function renderWeek(value, meta, rec, row, col, store) {
-		if(typeof value === 'undefined' || value.length < 1)
-			return 'No days';
-		else if(value == '1,2,3,4,5,6,7')
-			return 'All days';
-		else {
-			var ret = [];
-			var tags = value.split(',');
-			for(var i in tags) {
-				tag = tvheadend.data.weekdays.getById(tags[i]);
-				if(typeof tag !== 'undefined')
-					ret.push(tag.get("name"));
-			}
-			return ret.join(', ');
-		}
-	}
-	
-	//
 	function datastoreBuilder(url) {
 		var rec = Ext.data.Record.create([
 			{ name : 'channel'},
@@ -976,11 +929,10 @@ tvheadend.panel.dvr = function() {
 		activeTab : 0,
 		enableTabScroll : true,
 		iconCls : 'drive',
-		id : 'DVRTab',
-		items : [ new tvheadend.dvrUpcoming,
-				  new tvheadend.dvrFinished,
-				  new tvheadend.dvrFailed,
-				  new tvheadend.autoreceditor ],
+		items : [ new tvheadend.panel.dvrUpcoming(idUpcoming ? idUpcoming : Ext.id),
+				  new tvheadend.panel.dvrFinished(idFinished ? idFinished : Ext.id),
+				  new tvheadend.panel.dvrFailed(idFailed ? idFailed : Ext.id),
+				  new tvheadend.panel.dvrAutorec(idAutorec ? idAutorec : Ext.id) ],
 		title : 'DVR'
 	});
 	
