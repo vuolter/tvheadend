@@ -113,7 +113,7 @@ tvheadend.renderer.duration = function(value, meta, rec, row, col, store) {
 }
 
 tvheadend.renderer.priority = function(value, meta, rec, row, col, store) {
-	return tvheadend.data.dvrprio.getById(value).get("name");
+	return tvheadend.store.dvrprio.getById(value).get("name");
 }
 
 tvheadend.renderer.size = function(value, meta, rec, row, col, store) {
@@ -127,7 +127,7 @@ tvheadend.renderer.tags = function(value, meta, rec, row, col, store) {
 		var ret = [];
 		var tags = value.split(',');
 		for(var i in tags) {
-			tag = tvheadend.data.channelTags.getById(tags[i]);
+			tag = tvheadend.store.channelTags.getById(tags[i]);
 			if (typeof tag !== 'undefined' && tag.length > 3)
 				ret.push(tag.data.name);
 		}
@@ -179,7 +179,7 @@ tvheadend.renderer.Week = function(value, meta, rec, row, col, store) {
 		var ret = [];
 		var tags = value.split(',');
 		for(var i in tags) {
-			tag = tvheadend.data.weekdays.getById(tags[i]);
+			tag = tvheadend.store.weekdays.getById(tags[i]);
 			if (typeof tag !== 'undefined')
 				ret.push(tag.get("name"));
 		}
@@ -236,7 +236,7 @@ tvheadend.VLC = function(url) {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.data.channels2,
+		store : tvheadend.store.channels2,
 		mode : 'local',
 		editable : false,
 		triggerAction : 'all',

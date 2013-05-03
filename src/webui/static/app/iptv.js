@@ -8,7 +8,7 @@ tvheadend.grid.iptv = function(id) {
 		displayField : 'name',
 		lazyRender : true,
 		minChars : 2,
-		store : tvheadend.data.channels2,
+		store : tvheadend.store.channels2,
 		triggerAction : 'all',
 		typeAhead : true
 	});

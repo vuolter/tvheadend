@@ -1,4 +1,4 @@
-tvheadend.data.epggrabChannels = new Ext.data.JsonStore({
+tvheadend.store.epggrabChannels = new Ext.data.JsonStore({
 	root : 'entries',
 	url : 'epggrab',
 	baseParams : { op : 'channelList' },

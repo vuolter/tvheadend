@@ -1,7 +1,7 @@
 /**
  * Datastore for adapters
  */
-tvheadend.data.adapters = new Ext.data.JsonStore({
+tvheadend.store.adapters = new Ext.data.JsonStore({
 	root : 'entries',
 	id : 'identifier',
 	fields : [ 'identifier', 'type', 'name', 'path', 'devicename',
@@ -12,28 +12,28 @@ tvheadend.data.adapters = new Ext.data.JsonStore({
 });
 
 tvheadend.comet.on('tvAdapter', function(m) {
-	idx = tvheadend.data.adapters.find('identifier', m.identifier);
+	idx = tvheadend.store.adapters.find('identifier', m.identifier);
 	if (idx == -1) 
 		return;
-	r = tvheadend.data.adapters.getAt(idx);
+	r = tvheadend.store.adapters.getAt(idx);
 	r.beginEdit();
 	for (key in m)
 		r.set(key, m[key]);
 	r.endEdit();
-	tvheadend.data.adapters.commitChanges();
+	tvheadend.store.adapters.commitChanges();
 });
 
 tvheadend.panel.adapters = function() {
 	if (tvheadend.capabilities.indexOf('linuxdvb') == -1 && tvheadend.capabilities.indexOf('v4l') == -1)
 		return new tvheadend.panel.dummy({ title : 'TV Adapters', iconCls : 'hardware' });
 	
-	tvheadend.data.adapters.load();
+	tvheadend.store.adapters.load();
 
 	var adapterSelection = new Ext.form.ComboBox({
 		loadingText : 'Loading...',
 		width : 300,
 		displayField : 'name',
-		store : tvheadend.data.adapters,
+		store : tvheadend.store.adapters,
 		mode : 'remote',
 		editable : false,
 		lazyRender : true,

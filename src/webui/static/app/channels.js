@@ -4,7 +4,7 @@
 tvheadend.channelRec = new Ext.data.Record.create([ 'ch_icon', 'chid', 'epg_post_end', 'epg_pre_start', 
 													'epggrabsrc', 'name', 'number', 'tags']);
 
-tvheadend.data.channels = new Ext.data.JsonStore({
+tvheadend.store.channels = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
 	fields : tvheadend.channelRec,
@@ -16,7 +16,7 @@ tvheadend.data.channels = new Ext.data.JsonStore({
 	}
 });
 
-tvheadend.data.channels2 = new Ext.data.JsonStore({
+tvheadend.store.channels2 = new Ext.data.JsonStore({
 	root : 'entries',
 	fields : tvheadend.channelRec,
 	url : 'channels',
@@ -27,12 +27,12 @@ tvheadend.data.channels2 = new Ext.data.JsonStore({
 	}
 });
 
-tvheadend.data.channels.on('update', function() {
-	tvheadend.data.channels2.reload();
+tvheadend.store.channels.on('update', function() {
+	tvheadend.store.channels2.reload();
 });
 
 tvheadend.comet.on('channels', function(m) {
-	if (m.reload != null) tvheadend.data.channels.reload();
+	if (m.reload != null) tvheadend.store.channels.reload();
 });
 
 /**
@@ -57,7 +57,7 @@ tvheadend.mergeChannel = function(chan) {
 		hiddenName : 'targetID',
 		lazyRender : true,
 		name : 'targetchannel',		
-		store : tvheadend.data.channels2,
+		store : tvheadend.store.channels2,
 		triggerAction : 'all',
 		valueField : 'chid',
 		width : 200
@@ -145,7 +145,7 @@ tvheadend.grid.channels = function(id) {
 			dataIndex : 'tags',
 			editor : new Ext.ux.form.LovCombo({
 				displayField : 'name',
-				store : tvheadend.data.channelTags,
+				store : tvheadend.store.channelTags,
 				valueField : 'identifier'
 			}),
 			header : 'Tags',
@@ -160,7 +160,7 @@ tvheadend.grid.channels = function(id) {
 				loadingText : 'Loading...',
 				minChars : 2,
 				mode : 'remote',
-				store : tvheadend.data.epggrabChannels,
+				store : tvheadend.store.epggrabChannels,
 				triggerAction : 'all',
 				typeAhead : true,
 				valueField : 'mod-id'
@@ -258,7 +258,7 @@ tvheadend.grid.channels = function(id) {
 	}
 
 	function saveChanges() {
-		var mr = tvheadend.data.channels.getModifiedRecords();
+		var mr = tvheadend.store.channels.getModifiedRecords();
 		var out = [];
 		for (var x in mr) {
 			v = mr[x].getChanges();
@@ -273,7 +273,7 @@ tvheadend.grid.channels = function(id) {
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
-				tvheadend.data.channels.commitChanges();
+				tvheadend.store.channels.commitChanges();
 			},
 			failure : function(response, options) {
 				Ext.MessageBox.alert('Message', response.statusText);
@@ -310,7 +310,7 @@ tvheadend.grid.channels = function(id) {
 		iconCls : 'undo',
 		text : 'Revert changes',
 		handler : function() {
-			tvheadend.data.channels.rejectChanges();
+			tvheadend.store.channels.rejectChanges();
 		},
 		disabled : true
 	});
@@ -331,7 +331,7 @@ tvheadend.grid.channels = function(id) {
 		sm : sm,
 		stateId : this.id,
 		stateful : true,
-		store : tvheadend.data.channels,
+		store : tvheadend.store.channels,
 		stripeRows : true,
 		tbar : tb,
 		title : 'Channels'
@@ -342,14 +342,14 @@ tvheadend.grid.channels = function(id) {
 			delBtn.setDisabled(s.getCount() == 0);
 		});
 		
-		tvheadend.data.channels.on('update', function(s, r, o) {
+		tvheadend.store.channels.on('update', function(s, r, o) {
 			d = s.getModifiedRecords().length == 0
 			saveBtn.setDisabled(d);
 			rejectBtn.setDisabled(d);
 		});
 	}
 	
-	tvheadend.data.channelTags.on('load', function(s, r, o) {
+	tvheadend.store.channelTags.on('load', function(s, r, o) {
 		if (grid.rendered) grid.getView().refresh();
 	});
 

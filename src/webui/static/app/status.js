@@ -15,7 +15,7 @@ tvheadend.panel.subscriptions = function(id) {
 		{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ }
 	]);
 	
-	tvheadend.data.subscriptions = new Ext.data.JsonStore({
+	tvheadend.store.subscriptions = new Ext.data.JsonStore({
 		autoLoad : true,
 		fields : rec,
 		id : 'id',
@@ -30,12 +30,12 @@ tvheadend.panel.subscriptions = function(id) {
 
 	tvheadend.comet.on('subscriptions', function(m) {
 
-		if (m.reload != null) tvheadend.data.subscriptions.reload();
+		if (m.reload != null) tvheadend.store.subscriptions.reload();
 
 		if (m.updateEntry != null) {
-			r = tvheadend.data.subscriptions.getById(m.id)
+			r = tvheadend.store.subscriptions.getById(m.id)
 			if (typeof r === 'undefined') {
-				tvheadend.data.subscriptions.reload();
+				tvheadend.store.subscriptions.reload();
 				return;
 			}
 
@@ -45,8 +45,8 @@ tvheadend.panel.subscriptions = function(id) {
 			r.data.errors   = m.errors;
 			r.data.bw       = m.bw
 
-			tvheadend.data.subscriptions.afterEdit(r);
-			tvheadend.data.subscriptions.fireEvent('updated', tvheadend.data.subscriptions, r,
+			tvheadend.store.subscriptions.afterEdit(r);
+			tvheadend.store.subscriptions.fireEvent('updated', tvheadend.store.subscriptions, r,
 				Ext.data.Record.COMMIT);
 		}
 	});
@@ -119,7 +119,7 @@ tvheadend.panel.subscriptions = function(id) {
 		plugins : [ 'bufferedrenderer' ]
 		stateId : this.id,
 		stateful : true,
-		store : tvheadend.data.subscriptions,
+		store : tvheadend.store.subscriptions,
 		stripeRows : true,		
 		title : 'Subscriptions'
 	});
@@ -211,7 +211,7 @@ tvheadend.panel.adapterstatus = function(id) {
 		url : 'tv/adapter'
 	});
 
-	tvheadend.data.adapters.on('update', function() {
+	tvheadend.store.adapters.on('update', function() {
 		store.reload();
 	});
 	

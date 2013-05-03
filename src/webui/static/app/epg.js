@@ -2,7 +2,7 @@
  * @author Walter Purcaro <vuolter@gmail.com>
  */
 
-tvheadend.data.contentGroup = new Ext.data.JsonStore({
+tvheadend.store.contentGroup = new Ext.data.JsonStore({
 	autoLoad : {
 		callback : function(rec, opts, succ) {
 			rec[0].data.name = "Unknown";
@@ -19,7 +19,7 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 });
 
 tvheadend.contentGroupName = function(code) {
-	var index = tvheadend.data.contentGroup.find('code', (code & 0xF0));
+	var index = tvheadend.store.contentGroup.find('code', (code & 0xF0));
 	return index != -1 ? tvheadend.contentGroupName.getAt(index).get('name')
 					   : null;
 }
@@ -59,7 +59,7 @@ tvheadend.epgDetails = function(event) {
 	content += '<div id="altbcast"></div>';
 
 	var confcombo = new Ext.form.ComboBox({
-		// store : tvheadend.data.configNames,
+		// store : tvheadend.store.configNames,
 		triggerAction : 'all',
 		mode : 'local',
 		valueField : 'identifier',
@@ -365,7 +365,7 @@ tvheadend.grid.epg = function(id) {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		// store : tvheadend.data.channels2,
+		// store : tvheadend.store.channels2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -379,7 +379,7 @@ tvheadend.grid.epg = function(id) {
 	var epgFilterChannelTags = new Ext.form.ComboBox({
 		width : 200,
 		displayField : 'name',
-		// store : tvheadend.data.channelTags2,
+		// store : tvheadend.store.channelTags2,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,
@@ -394,7 +394,7 @@ tvheadend.grid.epg = function(id) {
 		loadingText : 'Loading...',
 		width : 200,
 		displayField : 'name',
-		store : tvheadend.data.contentGroup,
+		store : tvheadend.store.contentGroup,
 		mode : 'local',
 		editable : true,
 		forceSelection: true,

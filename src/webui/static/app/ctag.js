@@ -1,7 +1,7 @@
 /**
  * Channel tags
  */
-tvheadend.data.channelTags = new Ext.data.JsonStore({
+tvheadend.store.channelTags = new Ext.data.JsonStore({
 	autoLoad : true,
 	root : 'entries',
 	fields : [ 'identifier', 'name' ],
@@ -14,7 +14,7 @@ tvheadend.data.channelTags = new Ext.data.JsonStore({
 	}
 });
 
-tvheadend.data.channelTags2 = new Ext.data.JsonStore({
+tvheadend.store.channelTags2 = new Ext.data.JsonStore({
 	root : 'entries',
 	fields : [ 'identifier', 'name' ],
 	id : 'identifier',
@@ -26,12 +26,12 @@ tvheadend.data.channelTags2 = new Ext.data.JsonStore({
 	}
 });
 
-tvheadend.data.channelTags.on('update', function() {
-	tvheadend.data.channelTags2.reload();
+tvheadend.store.channelTags.on('update', function() {
+	tvheadend.store.channelTags2.reload();
 });
 
 tvheadend.comet.on('channeltags', function(m) {
-	if (m.reload != null) tvheadend.data.channelTags.reload();
+	if (m.reload != null) tvheadend.store.channelTags.reload();
 });
 
 /**
@@ -98,7 +98,7 @@ tvheadend.grid.ctag = function(id) {
 
 	var grid = new tvheadend.panel.table(id, 'Channel Tags', 'channeltags', sm, cm,
 		rec, [ 'bufferedrenderer', enabledColumn, internalColumn, search, titledIconColumn ],
-		tvheadend.data.channelTags, 'config_tags.html', 'tag');
+		tvheadend.store.channelTags, 'config_tags.html', 'tag');
 		
 	return grid;
 }
