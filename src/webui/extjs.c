@@ -114,6 +114,7 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
                  "Ext.namespace('tvheadend.panel');\n"
                  "Ext.namespace('tvheadend.renderer');\n"
                  "Ext.namespace('tvheadend.selection');\n"
+                 "Ext.namespace('tvheadend.store');\n"
                  "Ext.namespace('tvheadend.tab');\n");
 
   /**

@@ -1,6 +1,6 @@
 tvheadend.grid.cwc = function(id) {
 	if (tvheadend.capabilities.indexOf('cwc') == -1)
-		return new tvheadend.panel.dummy('Code Word Client','key');
+		return new tvheadend.panel.dummy({ title : 'Code Word Client', iconCls : 'key' });
 	
 	var search = new tvheadend.Search;
 	

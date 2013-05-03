@@ -25,7 +25,7 @@ tvheadend.comet.on('tvAdapter', function(m) {
 
 tvheadend.panel.adapters = function() {
 	if (tvheadend.capabilities.indexOf('linuxdvb') == -1 && tvheadend.capabilities.indexOf('v4l') == -1)
-		return new tvheadend.panel.dummy('TV Adapters','hardware');
+		return new tvheadend.panel.dummy({ title : 'TV Adapters', iconCls : 'hardware' });
 	
 	tvheadend.data.adapters.load();
 

@@ -1,6 +1,6 @@
 tvheadend.grid.capmt = function(id) {
 	if (tvheadend.capabilities.indexOf('cwc') == -1)
-		return new tvheadend.panel.dummy('Capmt Connections','key');
+		return new tvheadend.panel.dummy({ title : 'Capmt Connections', iconCls : 'key' });
 
 	var search = new tvheadend.Search;
 	

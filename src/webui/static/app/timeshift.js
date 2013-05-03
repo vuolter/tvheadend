@@ -1,6 +1,6 @@
 tvheadend.panel.timeshift = function() {
   if (tvheadend.capabilities.indexOf('timeshift') == -1)
-    return new tvheadend.panel.dummy('Timeshift','clock');
+    return new tvheadend.panel.dummy({ title : 'Timeshift', iconCls : 'clock' });
 	
   /* ****************************************************************
    * Data

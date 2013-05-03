@@ -1,5 +1,5 @@
 /**
- * @author Walter Purcaro
+ * @author Walter Purcaro <vuolter@gmail.com>
  */
  
 tvheadend.accessupdate = null;
@@ -30,10 +30,8 @@ Ext.define('tvheadend.selection.CheckboxModel', {
 Ext.define('tvheadend.panel.dummy', {
 	disabled : true,
 	extend : 'Ext.panel.Panel',
-	hidden : !title && !icon,
-	iconCls : icon,
-	items : { hidden : true },
-	title : title
+	hidden : !this.title && !this.iconCls,
+	items : { hidden : true }
 });
 
 /**
@@ -66,11 +64,20 @@ tvheadend.help = function(title, pagename) {
 }
 
 Ext.define('tvheadend.button.help', {
-	extend : 'Ext.button.Button',
-	handler : function() { new tvheadend.help(title, pagename); },
-	iconCls : 'help',
-	text : 'Help',
-	tooltip : tooltip ? tooltip : 'Show help page'
+	config : {
+		iconCls : 'help',
+		text : 'Help'
+	},
+	constructor : function(cfg) {
+		var title = cfg[0] ? cfg[0] : null;
+		var pagename = cfg[1] ? cfg[1] : null;
+		var tooltip = cfg[2] ? cfg[2] : 'Show help page';
+		this.initConfig({
+			handler : function() { new tvheadend.help(title, pagename); },
+			tooltip : tooltip
+		});
+	},
+	extend : 'Ext.button.Button'
 });
 
 /**
@@ -78,6 +85,11 @@ Ext.define('tvheadend.button.help', {
  */
 tvheadend.renderer.bandwidth = function(value, meta, rec, row, col, store) {
 	return parseInt(value / 125) + ' KiB/s';
+}
+
+tvheadend.renderer.contentGroupName = function(value, meta, rec, row, col, store) {
+	var value = tvheadend.contentGroupName(value);
+	return tvheadend.renderer.text(value, meta, 'Unknown');
 }
 
 tvheadend.renderer.date = function(value, meta, rec, row, col, store) {
@@ -435,14 +447,14 @@ tvheadend.app = function() {
 			tvheadend.dvrsettings = new tvheadend.panel.dvrsettings;
 		}
 		else {
-			tvheadend.dvr = new tvheadend.panel.dummy('DVR','drive');
-			tvheadend.dvrsettings = new tvheadend.panel.dummy('DVR Settings','drive');
+			tvheadend.dvr = new tvheadend.panel.dummy({ title : 'DVR', iconCls : 'drive' });
+			tvheadend.dvrsettings = new tvheadend.panel.dummy({ title : 'DVR Settings', iconCls : 'drive' });
 		}
 		
 		if (tvheadend.accessupdate.streaming)
 			tvheadend.channels = new tvheadend.grid.channels('channels');
 		else
-			tvheadend.channels = new tvheadend.panel.dummy('Channels','tv');
+			tvheadend.channels = new tvheadend.panel.dummy({ title : 'Channels', iconCls : 'tv' });
 		
 		if (tvheadend.accessupdate.admin) {
 			tvheadend.config = new tvheadend.panel.config;
@@ -458,7 +470,7 @@ tvheadend.app = function() {
 			tvheadend.status = new tvheadend.panel.status('subscriptions', 'adapterstatus');
 		}
 		else
-			tvheadend.status = new tvheadend.panel.dummy('Status','bulb');
+			tvheadend.status = new tvheadend.panel.dummy({ title : 'Status', iconCls : 'bulb' });
 		
 		tvheadend.log = new tvheadend.panel.log;
 		

@@ -756,10 +756,7 @@ tvheadend.grid.dvrAutorec = function(id) {
 			}),
 			header : 'Genre',
 			hidden : true,
-			renderer : function(value, meta, rec, row, col, store) {
-				value = tvheadend.contentGroupLookupName(value);
-				tvheadend.renderer.text(value, meta, 'Unknown');
-			},
+			renderer : tvheadend.renderer.contentGroupName,
 			width : 150
 		}, {
 			dataIndex : 'weekdays',

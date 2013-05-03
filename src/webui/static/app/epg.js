@@ -1,5 +1,5 @@
 /**
- * @author Walter Purcaro
+ * @author Walter Purcaro <vuolter@gmail.com>
  */
 
 tvheadend.data.contentGroup = new Ext.data.JsonStore({
@@ -18,9 +18,9 @@ tvheadend.data.contentGroup = new Ext.data.JsonStore({
 	url : 'ecglist'
 });
 
-tvheadend.contentGroupLookupName = function(code) {
-	var index = tvheadend.ContentGroupStore.find('code', (code & 0xF0));
-	return index != -1 ? tvheadend.contentGroupLookupName.getAt(index).get('name')
+tvheadend.contentGroupName = function(code) {
+	var index = tvheadend.data.contentGroup.find('code', (code & 0xF0));
+	return index != -1 ? tvheadend.contentGroupName.getAt(index).get('name')
 					   : null;
 }
 
@@ -37,7 +37,7 @@ tvheadend.epgDetails = function(event) {
 	content += '</div>';
 	content += '<div class="x-epg-desc">' + event.episode + '</div>';
 	content += '<div class="x-epg-desc">' + event.description + '</div>';
-	content += '<div class="x-epg-meta">' + tvheadend.contentGroupLookupName(event.contenttype) + '</div>';
+	content += '<div class="x-epg-meta">' + tvheadend.contentGroupName(event.contenttype) + '</div>';
 
 	if (event.ext_desc != null) 
 		content += '<div class="x-epg-meta">' + event.ext_desc + '</div>';
@@ -310,7 +310,7 @@ tvheadend.grid.epg = function(id) {
 			dataIndex : 'number',
 			header : 'Ch. #',
 			hidden : true,
-			id : 'number'
+			id : 'number',
 			width : 55
 		}, {
 			dataIndex : 'title',
@@ -339,9 +339,8 @@ tvheadend.grid.epg = function(id) {
 			header : 'Genre',
 			id : 'contenttype',
 			renderer : function(value, meta, rec, row, col, store) {
-				value = tvheadend.contentGroupLookupName(value);
-				tvheadend.renderer.text(value, meta, 'Unknown');
 				setMetaAttr(meta, rec);
+				return tvheadend.renderer.contentGroupName(value, meta, rec, row, col, store);
 			},
 			width : 150
 		}, {
