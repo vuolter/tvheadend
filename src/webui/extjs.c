@@ -96,8 +96,10 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
                      "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\" />\n",
                      tvheadend_webui_debug ? "-debug" : "");
   
-  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\" />\n",
-                     tvheadend_webui_debug ? "-debug" : "");
+  // htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\" />\n",
+                     // tvheadend_webui_debug ? "-debug" : "");
+  //force debug
+  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all-debug.js\" />\n");
   
   //extjs 3 compatibility layer
   htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext3-core-compat.js\" />\n"
