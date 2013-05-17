@@ -123,11 +123,11 @@ tvheadend.panel.timeshift = function() {
 
   panel.on('render', function() {
     panel.getForm().load({
-      url: 'timeshift',
-      params: {
-        'op': 'loadSettings'
+      url : 'timeshift',
+      params : {
+        'op' : 'loadSettings'
       },
-      success: function() {
+      success : function() {
         panel.enable();
         timeshiftMaxPeriod.setDisabled(timeshiftUnlPeriod.getValue());
         timeshiftMaxSize.setDisabled(timeshiftUnlSize.getValue());

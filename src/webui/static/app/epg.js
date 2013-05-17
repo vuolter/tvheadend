@@ -258,7 +258,7 @@ tvheadend.grid.epg = function(id) {
 		{ name : 'title' }
 	]);
 	
-	var store = new Ext.ux.grid.livegrid.Store({
+	tvheadend.store.epg = new Ext.ux.grid.livegrid.Store({
 		autoLoad : true,
 		reader : new Ext.ux.grid.livegrid.JsonReader({
 			fields : rec,
@@ -316,23 +316,23 @@ tvheadend.grid.epg = function(id) {
 			dataIndex : 'title',
 			header : 'Title',
 			hideable : false,
-			id : 'title'
+			id : 'title',
 			width : 400
 		}, {
 			dataIndex : 'subtitle',
 			header : 'Subtitle',
-			id : 'subtitle'
+			id : 'subtitle',
 			width : 300
 		}, {
 			dataIndex : 'episode',
 			header : 'Episode',
-			id : 'episode'
+			id : 'episode',
 			width : 85
 		}, {
 			dataIndex : 'description',
 			header : 'Description',
 			hidden : true,
-			id : 'description'
+			id : 'description',
 			width : 400
 		}, {
 			dataIndex : 'contenttype',
@@ -404,37 +404,37 @@ tvheadend.grid.epg = function(id) {
 	});
 
 	function epgQueryClear() {
-		delete store.baseParams.channel;
-		delete store.baseParams.tag;
-		delete store.baseParams.contenttype;
-		delete store.baseParams.title;
+		delete grid.store.baseParams.channel;
+		delete grid.store.baseParams.tag;
+		delete grid.store.baseParams.contenttype;
+		delete grid.store.baseParams.title;
 
 		epgFilterChannels.setValue("");
 		epgFilterChannelTags.setValue("");
 		epgFilterContentGroup.setValue("");
 		epgFilterTitle.setValue("");
 
-		store.reload();
+		grid.store.reload();
 	}
 
 	epgFilterChannels.on('select', function(c, r) {
-		if (store.baseParams.channel != r.data.name) {
-			store.baseParams.channel = r.data.name;
-			store.reload();
+		if (grid.store.baseParams.channel != r.data.name) {
+			grid.store.baseParams.channel = r.data.name;
+			grid.store.reload();
 		}
 	});
 
 	epgFilterChannelTags.on('select', function(c, r) {
-		if (store.baseParams.tag != r.data.name) {
-			store.baseParams.tag = r.data.name;
-			store.reload();
+		if (grid.store.baseParams.tag != r.data.name) {
+			grid.store.baseParams.tag = r.data.name;
+			grid.store.reload();
 		}
 	});
 
 	epgFilterContentGroup.on('select', function(c, r) {
-		if (store.baseParams.contenttype != r.data.code) {
-			store.baseParams.contenttype = r.data.code;
-			store.reload();
+		if (grid.store.baseParams.contenttype != r.data.code) {
+			grid.store.baseParams.contenttype = r.data.code;
+			grid.store.reload();
 		}
 	});
 
@@ -443,9 +443,9 @@ tvheadend.grid.epg = function(id) {
 
 		if (value.length < 1) value = null;
 
-		if (store.baseParams.title != value) {
-			store.baseParams.title = value;
-			store.reload();
+		if (grid.store.baseParams.title != value) {
+			grid.store.baseParams.title = value;
+			grid.store.reload();
 		}
 	});
 
@@ -483,7 +483,7 @@ tvheadend.grid.epg = function(id) {
 		iconCls : 'bell',
 		plugins : [ actions, 'bufferedrenderer' ],
 		sm : sm,
-		store : store,
+		store : tvheadend.store.epg,
 		stateId : this.id,
 		stateful : true,
 		stripeRows : true,
@@ -499,13 +499,13 @@ tvheadend.grid.epg = function(id) {
 
 	function createAutoRec() {
 
-		var title = store.baseParams.title ? store.baseParams.title
+		var title = grid.store.baseParams.title ? grid.store.baseParams.title
 			: "<i>Don't care</i>";
-		var channel = store.baseParams.channel ? store.baseParams.channel
+		var channel = grid.store.baseParams.channel ? grid.store.baseParams.channel
 			: "<i>Don't care</i>";
-		var tag = store.baseParams.tag ? store.baseParams.tag
+		var tag = grid.store.baseParams.tag ? grid.store.baseParams.tag
 			: "<i>Don't care</i>";
-		var contenttype = store.baseParams.contenttype ? store.baseParams.contenttype
+		var contenttype = grid.store.baseParams.contenttype ? grid.store.baseParams.contenttype
 			: "<i>Don't care</i>";
 
 		Ext.MessageBox.confirm('Auto Recorder',
@@ -517,11 +517,11 @@ tvheadend.grid.epg = function(id) {
 				+ '<div class="x-smallhdr">Tag:</div>' + tag + '<br>'
 				+ '<div class="x-smallhdr">Genre:</div>' + contenttype + '<br>'
 				+ '<br>' + 'Currently this will match (and record) '
-				+ store.getTotalCount() + ' events. ' + 'Are you sure?',
+				+ grid.store.getTotalCount() + ' events. ' + 'Are you sure?',
 
 			function(button) {
 				if (button == 'no') return;
-				createAutoRec2(store.baseParams);
+				createAutoRec2(grid.store.baseParams);
 			});
 	}
 

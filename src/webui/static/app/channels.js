@@ -231,7 +231,7 @@ tvheadend.grid.channels = function(id) {
         Ext.MessageBox.alert('Server Error', 'Unable to create new record');
       },
       success : function(response, options) {
-        var responseData = Ext.util.JSON.decode(response.responseText);
+        var responseData = Ext.decode(response.responseText);
         var p = new tvheadend.channelRec(responseData, responseData.id);
         grid.stopEditing();
         store.insert(0, p)

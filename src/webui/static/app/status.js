@@ -200,7 +200,7 @@ tvheadend.panel.adapterstatus = function(id) {
 									   'name', 'path', 'satConf', 'services', 'signal', 'snr', 'symrateMax', 
 									   'symrateMin', 'type', 'unc', 'uncavg' ]);
 	
-	var store = new Ext.data.JsonStore({
+	tvheadend.store.adapterstatus = new Ext.data.JsonStore({
 		fields : rec,
 		id : 'identifier',
 		root : 'entries',
@@ -209,10 +209,6 @@ tvheadend.panel.adapterstatus = function(id) {
 			property : 'path'
 		},
 		url : 'tv/adapter'
-	});
-
-	tvheadend.store.adapters.on('update', function() {
-		store.reload();
 	});
 	
 	var grid = new Ext.grid.GridPanel({
@@ -229,6 +225,10 @@ tvheadend.panel.adapterstatus = function(id) {
 		store : store,
 		stripeRows : true,		
 		title : 'Adapters'
+	});
+	
+	tvheadend.store.adapters.on('update', function() {
+		grid.store.reload();
 	});
 	
 	return grid;

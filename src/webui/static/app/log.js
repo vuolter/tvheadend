@@ -1,7 +1,7 @@
 /**
  * Log writer
  */
-tvheadend.logW = function(msg, style) {
+tvheadend.WriteLog = function(msg, style) {
 	s = style ? '<div style="' + style + '">' : '<div>'
 
 	sl = Ext.get('systemlog');
@@ -42,7 +42,7 @@ tvheadend.panel.log = function() {
 	});
 	
 	tvheadend.comet.on('logmessage', function(m) {
-		tvheadend.logW(m.logtxt);
+		tvheadend.WriteLog(m.logtxt);
 	});
 		
 	return panel;

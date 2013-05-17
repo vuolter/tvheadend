@@ -671,7 +671,7 @@ tvheadend.grid.dvrAutorec = function(id) {
 	var rec = Ext.data.Record.create([ 'approx_time', 'channel', 'comment', 'config_name', 'contenttype',
 									   'creator', 'enabled', 'pri', 'serieslink', 'tag', 'title','weekdays' ]);
 
-	var store = new Ext.data.JsonStore({
+	tvheadend.store.dvrAutorec = new Ext.data.JsonStore({
 		autoLoad : true,
 		fields : rec,
 		id : 'id',
@@ -685,10 +685,6 @@ tvheadend.grid.dvrAutorec = function(id) {
 			property : 'title'
 		},
 		url : 'tablemgr'
-	});
-
-	tvheadend.comet.on('autorec', function(m) {
-		if (m.reload != null) tvheadend.store.autorec.reload();
 	});
 	
 	var search = new tvheadend.Search;
@@ -836,7 +832,11 @@ tvheadend.grid.dvrAutorec = function(id) {
 	
 	var grid = new tvheadend.panel.table(id, 'Automatic Recorder', 'autorec', sm, cm, rec, 
 										 [ 'bufferedrenderer', enabledColumn, search ], store, 'autorec.html', 'wand');
-		
+	
+    tvheadend.comet.on('autorec', function(m) {
+		if (m.reload != null) grid.store.reload();
+	});
+    
 	return grid;
 }
 

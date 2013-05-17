@@ -36,7 +36,7 @@ tvheadend.grid.iptv = function(id) {
 			cb : function(grid, rec, action, row, col) {
 				Ext.Ajax.request({
 					success : function(response, options) {
-						r = Ext.util.JSON.decode(response.responseText);
+						r = Ext.decode(response.responseText);
 						tvheadend.showTransportDetails(r);
 					},
 					url : 'servicedetails/' + rec.id
@@ -133,7 +133,7 @@ tvheadend.grid.iptv = function(id) {
 	var rec = Ext.data.Record.create([ 'channelname', 'enabled', 'group', 'id', 'interface', 
 									   'pcr', 'pmt', 'port', 'sid', 'stype' ]);
 
-	var store = new Ext.data.JsonStore({
+	tvheadend.store.iptv = new Ext.data.JsonStore({
 		autoLoad : true,
 		baseParams : { op : 'get' },
 		fields : rec,
@@ -153,16 +153,6 @@ tvheadend.grid.iptv = function(id) {
 		url : 'iptv/services'
 	});
 
-	/*
-	 var storeReloader = new Ext.util.DelayedTask(function() {
-	store.reload()
-	 });
-
-	 tvheadend.comet.on('dvbService', function(m) {
-	storeReloader.delay(500);
-	 });
-	 */
-
 	function addRecord() {
 		Ext.Ajax.request({
 			url : 'iptv/services',
@@ -174,10 +164,10 @@ tvheadend.grid.iptv = function(id) {
 					'Unable to generate new record');
 			},
 			success : function(response, options) {
-				var responseData = Ext.util.JSON.decode(response.responseText);
+				var responseData = Ext.decode(response.responseText);
 				var p = new rec(responseData, responseData.id);
 				grid.stopEditing();
-				store.insert(0, p);
+				grid.store.insert(0, p);
 				grid.startEditing(0, 0);
 			}
 		})
@@ -218,7 +208,7 @@ tvheadend.grid.iptv = function(id) {
 					Ext.MessageBox.alert('Server Error', 'Unable to delete');
 				},
 				success : function(response, options) {
-					store.reload();
+					grid.store.reload();
 				}
 			})
 		}
@@ -240,7 +230,7 @@ tvheadend.grid.iptv = function(id) {
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
-				store.commitChanges();
+				grid.store.commitChanges();
 			},
 			failure : function(response, options) {
 				Ext.MessageBox.alert('Message', response.statusText);
@@ -269,7 +259,7 @@ tvheadend.grid.iptv = function(id) {
 		iconCls : 'undo',
 		text : 'Revert changes',
 		handler : function() {
-			store.rejectChanges();
+			grid.store.rejectChanges();
 		},
 		disabled : true
 	});
@@ -297,13 +287,13 @@ tvheadend.grid.iptv = function(id) {
 		sm : sm,
 		stateId : this.id,
 		stateful : true,
-		store : store,
+		store : tvheadend.store.iptv,
 		stripeRows : true,
 		tbar : tb,
 		title : 'IPTV'
 	});
 
-	store.on('update', function(s, r, o) {
+	grid.store.on('update', function(s, r, o) {
 		d = s.getModifiedRecords().length == 0
 		saveBtn.setDisabled(d);
 		rejectBtn.setDisabled(d);

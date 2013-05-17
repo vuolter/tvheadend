@@ -86,7 +86,7 @@ tvheadend.grid.cwc = function(id) {
 	var rec = Ext.data.Record.create([ 'comment', 'connected', 'emm', 'emmex', 'deskey', 'enabled', 
 									   'hostname', 'password', 'port', 'username' ]);
 
-	var store = new Ext.data.JsonStore({
+	tvheadend.store.cwc = new Ext.data.JsonStore({
 		autoLoad : true,
 		baseParams : {
 			table : 'cwc',
@@ -103,10 +103,10 @@ tvheadend.grid.cwc = function(id) {
 	});
 
 	var grid = new tvheadend.panel.table(id, 'Code Word Client', 'cwc', sm, cm, rec, 
-		[ actions, 'bufferedrenderer', emmColumn, emmexColumn, enabledColumn, search ], store, 'config_cwc.html', 'key');
+		[ actions, 'bufferedrenderer', emmColumn, emmexColumn, enabledColumn, search ], tvheadend.store.cwc, 'config_cwc.html', 'key');
 
 	tvheadend.comet.on('cwcStatus', function(msg) {
-		var rec = store.getById(msg.id);
+		var rec = grid.store.getById(msg.id);
 		if (rec) {
 			rec.set('connected', msg.connected);
 			grid.getView().refresh();

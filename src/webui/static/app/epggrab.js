@@ -407,7 +407,7 @@ tvheadend.panel.epggrab = function() {
 				enabled : r.get('enabled') ? 1 : 0
 			});
 		});
-		mods = Ext.util.JSON.encode(mods);
+		mods = Ext.encode(mods);
 		panel.getForm().submit({
 			url : 'epggrab',
 			params : {

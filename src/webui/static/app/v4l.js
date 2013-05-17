@@ -173,7 +173,7 @@ tvheadend.v4l_services = function(adapterId) {
 					'Unable to generate new record');
 			},
 			success : function(response, options) {
-				var responseData = Ext.util.JSON.decode(response.responseText);
+				var responseData = Ext.decode(response.responseText);
 				var p = new rec(responseData, responseData.id);
 				grid.stopEditing();
 				store.insert(0, p);

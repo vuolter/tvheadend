@@ -399,9 +399,9 @@ tvheadend.VLC = function(url) {
 tvheadend.app = function() {
 	
 	Ext.Ajax.request({
-		url: 'capabilities',
-		success: function(d) {
-			tvheadend.capabilities = Ext.util.JSON.decode(d.responseText);
+		url : 'capabilities',
+		success : function(response) {
+			tvheadend.capabilities = Ext.decode(response.responseText);
 		}
 	});
 

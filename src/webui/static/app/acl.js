@@ -109,7 +109,7 @@ tvheadend.grid.acl = function(id) {
 	var rec = Ext.data.Record.create([ 'admin', 'comment', 'enabled', 'dvr', 'dvrall', 'intro', 
 									   'password', 'prefix', 'streaming', 'username', 'webui' ]);
 	
-	var store = new Ext.data.JsonStore({
+	tvheadend.store.acl = new Ext.data.JsonStore({
 		autoLoad : true,
 		baseParams : {
 			table : 'accesscontrol',
@@ -127,7 +127,7 @@ tvheadend.grid.acl = function(id) {
 
 	var grid = new tvheadend.panel.table(id, 'Access control', 'accesscontrol', sm, cm,
 		rec, [ adminColumn, 'bufferedrenderer', enabledColumn, /*introColumn,*/ dvrColumn, 
-		dvrcfgColumn, search, streamingColumn, webuiColumn ], store, 'config_access.html', 'group');
+		dvrcfgColumn, search, streamingColumn, webuiColumn ], tvheadend.store.acl, 'config_access.html', 'group');
 			
 	return grid;
 }

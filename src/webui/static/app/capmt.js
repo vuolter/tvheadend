@@ -55,7 +55,7 @@ tvheadend.grid.capmt = function(id) {
 
 	var rec = Ext.data.Record.create([ 'comment', 'connected', 'camdfilename', 'enabled', 'oscam', 'port' ]);
 
-	store = new Ext.data.JsonStore({
+	tvheadend.store.capmt = new Ext.data.JsonStore({
 		autoLoad : true,
 		fields : rec,
 		id : 'id',
@@ -72,10 +72,10 @@ tvheadend.grid.capmt = function(id) {
 	});
 
 	var grid = new tvheadend.panel.table(id, 'Capmt Connections', 'capmt', sm, cm, rec,
-		[ 'bufferedrenderer', enabledColumn, oscamColumn, search ], store, 'config_capmt.html', 'key');
+		[ 'bufferedrenderer', enabledColumn, oscamColumn, search ], tvheadend.store.capmt, 'config_capmt.html', 'key');
 		
 	tvheadend.comet.on('capmtStatus', function(server) {
-		var rec = store.getById(server.id);
+		var rec = grid.store.getById(server.id);
 		if (rec) {
 			rec.set('connected', server.connected);
 			grid.getView().refresh();

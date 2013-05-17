@@ -424,7 +424,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 				Ext.Ajax.request({
 					url : "servicedetails/" + rec.id,
 					success : function(response, options) {
-						r = Ext.util.JSON.decode(response.responseText);
+						r = Ext.decode(response.responseText);
 						tvheadend.showTransportDetails(r);
 					}
 				})
