@@ -1,0 +1,49 @@
+td.x-grid3-progresscol {
+  vertical-align: middle;
+  border: 1px solid #8DB2E3;
+}
+
+.x-grid3-progresscol .x-grid3-cell-inner {
+  padding: 0px;
+}
+
+.x-grid3-progresscol .x-progress-bar {
+  height: 16px;
+}
+
+.x-grid3-progresscol .x-progress-inner {
+  height: 17px;
+}
+
+.x-grid3-progresscol .x-progress-text-front-ie6 {
+  padding: 2.5px 5px;
+}
+
+.x-grid3-progresscol .x-progress-text-front {
+  padding: 2px 5px;
+}
+
+.x-progress-bar-red,.x-progress-bar-orange,.x-progress-bar-green {
+  float: left;
+  height: 16px;
+}
+
+.x-progress-bar-red {
+  background: #ff0000 url(../resources/images/progress-bg-red.png) repeat-x scroll left
+    center !important;
+  border-top: 1px solid #ecb7ad !important;
+}
+
+.x-progress-bar-orange {
+  background: #9cbfee url(../resources/images/progress-bg-orange.png) repeat-x scroll
+    left center !important;
+  border-right: 1px solid #deab7e !important;
+  border-top: 1px solid #d7b290 !important;
+}
+
+.x-progress-bar-green {
+  background: #00ff00 url(../resources/images/progress-bg-green.png) repeat-x scroll
+    left center !important;
+  border-right: 1px solid #5bd976 !important;
+  border-top: 1px solid #79e18f !important;
+}

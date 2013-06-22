@@ -1,49 +1,41 @@
 /**
  *
  */
-tvheadend.status_subs = function() {
+tvheadend.panel.subscriptions = function(id) {
 
-	tvheadend.subsStore = new Ext.data.JsonStore({
-		root : 'entries',
-		totalProperty : 'totalCount',
-		fields : [ {
-			name : 'id'
-		}, {
-			name : 'hostname'
-		}, {
-			name : 'username'
-		}, {
-			name : 'title'
-		}, {
-			name : 'channel'
-		}, {
-			name : 'service'
-		}, {
-			name : 'state'
-		}, {
-			name : 'errors'
-		}, {
-			name : 'bw'
-		}, {
-			name : 'start',
-			type : 'date',
-			dateFormat : 'U' /* unix time */
-		} ],
-		url : 'subscriptions',
+	var rec = Ext.data.Record.create([
+		{ name : 'bw' },
+		{ name : 'channel' },
+		{ name : 'errors' },
+		{ name : 'id' },
+		{ name : 'service' },
+		{ name : 'state' },
+		{ name : 'title' },
+		{ name : 'username' },
+		{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ }
+	]);
+	
+	tvheadend.data.subscriptions = new Ext.data.JsonStore({
 		autoLoad : true,
-		id : 'id'
+		fields : rec,
+		id : 'id',
+		root : 'entries',
+		sortInfo : {
+			direction : 'ASC',
+			field : 'username'
+		},
+		totalProperty : 'totalCount',
+		url : 'subscriptions'	
 	});
-
-
 
 	tvheadend.comet.on('subscriptions', function(m) {
 
-		if (m.reload != null) tvheadend.subsStore.reload();
+		if (m.reload != null) tvheadend.data.subscriptions.reload();
 
 		if (m.updateEntry != null) {
-			r = tvheadend.subsStore.getById(m.id)
+			r = tvheadend.data.subscriptions.getById(m.id)
 			if (typeof r === 'undefined') {
-				tvheadend.subsStore.reload();
+				tvheadend.data.subscriptions.reload();
 				return;
 			}
 
@@ -53,170 +45,206 @@ tvheadend.status_subs = function() {
 			r.data.errors   = m.errors;
 			r.data.bw       = m.bw
 
-			tvheadend.subsStore.afterEdit(r);
-			tvheadend.subsStore.fireEvent('updated', tvheadend.subsStore, r,
+			tvheadend.data.subscriptions.afterEdit(r);
+			tvheadend.data.subscriptions.fireEvent('updated', tvheadend.data.subscriptions, r,
 				Ext.data.Record.COMMIT);
 		}
 	});
 
-	function renderDate(value) {
-		var dt = new Date(value);
-		return dt.format('D j M H:i');
-	}
-
-	function renderBw(value) {
-		return parseInt(value / 125);
-	}
-
-	var subsCm = new Ext.grid.ColumnModel([{
-		width : 50,
-		id : 'hostname',
-		header : "Hostname",
-		dataIndex : 'hostname'
-	}, {
-		width : 50,
-		id : 'username',
-		header : "Username",
-		dataIndex : 'username'
-	}, {
-		width : 80,
-		id : 'title',
-		header : "Title",
-		dataIndex : 'title'
-	}, {
-		width : 50,
-		id : 'channel',
-		header : "Channel",
-		dataIndex : 'channel'
-	}, {
-		width : 200,
-		id : 'service',
-		header : "Service",
-		dataIndex : 'service',
-	}, {
-		width : 50,
-		id : 'start',
-		header : "Start",
-		dataIndex : 'start',
-		renderer : renderDate
-	}, {
-		width : 50,
-		id : 'state',
-		header : "State",
-		dataIndex : 'state'
-	}, {
-		width : 50,
-		id : 'errors',
-		header : "Errors",
-		dataIndex : 'errors'
-	}, {
-		width : 50,
-		id : 'bw',
-		header : "Bandwidth (kb/s)",
-		dataIndex : 'bw',
-		renderer: renderBw
-	} ]);
-
-	var subs = new Ext.grid.GridPanel({
-                border: false,
-		loadMask : true,
-		stripeRows : true,
-		disableSelection : true,
-		title : 'Active subscriptions',
-		iconCls : 'eye',
-		store : tvheadend.subsStore,
-		cm : subsCm,
-                flex: 1,
-		viewConfig : {
-			forceFit : true
-		}
+	cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ {
+			dataIndex : 'hostname',
+			header : 'Hostname',
+			hideable : false,
+			id : 'hostname',
+			width : 100
+		}, {
+			dataIndex : 'username',
+			header : 'Username',
+			hideable : false,
+			id : 'username',
+			width : 100,
+		}, {
+			dataIndex : 'channel',
+			header : 'Channel',
+			id : 'channel',
+			width : 100
+		}, {
+			dataIndex : 'service',
+			header : 'Service',
+			id : 'service',			
+			width : 100
+		}, {
+			dataIndex : 'state',
+			header : 'Status',
+			id : 'state',
+			width : 100
+		}, {
+			dataIndex : 'start',
+			header : 'Start date',
+			id : 'start',
+			renderer : tvheadend.renderer.Date,
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : 'Type',
+			id : 'title',
+			width : 100
+		}, {
+			header : 'Errors',
+			id : 'errors',
+			dataIndex : 'errors',
+			width : 50
+		}, {
+			dataIndex : 'bw',
+			header : 'Bandwidth',
+			id : 'bw',
+			renderer : tvheadend.renderer.Bandwidth,
+			width : 50
+		} ]
 	});
-        return subs;
+
+	var grid = new Ext.grid.GridPanel({
+		border : false,
+		cm : cm,
+		enableColumnMove : false,
+		disableSelection : true,
+		flex : 1,
+		iconCls : 'transmit-blue',
+		id : id ? id : Ext.id,
+		stateId : this.id,
+		stateful : true,
+		store : tvheadend.data.subscriptions,
+		stripeRows : true,		
+		title : 'Subscriptions',
+		view : new tvheadend.BufferView
+	});
+	
+	return grid;
 }
 
 
 /**
  *
  */
-tvheadend.status_adapters = function() {
+tvheadend.panel.adapterstatus = function(id) {
 
-	var signal = new Ext.ux.grid.ProgressColumn({
-		header : "Signal Strength",
+	var strength = new Ext.ux.grid.ProgressColumn({
+		colored : true,
 		dataIndex : 'signal',
-		width : 85,
+		header : 'Signal Strength',
 		textPst : '%',
-		colored : true
+		width : 80
+	});
+/*	
+	var quality = new Ext.ux.grid.ProgressColumn({
+		colored : true,
+		dataIndex : 'quality',
+		header : 'Signal Quality',
+		textPst : '%',
+		width : 80
+	});
+*/
+
+	var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ {
+			dataIndex : 'name',
+			header : 'Name',			
+			hideable : false,
+			width : 100
+		}, {
+			
+			dataIndex : 'path',
+			header : 'Device',
+			hideable : false,
+			width : 100		
+		}, {
+			dataIndex : 'currentMux',
+			header : 'Currently tuned to',
+			hideable : false,
+			width : 100
+		}, {
+			dataIndex : 'bw',
+			header : 'Bandwidth',
+			renderer: tvheadend.renderer.Bandwidth,
+			width : 100
+		}, {
+			header : 'Bit error rate',
+			dataIndex : 'ber',
+			width : 50
+		}, {
+			dataIndex : 'uncavg',
+			header : 'Uncorrected bit error rate',
+			width : 50
+		}, {
+			dataIndex : 'snr',
+			header : 'SNR',
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, 'Unknown', value.toFixed(1) + ' dB');
+			},
+			width : 50
+		},
+		strength /*, quality*/ ]
 	});
 
-	function renderBw(value) {
-		return parseInt(value / 125);
-	}
+	var rec = Ext.data.Record.create([ 'ber', 'currentMux', 'freqMax', 'freqMin', 'freqStep', 'deliverySystem', 
+									   'devicename', 'hostconnection', 'identifier', 'initialMuxes', 'muxes', 
+									   'name', 'path', 'satConf', 'services', 'signal', 'snr', 'symrateMax', 
+									   'symrateMin', 'type', 'unc', 'uncavg' ]);
+	
+	var store = new Ext.data.JsonStore({
+		fields : rec,
+		id : 'identifier',
+		root : 'entries',
+		sortInfo : {
+			direction : 'ASC',
+			field : 'path'
+		},
+		url : 'tv/adapter'
+	});
 
-	var cm = new Ext.grid.ColumnModel([{
-		width : 50,
-		header : "Name",
-		dataIndex : 'name'
-        },{
-		width : 50,
-		header : "Hardware device",
-		dataIndex : 'path'
-        },{
-		width : 100,
-		header : "Currently tuned to",
-		dataIndex : 'currentMux'
-        },{
-		width : 100,
-		header : "Bandwidth (kb/s)",
-		dataIndex : 'bw',
-		renderer: renderBw
-        },{
-		width : 50,
-		header : "Bit error rate",
-		dataIndex : 'ber'
-        },{
-		width : 50,
-		header : "Uncorrected bit error rate",
-		dataIndex : 'uncavg'
-        },{
-		width : 50,
-		header : "SNR",
-		dataIndex : 'snr',
-                renderer: function(value) {
-                        if(value > 0) {
-                                return value.toFixed(1) + " dB";
-                        } else {
-                                return '<span class="tvh-grid-unset">Unknown</span>';
-                        }
-                }
-        }, signal]);
-
-	var panel = new Ext.grid.GridPanel({
-                border: false,
-		loadMask : true,
-		stripeRows : true,
-		disableSelection : true,
-		title : 'Adapters',
-		iconCls : 'hardware',
-		store : tvheadend.tvAdapterStore,
+	tvheadend.data.adapters.on('update', function() {
+		store.reload();
+	});
+	
+	var grid = new Ext.grid.GridPanel({
+		border : false,
 		cm : cm,
-                flex: 1,
-		viewConfig : {
-			forceFit : true
-		}
+		enableColumnMove : false,
+		disableSelection : true,
+		flex : 1,
+		iconCls : 'hardware',
+		id : id ? id : Ext.id,
+		stateId : this.id,
+		stateful : true,
+		store : store,
+		stripeRows : true,		
+		title : 'Adapters',
+		view : new tvheadend.BufferView
 	});
-        return panel;
+	
+	return grid;
 }
 
-tvheadend.status = function() {
-
-        var panel = new Ext.Panel({
-                border: false,
+tvheadend.panel.status = function(idSubs, idAdapt) {
+	
+	var helpBtn = new tvheadend.button.help('Status', 'status.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ '->', helpBtn ]
+	});
+	
+	var panel = new Ext.Panel({
+		iconCls : 'bulb',		
+		items : [ new tvheadend.panel.subscriptions(idSubs ? idSubs : Ext.id),
+				  new tvheadend.panel.adapterstatus(idAdapt ? idAdapt : Ext.id) ],
 		layout : 'vbox',
-		title : 'Status',
-		iconCls : 'eye',
-		items : [ new tvheadend.status_subs, new tvheadend.status_adapters ]
-        });
-
+		tbar : tb,
+		title : 'Status'
+	});
+	
 	return panel;
 }
-

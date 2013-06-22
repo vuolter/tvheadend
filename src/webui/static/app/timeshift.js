@@ -1,5 +1,7 @@
-tvheadend.timeshift = function() {
-
+tvheadend.panel.timeshift = function() {
+  if(tvheadend.capabilities.indexOf('timeshift') == -1)
+    return new tvheadend.panel.dummy('Timeshift','clock');
+	
   /* ****************************************************************
    * Data
    * ***************************************************************/
@@ -80,24 +82,24 @@ tvheadend.timeshift = function() {
    * Form
    * ***************************************************************/
 
-  var saveButton = new Ext.Button({
-    text : "Save configuration",
+  var saveBtn = new Ext.Button({
+    text : 'Save configuration',
     tooltip : 'Save changes made to configuration below',
     iconCls : 'save',
     handler : saveChanges
   });
 
-  var helpButton = new Ext.Button({
-    text : 'Help',
-    handler : function() {
-      new tvheadend.help('Timeshift Configuration', 'config_timeshift.html');
-    }
-  });
-
-  var confpanel = new Ext.FormPanel({
-    title : 'Timeshift',
+	var helpBtn = new tvheadend.button.help('Timeshift Configuration', 'config_timeshift.html');
+  
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveBtn, '->', helpBtn ]
+	});
+	
+  var panel = new Ext.form.FormPanel({
+    autoScroll : true,
+	title : 'Timeshift',
     iconCls : 'clock',
-    border : false,
     bodyStyle : 'padding:15px',
     labelAlign : 'left',
     labelWidth : 150,
@@ -112,21 +114,21 @@ tvheadend.timeshift = function() {
       timeshiftMaxPeriod, timeshiftUnlPeriod,
       timeshiftMaxSize, timeshiftUnlSize
     ],
-    tbar : [ saveButton, '->', helpButton ]
+    tbar : tb
   });
 
   /* ****************************************************************
    * Load/Save
    * ***************************************************************/
 
-  confpanel.on('render', function() {
-    confpanel.getForm().load({
+  panel.on('render', function() {
+    panel.getForm().load({
       url: 'timeshift',
       params: {
         'op': 'loadSettings'
       },
       success: function() {
-        confpanel.enable();
+        panel.enable();
         timeshiftMaxPeriod.setDisabled(timeshiftUnlPeriod.getValue());
         timeshiftMaxSize.setDisabled(timeshiftUnlSize.getValue());
       }
@@ -134,7 +136,7 @@ tvheadend.timeshift = function() {
   });
 
   function saveChanges() {
-    confpanel.getForm().submit({
+    panel.getForm().submit({
       url : 'timeshift',
       params : {
         op : 'saveSettings',
@@ -148,5 +150,5 @@ tvheadend.timeshift = function() {
     });
   }
 
-  return confpanel;
+  return panel;
 }

@@ -1,17 +1,19 @@
 // Store: config languages
-tvheadend.languages = new Ext.data.JsonStore({
-    autoLoad:true,
-    root:'entries',
-    fields: ['identifier','name'],
-    id: 'identifier',
-    url:'languages',
-    baseParams: {
-    	op: 'list'
-    }
+tvheadend.data.languages = new Ext.data.JsonStore({
+	autoLoad : true,
+	baseParams : { op : 'list' },
+	fields : ['identifier','name'],
+	id : 'identifier',
+	root : 'entries',
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	},
+	url : 'languages'
 });
 
 // Store: all languages
-tvheadend.config_languages = new Ext.data.JsonStore({
+tvheadend.data.configLanguages = new Ext.data.JsonStore({
     autoLoad:true,
     root:'entries',
     fields: ['identifier','name'],
@@ -22,16 +24,14 @@ tvheadend.config_languages = new Ext.data.JsonStore({
     }
 });
 
-tvheadend.languages.setDefaultSort('name', 'ASC');
-
 tvheadend.comet.on('config', function(m) {
     if(m.reload != null) {
-        tvheadend.languages.reload();
-        tvheadend.config_languages.reload();
+        tvheadend.data.languages.reload();
+        tvheadend.data.configLanguages.reload();
     }
 });
 
-tvheadend.miscconf = function() {
+tvheadend.panel.config = function() {
 	/*
 	 * Basic Config
 	 */
@@ -41,7 +41,7 @@ tvheadend.miscconf = function() {
        'imagecache_enabled', 'imagecache_ok_period',
        'imagecache_fail_period', 'imagecache_ignore_sslcert',
        'tvhtime_update_enabled', 'tvhtime_ntp_enabled',
-       'tvhtime_tolerance']);
+       'tvhtime_tolerance', 'xtheme' ]);
 
 	/* ****************************************************************
 	 * Form Fields
@@ -64,8 +64,8 @@ tvheadend.miscconf = function() {
 
 	var language = new Ext.ux.ItemSelector({
 		name: 'language',
-		fromStore: tvheadend.languages,
-		toStore: tvheadend.config_languages,
+		fromStore: tvheadend.data.languages,
+		toStore: tvheadend.data.configLanguages,
 		fieldLabel: 'Default Language(s)',
 		dataFields:['identifier', 'name'],
 		msWidth: 190,
@@ -127,6 +127,7 @@ tvheadend.miscconf = function() {
   });
 
   var imagecachePanel = new Ext.form.FieldSet({
+	hidden : tvheadend.capabilities.indexOf('imagecache') == -1,
     title: 'Image Caching',
     width: 700,
     autoHeight: true,
@@ -134,62 +135,88 @@ tvheadend.miscconf = function() {
     items : [ imagecacheEnabled, imagecacheOkPeriod, imagecacheFailPeriod,
               imagecacheIgnoreSSLCert ]
   });
-  if (tvheadend.capabilities.indexOf('imagecache') == -1)
-    imagecachePanel.hide();
-
+  
+	/*
+	 * Theme
+	 */
+	var theme = new Ext.form.ComboBox({
+		displayField : 'display',
+		editable : false,
+		emptyText : 'Blue',
+		fieldLabel : 'Theme',
+		lazyRender : true,
+		listeners : {
+			'select' : function(c){ 
+				if(c.isDirty())
+					Ext.util.CSS.swapStyleSheet('theme', c.getValue());
+			}
+		},
+		mode : 'local',
+		name : 'xtheme',
+		store : new Ext.data.ArrayStore({
+			fields : [ 'display', 'value' ],
+			data : [ 
+				 [ 'Blue', '../static/extjs/resources/css/xtheme-blue.css' ]
+				,[ 'Gray', '../static/extjs/resources/css/xtheme-gray.css' ]
+				//,[ 'Dark Orange', '../static/extjs/resources/css/xtheme-darkorange.css' ]
+			]
+		}),
+		triggerAction : 'all',
+		valueField : 'value'
+	});
+	
 	/* ****************************************************************
 	 * Form
 	 * ***************************************************************/
 
-	var saveButton = new Ext.Button({
-		text : "Save configuration",
+	var saveBtn = new Ext.Button({
+		text : 'Save configuration',
 		tooltip : 'Save changes made to configuration below',
 		iconCls : 'save',
 		handler : saveChanges
 	});
 
-	var helpButton = new Ext.Button({
-		text : 'Help',
-		handler : function() {
-			new tvheadend.help('General Configuration', 'config_misc.html');
-		}
-	});
+	var helpBtn = new tvheadend.button.help('General Configuration', 'config_misc.html');
 
-	var confpanel = new Ext.form.FormPanel({
-		title : 'General',
-		iconCls : 'wrench',
-		border : false,
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveBtn, '->', helpBtn ]
+	});
+	
+	var panel = new Ext.form.FormPanel({
+		autoHeight : true,
+		autoScroll : true,
 		bodyStyle : 'padding:15px',
+		defaultType : 'textfield',
+		iconCls : 'wrench-blue',
+		items : [ language, dvbscanPath, imagecachePanel, tvhtimePanel, theme ],
 		labelAlign : 'left',
 		labelWidth : 200,
-		waitMsgTarget : true,
-		reader : confreader,
 		layout : 'form',
-		defaultType : 'textfield',
-		autoHeight : true,
-		items : [ language, dvbscanPath,
-              imagecachePanel, tvhtimePanel ],
-		tbar : [ saveButton, '->', helpButton ]
+		reader : confreader,
+		tbar : tb,
+		title : 'General',
+		waitMsgTarget : true
 	});
 
 	/* ****************************************************************
 	 * Load/Save
 	 * ***************************************************************/
 
-	confpanel.on('render', function() {
-		confpanel.getForm().load({
+	panel.on('render', function() {
+		panel.getForm().load({
 			url : 'config',
 			params : {
 				op : 'loadSettings'
 			},
 			success : function(form, action) {
-				confpanel.enable();
+				panel.enable();
 			}
 		});
 	});
 
 	function saveChanges() {
-		confpanel.getForm().submit({
+		panel.getForm().submit({
 			url : 'config',
 			params : {
 				op : 'saveSettings'
@@ -201,5 +228,5 @@ tvheadend.miscconf = function() {
 		});
 	}
 
-	return confpanel;
+	return panel;
 }

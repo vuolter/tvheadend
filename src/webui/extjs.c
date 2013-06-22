@@ -95,43 +95,66 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
   // Issue #1504 - IE9 temporary fix
   htsbuf_qprintf(hq, "<meta http-equiv=\"X-UA-Compatible\" content=\"IE=8\">\n");
 
-  
-  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext/ext-base%s.js\"></script>\n"
-                     "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/xtheme-blue.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/livegrid/resources/css/ext-ux-livegrid.css\">\n"
-                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/ext.css\">\n",
-                     tvheadend_webui_debug ? "-debug" : "",
-                     tvheadend_webui_debug ? "-debug" : "",
+  htsbuf_qprintf(hq, "<link rel=\"stylesheet\" type=\"text/css\" href=\""EXTJSPATH"/resources/css/ext-all-notheme%s.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/bubble/resources/css/bubble.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/gridsearch/resources/css/gridsearch.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/grouptab/resources/css/GroupTab.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/livegrid/resources/css/ext-ux-livegrid.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/lovcombo/resources/css/Ext.ux.form.LovCombo.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/multiselect/resources/css/multiselect.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/progresscolumn/resources/css/Ext.ux.grid.ProgressColumn.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/rowactions/resources/css/Ext.ux.grid.RowActions.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/extensions/spinner/resources/css/Spinner.css\">\n"
+                     "<link rel=\"stylesheet\" type=\"text/css\" href=\"static/app/resources/css/app.css\">\n",
                      tvheadend_webui_debug ? ""       : "-min");
+
+  htsbuf_qprintf(hq, "<script type=\"text/javascript\" src=\""EXTJSPATH"/adapter/ext-base%s.js\"></script>\n"
+                     "<script type=\"text/javascript\" src=\""EXTJSPATH"/ext-all%s.js\"></script>\n",
+                     tvheadend_webui_debug ? "-debug" : "",
+                     tvheadend_webui_debug ? "-debug" : "");
   
-  extjs_exec(hq, "Ext.BLANK_IMAGE_URL = " "'"EXTJSPATH"/resources/images/default/s.gif';");
+  extjs_exec(hq, "Ext.BLANK_IMAGE_URL = " "'"EXTJSPATH"/resources/images/default/s.png';");
 
   /**
    * Load extjs extensions
    */
   extjs_load(hq, "static/app/extensions.js");
-  extjs_load(hq, "static/livegrid/livegrid-all.js");
-  extjs_load(hq, "static/lovcombo/lovcombo-all.js");
-  extjs_load(hq, "static/multiselect/multiselect.js");
-  extjs_load(hq, "static/multiselect/ddview.js");
+  extjs_load(hq, "static/extensions/BufferView.js");
+  extjs_load(hq, "static/extensions/CheckColumn.js");
+  extjs_load(hq, "static/extensions/GridValidator.js");
+  extjs_load(hq, "static/extensions/LocalStorage.js");
+  extjs_load(hq, "static/extensions/bubble/BubblePanel.js");
+  extjs_load(hq, "static/extensions/gridsearch/Ext.ux.grid.Search.js");
+  extjs_load(hq, "static/extensions/grouptab/GroupTab.js");
+  extjs_load(hq, "static/extensions/grouptab/GroupTabPanel.js");
+  extjs_load(hq, "static/extensions/livegrid/livegrid-all.js");
+  extjs_load(hq, "static/extensions/lovcombo/Ext.ux.form.LovCombo.js");
+  extjs_load(hq, "static/extensions/multiselect/ddview.js");
+  extjs_load(hq, "static/extensions/multiselect/multiselect.js");
+  extjs_load(hq, "static/extensions/progresscolumn/Ext.ux.grid.ProgressColumn.js");
+  extjs_load(hq, "static/extensions/rowactions/Ext.ux.grid.RowActions.js");
+  extjs_load(hq, "static/extensions/spinner/Spinner.js");
+  extjs_load(hq, "static/extensions/spinner/SpinnerStrategy.js");
 
   /**
-   * Create a namespace for our app
+   * Create namespaces for our app
    */
-  extjs_exec(hq, "Ext.namespace('tvheadend');");
+  extjs_exec(hq, "Ext.namespace('tvheadend.button');\n"
+                 "Ext.namespace('tvheadend.data');\n"
+                 "Ext.namespace('tvheadend.panel');\n"
+                 "Ext.namespace('tvheadend.renderer');\n"
+                 "Ext.namespace('tvheadend.selection');\n");
 
   /**
    * Load all components
    */
   extjs_load(hq, "static/app/comet.js");
-  extjs_load(hq, "static/app/tableeditor.js");
-  extjs_load(hq, "static/app/cteditor.js");
-  extjs_load(hq, "static/app/acleditor.js");
-  extjs_load(hq, "static/app/cwceditor.js");
-  extjs_load(hq, "static/app/capmteditor.js");
-  extjs_load(hq, "static/app/tvadapters.js");
+  extjs_load(hq, "static/app/table.js");
+  extjs_load(hq, "static/app/ctag.js");
+  extjs_load(hq, "static/app/acl.js");
+  extjs_load(hq, "static/app/cwc.js");
+  extjs_load(hq, "static/app/capmt.js");
+  extjs_load(hq, "static/app/adapters.js");
 #if ENABLE_LINUXDVB
   extjs_load(hq, "static/app/dvb.js");
 #endif
@@ -142,12 +165,12 @@ extjs_root(http_connection_t *hc, const char *remain, void *opaque)
 #if ENABLE_TIMESHIFT
   extjs_load(hq, "static/app/timeshift.js");
 #endif
-  extjs_load(hq, "static/app/chconf.js");
+  extjs_load(hq, "static/app/channels.js");
   extjs_load(hq, "static/app/epg.js");
   extjs_load(hq, "static/app/dvr.js");
   extjs_load(hq, "static/app/epggrab.js");
   extjs_load(hq, "static/app/config.js");
-  extjs_load(hq, "static/app/tvhlog.js");
+  extjs_load(hq, "static/app/log.js");
   extjs_load(hq, "static/app/status.js");
 
   /**
@@ -912,6 +935,7 @@ extjs_epg(http_connection_t *hc, const char *remain, void *opaque)
 
     htsmsg_add_str(m, "channel", ch->ch_name);
     htsmsg_add_u32(m, "channelid", ch->ch_id);
+    htsmsg_add_u32(m, "number", ch->ch_number);
     if(ch->ch_icon != NULL)
       htsmsg_add_imageurl(m, "chicon", "imagecache/%d", ch->ch_icon);
 
@@ -2019,6 +2043,8 @@ extjs_config(http_connection_t *hc, const char *remain, void *opaque)
       save |= config_set_muxconfpath(str);
     if ((str = http_arg_get(&hc->hc_req_args, "language")))
       save |= config_set_language(str);
+	if ((str = http_arg_get(&hc->hc_req_args, "xtheme")))
+      save |= config_set_xtheme(str);
     if (save)
       config_save();
 
@@ -2249,15 +2275,15 @@ extjs_start(void)
   http_path_add("/epg",              NULL, extjs_epg,              ACCESS_WEB_INTERFACE);
   http_path_add("/epgrelated",       NULL, extjs_epgrelated,       ACCESS_WEB_INTERFACE);
   http_path_add("/epgobject",        NULL, extjs_epgobject,        ACCESS_WEB_INTERFACE);
-  http_path_add("/dvr",              NULL, extjs_dvr,              ACCESS_WEB_INTERFACE);
-  http_path_add("/dvrlist_upcoming", NULL, extjs_dvrlist_upcoming, ACCESS_WEB_INTERFACE);
-  http_path_add("/dvrlist_finished", NULL, extjs_dvrlist_finished, ACCESS_WEB_INTERFACE);
-  http_path_add("/dvrlist_failed",   NULL, extjs_dvrlist_failed,   ACCESS_WEB_INTERFACE);
-  http_path_add("/dvr_containers",   NULL, extjs_dvr_containers,   ACCESS_WEB_INTERFACE);
-  http_path_add("/subscriptions",    NULL, extjs_subscriptions,    ACCESS_WEB_INTERFACE);
+  http_path_add("/dvr",              NULL, extjs_dvr,              ACCESS_RECORDER);
+  http_path_add("/dvrlist_upcoming", NULL, extjs_dvrlist_upcoming, ACCESS_RECORDER);
+  http_path_add("/dvrlist_finished", NULL, extjs_dvrlist_finished, ACCESS_RECORDER);
+  http_path_add("/dvrlist_failed",   NULL, extjs_dvrlist_failed,   ACCESS_RECORDER);
+  http_path_add("/dvr_containers",   NULL, extjs_dvr_containers,   ACCESS_RECORDER_ALL);
+  http_path_add("/subscriptions",    NULL, extjs_subscriptions,    ACCESS_ADMIN);
   http_path_add("/ecglist",          NULL, extjs_ecglist,          ACCESS_WEB_INTERFACE);
-  http_path_add("/config",           NULL, extjs_config,           ACCESS_WEB_INTERFACE);
-  http_path_add("/languages",        NULL, extjs_languages,        ACCESS_WEB_INTERFACE);
+  http_path_add("/config",           NULL, extjs_config,           ACCESS_ADMIN);
+  http_path_add("/languages",        NULL, extjs_languages,        ACCESS_ADMIN);
   http_path_add("/mergechannel",     NULL, extjs_mergechannel,     ACCESS_ADMIN);
   http_path_add("/iptv/services",    NULL, extjs_iptvservices,     ACCESS_ADMIN);
   http_path_add("/servicedetails",   NULL, extjs_servicedetails,   ACCESS_ADMIN);

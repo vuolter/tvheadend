@@ -1017,7 +1017,7 @@ webui_static_content(const char *http_path, const char *source)
 static int
 favicon(http_connection_t *hc, const char *remain, void *opaque)
 {
-  http_redirect(hc, "static/htslogo.png");
+  http_redirect(hc, "static/app/resources/images/htslogo.png");
   return 0;
 }
 
@@ -1033,11 +1033,11 @@ webui_init(void)
     tvhlog(LOG_INFO, "webui", "Running web interface in debug mode");
 
   http_path_add("", NULL, page_root2, ACCESS_WEB_INTERFACE);
-  http_path_add("/", NULL, page_root, ACCESS_WEB_INTERFACE);
+  http_path_add("/", NULL, page_root, ACCESS_ANONYMOUS);
 
-  http_path_add("/dvrfile", NULL, page_dvrfile, ACCESS_WEB_INTERFACE);
-  http_path_add("/favicon.ico", NULL, favicon, ACCESS_WEB_INTERFACE);
-  http_path_add("/playlist", NULL, page_http_playlist, ACCESS_WEB_INTERFACE);
+  http_path_add("/dvrfile", NULL, page_dvrfile, ACCESS_STREAMING);
+  http_path_add("/favicon.ico", NULL, favicon, ACCESS_ANONYMOUS);
+  http_path_add("/playlist", NULL, page_http_playlist, ACCESS_STREAMING);
 
   http_path_add("/state", NULL, page_statedump, ACCESS_ADMIN);
 

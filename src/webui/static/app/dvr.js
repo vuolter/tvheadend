@@ -1,273 +1,162 @@
-tvheadend.weekdays = new Ext.data.SimpleStore({
-	fields : [ 'identifier', 'name' ],
-	id : 0,
-	data : [ [ '1', 'Mon' ], [ '2', 'Tue' ], [ '3', 'Wed' ], [ '4', 'Thu' ],
-		[ '5', 'Fri' ], [ '6', 'Sat' ], [ '7', 'Sun' ] ]
+tvheadend.data.weekdays = new Ext.data.SimpleStore({
+	data : [ 
+		[ '1', 'Monday'],
+		[ '2', 'Tuesday'],
+		[ '3', 'Wednesday'],
+		[ '4', 'Thursday'],
+		[ '5', 'Friday'],
+		[ '6', 'Saturday'],
+		[ '7', 'Sunday']
+    ],
+	fields : [ 'identifier', 'name' ]
 });
 
 //This should be loaded from tvheadend
-tvheadend.dvrprio = new Ext.data.SimpleStore({
-	fields : [ 'identifier', 'name' ],
-	id : 0,
-	data : [ [ 'important', 'Important' ], [ 'high', 'High' ],
-		[ 'normal', 'Normal' ], [ 'low', 'Low' ],
-		[ 'unimportant', 'Unimportant' ] ]
+tvheadend.data.dvrprio = new Ext.data.SimpleStore({
+	data : [ 
+		[ 'important'  , 'Important'],
+		[ 'high'       , 'High'],
+		[ 'normal'     , 'Normal'],
+		[ 'low'        , 'Low'],
+		[ 'unimportant', 'Unimportant']
+    ],
+	fields : [ 'identifier', 'name' ]
 });
-
 
 //For the container configuration
-tvheadend.containers = new Ext.data.JsonStore({
+tvheadend.data.containers = new Ext.data.JsonStore({
 	autoLoad : true,
-	root : 'entries',
+	baseParams : { op : 'list' },
 	fields : [ 'name', 'description' ],
 	id : 'name',
-	url : 'dvr_containers',
-	baseParams : {
-		op : 'list'
-	}
+	root : 'entries',
+	url : 'dvr_containers'
 });
-
 
 /**
  * Configuration names
  */
-tvheadend.configNames = new Ext.data.JsonStore({
+tvheadend.data.configNames = new Ext.data.JsonStore({
 	autoLoad : true,
-	root : 'entries',
+	baseParams : { op : 'list' },
 	fields : [ 'identifier', 'name' ],
 	id : 'identifier',
-	url : 'confignames',
-	baseParams : {
-		op : 'list'
-	}
+	root : 'entries',
+	sortInfo : {
+		field : 'name',
+		direction : 'ASC'
+	},
+	url : 'confignames'
 });
-
-tvheadend.configNames.setDefaultSort('name', 'ASC');
 
 tvheadend.comet.on('dvrconfig', function(m) {
-	if (m.reload != null) tvheadend.configNames.reload();
+	if (m.reload != null) tvheadend.data.configNames.reload();
 });
 
 /**
- *
+ * Upcoming dvr panel
  */
-tvheadend.dvrDetails = function(entry) {
-
-	var content = '';
-	var but;
-
-	if (entry.chicon != null && entry.chicon.length > 0) content += '<img class="x-epg-chicon" src="'
-		+ entry.chicon + '">';
-
-	content += '<div class="x-epg-title">' + entry.title + '</div>';
-	content += '<div class="x-epg-desc">' + entry.description + '</div>';
-	content += '<hr>'
-	content += '<div class="x-epg-meta">Status: ' + entry.status + '</div>';
-
-	if (entry.url != null && entry.filesize > 0) {
-		content += '<div class="x-epg-meta">' + '<a href="' + entry.url
-			+ '" target="_blank">Download</a> '
-			+ parseInt(entry.filesize / 1000000) + ' MB<br>'
-			+ "<a href=\"javascript:tvheadend.VLC('dvrfile/" + entry.id
-			+ "')\">Play</a>" + '</div>';
-	}
-
-	var win = new Ext.Window({
-		title : entry.title,
-		layout : 'fit',
-		width : 400,
-		height : 300,
-		constrainHeader : true,
-		buttonAlign : 'center',
-		html : content
+tvheadend.panel.dvrUpcoming = function(id) {
+	
+	var search = new tvheadend.Search;
+	
+	var actions = new Ext.ux.grid.RowActions({
+		actions : { iconIndex : 'schedstate' },
+		dataIndex : 'actions',
+		hideable : false,
+		width : 45
 	});
 
-	switch (entry.schedstate) {
-		case 'scheduled':
-			win.addButton({
-				handler : cancelEvent,
-				text : "Remove from schedule"
-			});
-			break;
-
-		case 'recording':
-		case 'recordingError':
-			win.addButton({
-				handler : cancelEvent,
-				text : "Abort recording"
-			});
-			break;
-		case 'completedError':
-		case 'completed':
-			win.addButton({
-				handler : deleteEvent,
-				text : "Delete recording"
-			});
-			break;
-	}
-
-	win.show();
-
-	function cancelEvent() {
-		Ext.Ajax.request({
-			url : 'dvr',
-			params : {
-				entryId : entry.id,
-				op : 'cancelEntry'
+	var sm = new tvheadend.selection.CheckboxModel;
+	
+	var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ sm, actions, {
+			dataIndex : 'status',
+			header : 'Status',
+			id : 'status',
+			width : 200
+		}, {
+			dataIndex : 'start_day',
+			header : 'Start date',
+			id : 'start_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return tvheadend.renderer.Day(rec.get('start'));
 			},
-
-			success : function(response, options) {
-				win.close();
+			width : 150
+		}, {
+			dataIndex : 'start',
+			header : 'Start time',
+			id : 'start_time',
+			renderer : tvheadend.renderer.Time,
+			width : 100
+		}, {
+			dataIndex : 'end_day',
+			header : 'End date',
+			id : 'end_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return tvheadend.renderer.Day(rec.get('end'));
 			},
-
-			failure : function(response, options) {
-				Ext.MessageBox.alert('DVR', response.statusText);
-			}
-		});
-	}
-
-	function deleteEvent() {
-		Ext.Ajax.request({
-			url : 'dvr',
-			params : {
-				entryId : entry.id,
-				op : 'deleteEntry'
+			width : 150
+		}, {
+			dataIndex : 'end',
+			header : 'End time',
+			id : 'end_time',
+			renderer : tvheadend.renderer.Time,
+			width : 100
+		}, {
+			dataIndex : 'channel',
+			header : 'Channel',
+			id : 'channel',
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : 'Title',
+			id : 'title',
+			width : 400
+		}, {
+			dataIndex : 'episode',
+			header : 'Episode',
+			id : 'episode',
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
-
-			success : function(response, options) {
-				win.close();
+			width : 100
+		}, {
+			dataIndex : 'duration',
+			header : 'Duration',
+			id : 'duration',
+			renderer : tvheadend.renderer.Duration,
+			width : 100
+		}, {
+			dataIndex : 'filesize',
+			header : 'File size',
+			hidden : true,
+			id : 'filesize',
+			renderer : tvheadend.renderer.Size,
+			width : 100
+		}, {
+			dataIndex : 'creator',
+			header : 'Created by',
+			id : 'creator',
+			renderer : tvheadend.renderer.Value,
+			width : 150
+		}, {
+			dataIndex : 'config_name',
+			header : 'DVR Configuration',
+			id : 'config_name',
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, '(default profile)');
 			},
-
-			failure : function(response, options) {
-				Ext.MessageBox.alert('DVR', response.statusText);
-			}
-		});
-	}
-
-}
-
-/**
- *
- */
-tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
-
-	var actions = new Ext.ux.grid.RowActions({
-		header : '',
-		dataIndex : 'actions',
-		width : 45,
-		actions : [ {
-			iconIndex : 'schedstate'
+			width : 150
+		}, {
+			dataIndex : 'pri',
+			header : 'Priority',
+			id : 'pri',
+			renderer : tvheadend.renderer.Priority,
+			width : 150
 		} ]
 	});
-
-	function renderDate(value) {
-		var dt = new Date(value);
-		return dt.format('D j M H:i');
-	}
-
-	function renderDuration(value) {
-		value = value / 60; /* Nevermind the seconds */
-
-		if (value >= 60) {
-			var min = parseInt(value % 60);
-			var hours = parseInt(value / 60);
-
-			if (min == 0) {
-				return hours + ' hrs';
-			}
-			return hours + ' hrs, ' + min + ' min';
-		}
-		else {
-			return parseInt(value) + ' min';
-		}
-	}
-
-	function renderSize(value)
-	{
-		if (value == null)
-			return '';
-		return parseInt(value / 1000000) + ' MB';
-	}
-
-	function renderPri(value) {
-		return tvheadend.dvrprio.getById(value).data.name;
-	}
-
-	var dvrCm = new Ext.grid.ColumnModel([ actions, {
-		width : 250,
-		id : 'title',
-		header : "Title",
-		dataIndex : 'title'
-	}, {
-		width : 100,
-		id : 'episode',
-		header : "Episode",
-		dataIndex : 'episode'
-	}, {
-		width : 100,
-		id : 'pri',
-		header : "Priority",
-		dataIndex : 'pri',
-		renderer : renderPri,
-		hidden : iconCls != 'clock',
-	}, {
-		width : 100,
-		id : 'start',
-		header : iconCls == 'clock' ? "Start" : "Date/Time",
-		dataIndex : 'start',
-		renderer : renderDate
-	}, {
-		width : 100,
-		hidden : true,
-		id : 'end',
-		header : "End",
-		dataIndex : 'end',
-		renderer : renderDate
-	}, {
-		width : 100,
-		id : 'duration',
-		header : "Duration",
-		dataIndex : 'duration',
-		renderer : renderDuration
-	}, {
-		width : 100,
-		id : 'filesize',
-		header : "Filesize",
-		dataIndex : 'filesize',
-		renderer : renderSize,
-		hidden : iconCls != 'television'
-	}, {
-		width : 250,
-		id : 'channel',
-		header : "Channel",
-		dataIndex : 'channel'
-	}, {
-		width : 200,
-		id : 'creator',
-		header : "Created by",
-		hidden : true,
-		dataIndex : 'creator'
-	}, {
-		width : 200,
-		id : 'config_name',
-		header : "DVR Configuration",
-		renderer : function(value, metadata, record, row, col, store) {
-			if (!value) {
-				return '<span class="tvh-grid-unset">(default)</span>';
-			}
-			else {
-				return value;
-			}
-		},
-		dataIndex : 'config_name',
-		hidden: iconCls != 'clock'
-	}, {
-		width : 200,
-		id : 'status',
-		header : "Status",
-		dataIndex : 'status',
-		hidden: iconCls != 'exclamation'
-	} ]);
 
 	function addEntry() {
 
@@ -287,7 +176,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 			});
 		}
 
-		var panel = new Ext.FormPanel({
+		var panel = new Ext.form.FormPanel({
 			frame : true,
 			border : true,
 			bodyStyle : 'padding:5px',
@@ -304,7 +193,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 				valueField : 'chid',
 				mode : 'remote',
 				triggerAction : 'all',
-				store : tvheadend.channels
+				store : tvheadend.data.channels2
 			}), new Ext.form.DateField({
 				allowBlank : false,
 				fieldLabel : 'Date',
@@ -322,7 +211,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 				increment : 10,
 				format : 'H:i'
 			}), new Ext.form.ComboBox({
-				store : tvheadend.dvrprio,
+				store : tvheadend.data.dvrprio,
 				value : "normal",
 				triggerAction : 'all',
 				mode : 'local',
@@ -335,7 +224,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 				fieldLabel : 'Title',
 				name : 'title'
 			}, new Ext.form.ComboBox({
-				store : tvheadend.configNames,
+				store : tvheadend.data.configNames,
 				triggerAction : 'all',
 				mode : 'local',
 				fieldLabel : 'DVR Configuration',
@@ -363,7 +252,7 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 		});
 		win.show();
 		new Ext.form.ComboBox({
-			store : tvheadend.configNames,
+			store : tvheadend.data.configNames,
 			triggerAction : 'all',
 			mode : 'local',
 			fieldLabel : 'DVR Configuration',
@@ -375,279 +264,632 @@ tvheadend.dvrschedule = function(title, iconCls, dvrStore) {
 			editable : false
 		})
 	}
-	;
-
-	var panel = new Ext.grid.GridPanel({
-		loadMask : true,
-		stripeRows : true,
-		disableSelection : true,
-		title : title,
-		iconCls : iconCls,
-		store : dvrStore,
-		cm : dvrCm,
-		plugins : [ actions ],
-		viewConfig : {
-			forceFit : true
-		},
-		tbar : [ {
-			tooltip : 'Schedule a new recording session on the server.',
-			iconCls : 'add',
-			text : 'Add entry',
-			handler : addEntry
-		}, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('Digital Video Recorder', 'dvrlog.html');
+	
+	function delSelected() {
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
+		else {
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
 			}
-		} ],
-		bbar : new Ext.PagingToolbar({
-			store : dvrStore,
-			pageSize : 20,
-			displayInfo : true,
-			displayMsg : 'Programs {0} - {1} of {2}',
-			emptyMsg : "No programs to display"
-		})
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
+		}
+	}
+	
+	var addBtn = new Ext.Button({
+		handler : addEntry,
+		iconCls : 'add',
+		text : 'Add entry',
+		tooltip : 'Schedule a new recording session on the server.'
+	});
+	
+	var delBtn = new Ext.Button({
+		disabled : true,
+		handler : delSelected,
+		iconCls : 'remove',
+		text : 'Delete',
+		tooltip : 'Delete one or more selected rows'
+	});
+	
+	var helpBtn = new tvheadend.button.help('Digital Video Recorder', 'dvrlog.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ addBtn, delBtn, '->', helpBtn ]
+	});
+	
+	var grid = new Ext.grid.GridPanel({
+		cm : cm,
+		enableColumnMove : false,
+		iconCls : 'clock',
+		id : id ? id : Ext.id,
+		plugins : [ actions, search ],
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		store : tvheadend.data.dvrUpcoming,
+		stripeRows : true,
+		tbar : tb,
+		title : 'Scheduled recordings',
+		view : new tvheadend.BufferView
+	});
+	
+	return grid;
+}
 
+/**
+ * Finished dvr panel
+ */
+tvheadend.panel.dvrFinished = function(id) {
+	
+	var search = new tvheadend.Search;
+	
+	var actions = new Ext.ux.grid.RowActions({
+		actions : [ {
+			cb : function(grid, rec, action, row, col) {
+				return rec.get('url');
+			},
+			iconCls : 'download',
+			qtip : 'Download this record'
+		}, 
+		' ', {
+			cb : function(grid, rec, action, row, col) {
+				var url = 'dvrfile/' + rec.get('id');
+				tvheadend.VLC(url);
+			},
+			disabled : !tvheadend.accessupdate.streaming,
+			iconCls : 'watch',
+			qtip : 'Watch this record'
+		} ],
+		dataIndex : 'actions',
+		hideable : false,
+		width : 45
 	});
 
-	panel.on('rowclick', rowclicked);
-	function rowclicked(grid, index) {
-		new tvheadend.dvrDetails(grid.getStore().getAt(index).data);
+	var sm = new tvheadend.selection.CheckboxModel;
+	
+	var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ sm, {
+			dataIndex : 'status',
+			header : 'Status',
+			hidden : true,
+			id : 'status',
+			width : 200
+		}, {
+			dataIndex : 'start_day',
+			header : 'Start date',
+			id : 'start_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return tvheadend.renderer.Day(rec.get('start'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'start',
+			header : 'Start time',
+			id : 'start_time',
+			renderer : tvheadend.renderer.Time,
+			width : 100
+		}, {
+			dataIndex : 'end_day',
+			header : 'End date',
+			id : 'end_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return tvheadend.renderer.Day(rec.get('end'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'end',
+			header : 'End time',
+			id : 'end_time',
+			renderer : tvheadend.renderer.Time,
+			width : 100
+		}, {
+			dataIndex : 'channel',
+			header : 'Channel',
+			id : 'channel',
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : 'Title',
+			id : 'title',
+			width : 400
+		}, {
+			dataIndex : 'episode',
+			header : 'Episode',
+			id : 'episode',
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, 'Unknown');
+			},
+			width : 100
+		}, {
+			dataIndex : 'duration',
+			header : 'Duration',
+			id : 'duration',
+			renderer : tvheadend.renderer.Duration,
+			width : 100
+		}, {
+			dataIndex : 'filesize',
+			header : 'File size',
+			id : 'filesize',
+			renderer : tvheadend.renderer.Size,
+			width : 100
+		}, {
+			dataIndex : 'creator',
+			header : 'Created by',
+			id : 'creator',
+			renderer : tvheadend.renderer.Value,
+			width : 150
+		}, {
+			dataIndex : 'config_name',
+			header : 'DVR Configuration',
+			hidden : true,
+			id : 'config_name',
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, '(default profile)');
+			},
+			width : 150
+		}, {
+			dataIndex : 'pri',
+			header : 'Priority',
+			hidden : true,
+			id : 'pri',
+			renderer : tvheadend.renderer.Priority,
+			width : 150
+		}, 
+		actions ]
+	});
+	
+	function delSelected() {
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
+		else {
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
+		}
 	}
-	return panel;
+	
+	var delBtn = new Ext.Button({
+		disabled : true,
+		handler : delSelected,
+		iconCls : 'remove',
+		text : 'Delete entry',
+		tooltip : 'Delete one or more selected rows'
+	});
+	
+	var helpBtn = new tvheadend.button.help('Digital Video Recorder', 'dvrlog.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ delBtn, '->', helpBtn ]
+	});
+	
+	var grid = new Ext.grid.GridPanel({
+		cm : cm,
+		enableColumnMove : false,
+		iconCls : 'tick',
+		id : id ? id : Ext.id,
+		plugins : [ actions, search ],
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		store : tvheadend.data.dvrFinished,
+		stripeRows : true,
+		tbar : tb,
+		title : 'Finished recordings',
+		view : new tvheadend.BufferView
+	});
+	
+	return grid;
+}
+
+/**
+ * Failed dvr panel
+ */
+tvheadend.panel.dvrFailed = function(id) {
+	
+	var search = new tvheadend.Search;
+	
+	var actions = new Ext.ux.grid.RowActions({
+		actions : { iconIndex : 'schedstate' },
+		dataIndex : 'actions',
+		hideable : false,
+		width : 45
+	});
+
+	var sm = new tvheadend.selection.CheckboxModel;
+	
+	var cm = new Ext.grid.ColumnModel({
+		defaults : { sortable : true },
+		columns : [ sm, actions, {
+			dataIndex : 'status',
+			header : 'Status',
+			id : 'status',
+			width : 200
+		}, {
+			dataIndex : 'start_day',
+			header : 'Start date',
+			id : 'start_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return tvheadend.renderer.Day(rec.get('start'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'start',
+			header : 'Start time',
+			id : 'start_time',
+			renderer : tvheadend.renderer.Time,
+			width : 100
+		}, {
+			dataIndex : 'end_day',
+			header : 'End date',
+			id : 'end_day',
+			renderer : function(value, meta, rec, row, col, store) {
+				return tvheadend.renderer.Day(rec.get('end'));
+			},
+			width : 150
+		}, {
+			dataIndex : 'end',
+			header : 'End time',
+			id : 'end_time',
+			renderer : tvheadend.renderer.Time,
+			width : 100
+		}, {
+			dataIndex : 'channel',
+			header : 'Channel',
+			id : 'channel',
+			width : 150
+		}, {
+			dataIndex : 'title',
+			header : 'Title',
+			id : 'title',
+			width : 400
+		}, {
+			dataIndex : 'episode',
+			header : 'Episode',
+			hidden : true,
+			id : 'episode',
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, 'Unknown');
+			},
+			width : 100
+		}, {
+			dataIndex : 'duration',
+			header : 'Duration',
+			id : 'duration',
+			renderer : tvheadend.renderer.Duration,
+			width : 100
+		}, {
+			dataIndex : 'filesize',
+			header : 'File size',
+			hidden : true,
+			id : 'filesize',
+			renderer : tvheadend.renderer.Size,
+			width : 100
+		}, {
+			dataIndex : 'creator',
+			header : 'Created by',
+			id : 'creator',
+			renderer : tvheadend.renderer.Value,
+			width : 150
+		}, {
+			dataIndex : 'config_name',
+			header : 'DVR Configuration',
+			id : 'config_name',
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, '(default profile)');
+			},
+			width : 150
+		}, {
+			dataIndex : 'pri',
+			header : 'Priority',
+			id : 'pri',
+			renderer : tvheadend.renderer.Priority,
+			width : 150
+		} ]
+	});
+
+	function delSelected() {
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
+		else {
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
+		}
+	}
+	
+	var delBtn = new Ext.Button({
+		disabled : true,
+		handler : delSelected,
+		iconCls : 'remove',
+		text : 'Delete entry',
+		tooltip : 'Delete one or more selected rows'
+	});
+	
+	var helpBtn = new tvheadend.button.help('Digital Video Recorder', 'dvrlog.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ delBtn, '->', helpBtn ]
+	});
+	
+	var grid = new Ext.grid.GridPanel({
+		cm : cm,
+		enableColumnMove : false,
+		iconCls : 'error',
+		id : id ? id : Ext.id,
+		plugins : [ actions, search ],
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		store : tvheadend.data.dvrFailed,
+		stripeRows : true,
+		tbar : tb,
+		title : 'Failed recordings',
+		view : new tvheadend.BufferView
+	});
+	
+	return grid;
 }
 
 /**
  *
  */
+tvheadend.panel.dvrAutorec = function(id) {
+	
+	var rec = Ext.data.Record.create([ 'approx_time', 'channel', 'comment', 'config_name', 'contenttype',
+									   'creator', 'enabled', 'pri', 'serieslink', 'tag', 'title','weekdays' ]);
 
-/**
- *
- */
-tvheadend.autoreceditor = function() {
-	var fm = Ext.form;
+	var store = new Ext.data.JsonStore({
+		autoLoad : true,
+		fields : rec,
+		id : 'id',
+		baseParams : {
+			table : 'autorec',
+			op : 'get'
+		},
+		root : 'entries',
+		sortInfo : {
+			field : 'title',
+			direction : 'ASC'
+		},
+		url : 'tablemgr'
+	});
 
+	tvheadend.comet.on('autorec', function(m) {
+		if (m.reload != null) tvheadend.data.autorec.reload();
+	});
+	
+	var search = new tvheadend.Search;
+	
 	var enabledColumn = new Ext.grid.CheckColumn({
 		header : "Enabled",
+		hideable : false,
 		dataIndex : 'enabled',
-		width : 30
+		width : 80
+	});
+	
+	var channelsCombo = new Ext.form.ComboBox({
+		autoScroll : true,
+		displayField : 'name',
+		editable : false,
+		emptyText : 'Only include channel...',
+		lazyRender : true,
+		loadingText : 'Loading...',
+		store : tvheadend.data.channels2,
+		triggerAction : 'all'
 	});
 
+	var sm = new tvheadend.selection.CheckboxModel;
+	
 	var cm = new Ext.grid.ColumnModel({
-  defaultSortable: true,
-  columns :
-		[
-			enabledColumn,
-			{
-				header : "Title (Regexp)",
-				dataIndex : 'title',
-				editor : new fm.TextField({
-					allowBlank : true
-				})
+		defaults : { sortable : true },
+		columns : [ sm, enabledColumn, {
+			dataIndex : 'title',
+			editor : new Ext.form.TextField({ allowBlank : true }),
+			header : 'Title (regexp)',
+			renderer : tvheadend.renderer.Value,
+			width : 400
+		}, {
+			dataIndex : 'channel',
+			editor : channelsCombo,
+			header : 'Channel',
+			renderer : tvheadend.renderer.Value,
+			width : 150
+		}, {
+			dataIndex : 'tag',
+			editor : new Ext.form.ComboBox({
+				displayField : 'name',
+				editable : false,
+				emptyText : 'Only include tag...',
+				lazyRender : true,
+				mode : 'local',
+				store : tvheadend.data.channelTags2,
+				triggerAction : 'all'
+			}),
+			header : 'Channel Tags',
+			renderer : tvheadend.renderer.Value,
+			width : 250,
+		}, {
+			dataIndex : 'contenttype',
+			editor : new Ext.form.ComboBox({
+				displayField : 'name',
+				editable : false,
+				emptyText : 'Only include content...',
+				lazyRender : true,
+				mode : 'local',
+				store : tvheadend.data.contentGroup,
+				triggerAction : 'all',
+				valueField : 'code'
+				
+			}),
+			header : 'Genre',
+			hidden : true,
+			renderer : function(value, meta, rec, row, col, store) {
+				value = tvheadend.contentGroupLookupName(value);
+				tvheadend.renderer.Value(value, meta, 'Unknown');
 			},
-			{
-				header : "Channel",
-				dataIndex : 'channel',
-				editor : new Ext.form.ComboBox({
-					loadingText : 'Loading...',
-					displayField : 'name',
-					store : tvheadend.channels,
-					mode : 'local',
-					editable : false,
-					triggerAction : 'all',
-					emptyText : 'Only include channel...'
-				})
+			width : 150
+		}, {
+			dataIndex : 'weekdays',
+			editor : new Ext.ux.form.LovCombo({
+				displayField : 'name',
+				mode : 'local',
+				store : tvheadend.data.weekdays,
+				valueField : 'identifier'
+			}),
+			header : 'Weekdays',
+			renderer : tvheadend.renderer.Week,
+			width : 150
+		}, {
+			header : 'Starting Around',
+			dataIndex : 'approx_time',
+			width : 150,
+			renderer : tvheadend.renderer.Time,
+			editor : new Ext.form.TimeField({
+				allowBlank : true,
+				format : 'H:i',
+				increment : 5
+			}),
+			renderer : tvheadend.renderer.Value
+		}, {
+			dataIndex : 'serieslink',
+			header : "Series Link",
+			renderer : function(v) {
+				return v ? 'Enable' : 'Disable';
 			},
-      {
-        header    : "SeriesLink",
-        dataIndex : 'serieslink',
-        renderer  : function(v) {
-          return v ? 'yes' : 'no';
-        }
+			width : 100
+		}, {
+			dataIndex : 'config_name',
+			header : 'DVR Configuration',
+			editor : new Ext.form.ComboBox({
+				displayField : 'name',
+				editable : false,
+				emptyText : '(default profile)',
+				lazyRender : true,
+				mode : 'local',
+				name : 'config_name',
+				store : tvheadend.data.configNames,
+				triggerAction : 'all',
+				valueField : 'identifier'
+			}),
+			renderer : function(value, meta, rec, row, col, store) {
+				tvheadend.renderer.Value(value, meta, '(default profile)');
 			},
-			{
-				header : "Channel tag",
-				dataIndex : 'tag',
-				editor : new Ext.form.ComboBox({
-					displayField : 'name',
-					store : tvheadend.channelTags,
-					mode : 'local',
-					editable : false,
-					triggerAction : 'all',
-					emptyText : 'Only include tag...'
-				})
+			width : 150
+		}, {
+			dataIndex : 'pri',
+			header : 'Priority',
+			editor : new Ext.form.ComboBox({
+				displayField : 'name',
+				lazyRender : true,
+				mode : 'local',
+				store : tvheadend.data.dvrprio,
+				triggerAction : 'all',
+				valueField : 'identifier'
+			}),
+			renderer : function(value, meta, rec, row, col, store) {
+				return tvheadend.data.dvrprio.getById(value).get("name");
 			},
-			{
-				header : "Genre",
-				dataIndex : 'contenttype',
-				renderer : function(v) {
-					return tvheadend.contentGroupLookupName(v);
-				},
-				editor : new Ext.form.ComboBox({
-					valueField : 'code',
-					displayField : 'name',
-					store : tvheadend.ContentGroupStore,
-					mode : 'local',
-					editable : false,
-					triggerAction : 'all',
-					emptyText : 'Only include content...'
-				})
-			},
-			{
-				header : "Weekdays",
-				dataIndex : 'weekdays',
-				renderer : function(value, metadata, record, row, col, store) {
-					if (typeof value === 'undefined' || value.length < 1) return 'No days';
-
-					if (value == '1,2,3,4,5,6,7') return 'All days';
-
-					ret = [];
-					tags = value.split(',');
-					for ( var i = 0; i < tags.length; i++) {
-						var tag = tvheadend.weekdays.getById(tags[i]);
-						if (typeof tag !== 'undefined') ret.push(tag.data.name);
-					}
-					return ret.join(', ');
-				},
-				editor : new Ext.ux.form.LovCombo({
-					store : tvheadend.weekdays,
-					mode : 'local',
-					valueField : 'identifier',
-					displayField : 'name'
-				})
-			}, {
-				header : "Starting Around",
-				dataIndex : 'approx_time',
-				renderer : function(value, metadata, record, row, col, store) {
-					if (typeof value === 'string') return value;
-
-					if (value === 0) return '';
-
-					var hours = Math.floor(value / 60);
-					var mins = value % 60;
-					var dt = new Date();
-					dt.setHours(hours);
-					dt.setMinutes(mins);
-					return dt.format('H:i');
-				},
-				editor : new Ext.form.TimeField({
-					allowBlank : true,
-					increment : 10,
-					format : 'H:i'
-				})
-			}, {
-				header : "Priority",
-				dataIndex : 'pri',
-				width : 100,
-				renderer : function(value, metadata, record, row, col, store) {
-					return tvheadend.dvrprio.getById(value).data.name;
-				},
-				editor : new fm.ComboBox({
-					store : tvheadend.dvrprio,
-					triggerAction : 'all',
-					mode : 'local',
-					valueField : 'identifier',
-					displayField : 'name'
-				})
-			}, {
-				header : "DVR Configuration",
-				dataIndex : 'config_name',
-				renderer : function(value, metadata, record, row, col, store) {
-					if (!value) {
-						return '<span class="tvh-grid-unset">(default)</span>';
-					}
-					else {
-						return value;
-					}
-				},
-				editor : new Ext.form.ComboBox({
-					store : tvheadend.configNames,
-					triggerAction : 'all',
-					mode : 'local',
-					valueField : 'identifier',
-					displayField : 'name',
-					name : 'config_name',
-					emptyText : '(default)',
-					editable : false
-				})
-			}, {
-				header : "Created by",
-				dataIndex : 'creator',
-				editor : new fm.TextField({
-					allowBlank : false
-				})
-			}, {
-				header : "Comment",
-				dataIndex : 'comment',
-				editor : new fm.TextField({
-					allowBlank : false
-				})
-			} ]});
-
-	return new tvheadend.tableEditor('Automatic Recorder', 'autorec', cm,
-		tvheadend.autorecRecord, [ enabledColumn ], tvheadend.autorecStore,
-		'autorec.html', 'wand');
+			width : 150
+		}, {
+			dataIndex : 'creator',
+			editor : new Ext.form.TextField({ allowBlank : false }),
+			header : 'Created by',
+			hidden : true,
+			renderer : tvheadend.renderer.Value,
+			width : 150
+		}, {
+			dataIndex : 'comment',
+			editor : new Ext.form.TextField({ allowBlank : false }),
+			header : 'Comment',
+			hidden : true,
+			renderer : tvheadend.renderer.Value,
+			width : 150
+		} ]
+	});
+	
+	var grid = new tvheadend.panel.table(id, 'Automatic Recorder', 'autorec', sm, cm, rec, 
+										 [ enabledColumn, search ], store, 'autorec.html', 'wand');
+		
+	return grid;
 }
+
 /**
  *
  */
-tvheadend.dvr = function() {
+tvheadend.panel.dvr = function(idUpcoming, idFinished, idFailed, idAutorec) {
 
 	function datastoreBuilder(url) {
+		var rec = Ext.data.Record.create([
+			{ name : 'channel'},
+			{ name : 'chicon' },
+			{ name : 'config_name' },
+			{ name : 'creator' },
+			{ name : 'description' },
+			{ name : 'duration' },
+			{ name : 'end', type : 'date', dateFormat : 'U' /* unix time */ },
+			{ name : 'episode' },
+			{ name : 'error' },
+			{ name : 'filesize' },
+			{ name : 'id' },
+			{ name : 'pri' },
+			{ name : 'schedstate' },
+			{ name : 'start', type : 'date', dateFormat : 'U' /* unix time */ },
+			{ name : 'status' },
+			{ name : 'title' },
+			{ name : 'url' }
+		]);
+				
 	    return new Ext.data.JsonStore({
-		root : 'entries',
-		totalProperty : 'totalCount',
-		fields : [ {
-			name : 'id'
-		}, {
-			name : 'channel'
-		}, {
-			name : 'title'
-		}, {
-			name : 'episode'
-		}, {
-			name : 'pri'
-		}, {
-			name : 'description'
-		}, {
-			name : 'chicon'
-		}, {
-			name : 'start',
-			type : 'date',
-			dateFormat : 'U' /* unix time */
-		}, {
-			name : 'end',
-			type : 'date',
-			dateFormat : 'U' /* unix time */
-		}, {
-			name : 'config_name'
-		}, {
-			name : 'status'
-		}, {
-			name : 'schedstate'
-		}, {
-			name : 'error'
-		}, {
-			name : 'creator'
-		}, {
-			name : 'duration'
-		}, {
-			name : 'filesize'
-		}, {
-			name : 'url'
-		} ],
-		url : url,
-		autoLoad : true,
-		id : 'id',
-		remoteSort : true
+			autoLoad : true,
+			fields : rec,
+			id : 'id',
+			root : 'entries',
+			totalProperty : 'totalCount',
+			url : url
 	    });
 	}
-	tvheadend.dvrStoreUpcoming = datastoreBuilder('dvrlist_upcoming');
-	tvheadend.dvrStoreFinished = datastoreBuilder('dvrlist_finished');
-	tvheadend.dvrStoreFailed = datastoreBuilder('dvrlist_failed');
-        tvheadend.dvrStores = [tvheadend.dvrStoreUpcoming,
-	                       tvheadend.dvrStoreFinished,
-	                       tvheadend.dvrStoreFailed];
+	
+	tvheadend.data.dvrUpcoming = datastoreBuilder('dvrlist_upcoming');
+	tvheadend.data.dvrFinished = datastoreBuilder('dvrlist_finished');
+	tvheadend.data.dvrFailed = datastoreBuilder('dvrlist_failed');
+	
+	tvheadend.data.dvrUpcoming.sort('start', 'ASC');
+	tvheadend.data.dvrFinished.sort('end', 'DESC');
+	tvheadend.data.dvrFailed.sort('start', 'DESC');
+	
+    tvheadend.dvrStores = [ tvheadend.data.dvrUpcoming,
+	                        tvheadend.data.dvrFinished,
+	                        tvheadend.data.dvrFailed ];
 
 
 	function updateDvrStore(store, r, m) {
@@ -655,12 +897,11 @@ tvheadend.dvr = function() {
 		r.data.schedstate = m.schedstate;
 
 		store.afterEdit(r);
-		store.fireEvent('updated', store, r,
-			Ext.data.Record.COMMIT);
+		store.fireEvent('updated', store, r, Ext.data.Record.COMMIT);
 	}
 
 	function reloadStores() {
-		for (var i = 0; i < tvheadend.dvrStores.length; i++) {
+		for (var i in tvheadend.dvrStores) {
 			tvheadend.dvrStores[i].reload();
 		}
 	}
@@ -672,9 +913,9 @@ tvheadend.dvr = function() {
 		}
 
 		if (m.updateEntry != null) {
-			for (var i = 0; i < tvheadend.dvrStores.length; i++) {
+			for (var i in tvheadend.dvrStores) {
 				var store = tvheadend.dvrStores[i];
-				r = tvheadend.dvrStoreUpcoming.getById(m.id);
+				r = tvheadend.data.dvrUpcoming.getById(m.id);
 				if (typeof r !== 'undefined') {
 					updateDvrStore(store, r, m);
 					return;
@@ -684,45 +925,24 @@ tvheadend.dvr = function() {
 		}
 	});
 
-	tvheadend.autorecRecord = Ext.data.Record.create([ 'enabled', 'title',
-		'serieslink', 'channel', 'tag', 'creator', 'contenttype', 'comment',
-		'weekdays', 'pri', 'approx_time', 'config_name' ]);
-
-	tvheadend.autorecStore = new Ext.data.JsonStore({
-		root : 'entries',
-		fields : tvheadend.autorecRecord,
-		url : "tablemgr",
-		autoLoad : true,
-		id : 'id',
-		baseParams : {
-			table : "autorec",
-			op : "get"
-		}
-	});
-
-	tvheadend.comet.on('autorec', function(m) {
-		if (m.reload != null) tvheadend.autorecStore.reload();
-	});
-
 	var panel = new Ext.TabPanel({
 		activeTab : 0,
-		autoScroll : true,
-		title : 'Digital Video Recorder',
+		enableTabScroll : true,
 		iconCls : 'drive',
-		items : [ 
-		          new tvheadend.dvrschedule('Upcoming recordings', 'clock', tvheadend.dvrStoreUpcoming),
-		          new tvheadend.dvrschedule('Finished recordings', 'television', tvheadend.dvrStoreFinished),
-		          new tvheadend.dvrschedule('Failed recordings', 'exclamation', tvheadend.dvrStoreFailed),
-		          new tvheadend.autoreceditor
-		        ]
+		items : [ new tvheadend.panel.dvrUpcoming(idUpcoming ? idUpcoming : Ext.id),
+				  new tvheadend.panel.dvrFinished(idFinished ? idFinished : Ext.id),
+				  new tvheadend.panel.dvrFailed(idFailed ? idFailed : Ext.id),
+				  new tvheadend.panel.dvrAutorec(idAutorec ? idAutorec : Ext.id) ],
+		title : 'DVR'
 	});
+	
 	return panel;
 }
 
 /**
  * Configuration panel (located under configuration)
  */
-tvheadend.dvrsettings = function() {
+tvheadend.panel.dvrsettings = function() {
 
 	var confreader = new Ext.data.JsonReader({
 		root : 'dvrSettings'
@@ -732,28 +952,41 @@ tvheadend.dvrsettings = function() {
 		'episodeInTitle', 'cleanTitle', 'tagFiles', 'commSkip' ]);
 
 	var confcombo = new Ext.form.ComboBox({
-		store : tvheadend.configNames,
-		triggerAction : 'all',
-		mode : 'local',
 		displayField : 'name',
-		name : 'config_name',
+		editable : true,
 		emptyText : '(default)',
-		value : '',
-		editable : true
+		lazyRender : true,
+		mode : 'local',
+		name : 'config_name',
+		store : tvheadend.data.configNames,
+		triggerAction : 'all',
+		value : ''
 	});
 
-	var delButton = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Button({
 		tooltip : 'Delete named configuration',
 		iconCls : 'remove',
-		text : "Delete configuration",
+		text : 'Delete configuration',
 		handler : deleteConfiguration,
 		disabled : true
 	});
 
-	var confpanel = new Ext.FormPanel({
-		title : 'Digital Video Recorder',
+	var helpBtn = new tvheadend.button.help('DVR configuration', 'config_dvr.html');
+	
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ confcombo, {
+			handler : saveChanges,
+			iconCls : 'save',
+			text : 'Save configuration',
+			tooltip : 'Save changes made to dvr configuration below',
+		}, delBtn, '->', helpBtn ]
+	});
+	
+	var panel = new Ext.form.FormPanel({
+		autoScroll : true,
+		title : 'DVR Settings',
 		iconCls : 'drive',
-		border : false,
 		bodyStyle : 'padding:15px',
 		anchor : '100% 50%',
 		labelAlign : 'right',
@@ -767,7 +1000,7 @@ tvheadend.dvrsettings = function() {
 			fieldLabel : 'Recording system path',
 			name : 'storage'
 		}, new Ext.form.ComboBox({
-			store : tvheadend.containers,
+			store : tvheadend.data.containers,
 			fieldLabel : 'Media container',
 			triggerAction : 'all',
 			displayField : 'description',
@@ -827,45 +1060,39 @@ tvheadend.dvrsettings = function() {
 			fieldLabel : 'Post-processor command',
 			name : 'postproc'
 		} ],
-		tbar : [ confcombo, {
-			tooltip : 'Save changes made to dvr configuration below',
-			iconCls : 'save',
-			text : "Save configuration",
-			handler : saveChanges
-		}, delButton, '->', {
-			text : 'Help',
-			handler : function() {
-				new tvheadend.help('DVR configuration', 'config_dvr.html');
-			}
-		} ]
+		tbar : tb
 	});
 
 	function loadConfig() {
-		confpanel.getForm().load({
+		panel.getForm().load({
 			url : 'dvr',
 			params : {
 				'op' : 'loadSettings',
 				'config_name' : confcombo.getValue()
 			},
 			success : function(form, action) {
-				confpanel.enable();
+				panel.enable();
 			}
 		});
 	}
 
-	confcombo.on('select', function() {
-		if (confcombo.getValue() == '') delButton.disable();
-		else delButton.enable();
-		loadConfig();
+	confcombo.on('select', function(c) {
+		if(c.isDirty()) {
+			if(confcombo.getValue() == '')
+				delBtn.disable();
+			else
+				delBtn.enable();
+			loadConfig();
+		}
 	});
 
-	confpanel.on('render', function() {
+	panel.on('render', function() {
 		loadConfig();
 	});
 
 	function saveChanges() {
 		var config_name = confcombo.getValue();
-		confpanel.getForm().submit({
+		panel.getForm().submit({
 			url : 'dvr',
 			params : {
 				'op' : 'saveSettings',
@@ -892,7 +1119,7 @@ tvheadend.dvrsettings = function() {
 
 	function deleteAction(btn) {
 		if (btn == 'yes') {
-			confpanel.getForm().submit({
+			panel.getForm().submit({
 				url : 'dvr',
 				params : {
 					'op' : 'deleteSettings',
@@ -910,5 +1137,5 @@ tvheadend.dvrsettings = function() {
 		}
 	}
 
-	return confpanel;
+	return panel;
 }

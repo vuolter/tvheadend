@@ -5,10 +5,10 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
 
-	var fm = Ext.form;
+	var search = new tvheadend.Search;
 
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
+		header : 'Enabled',
 		dataIndex : 'enabled',
 		width : 40
 	});
@@ -21,14 +21,15 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		colored : true
 	});
 
+	var sm = new tvheadend.selection.CheckboxModel;
 	var cmlist = Array();
 
-	cmlist.push(enabledColumn, {
-		header : "Play",
+	cmlist.push(sm, enabledColumn, {
+		header : 'Play',
 		dataIndex : 'id',
 		width : 50,
-		renderer : function(value, metadata, record, row, col, store) {
-			url = 'stream/mux/' + value
+		renderer : function(value, meta, rec, row, col, store) {
+			var url = 'stream/mux/' + value
 			return '<a href="' + url + '">Play</a>'
 		}
 	}, {
@@ -71,7 +72,7 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 					header : "Satellite config",
 					dataIndex : 'satconf',
 					width : 100,
-					renderer : function(value, metadata, record, row, col, store) {
+					renderer : function(value, meta, rec, row, col, store) {
 						r = satConfStore.getById(value);
 						return typeof r === 'undefined' ? '<span class="tvh-grid-unset">Unset</span>'
 							: r.data.name;
@@ -97,17 +98,17 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
     columns: cmlist, 
     defaultSortable: true});
 
-	var rec = Ext.data.Record.create([ 'id', 'enabled', 'network', 'freq',
-		'pol', 'satconf', 'onid', 'muxid', 'quality', 'fe_status', 'mod' ]);
+	var rec = Ext.data.Record.create([ 'id', 'enabled', 'network', 'freq', 'pol', 'satconf', 'onid', 
+									   'muxid', 'quality', 'fe_status', 'mod' ]);
 
 	var store = new Ext.data.JsonStore({
 		root : 'entries',
 		fields : rec,
-		url : "dvb/muxes/" + adapterId,
+		url : 'dvb/muxes/' + adapterId,
 		autoLoad : true,
 		id : 'id',
 		baseParams : {
-			op : "get"
+			op : 'get'
 		},
 		listeners : {
 			'update' : function(s, r, o) {
@@ -137,26 +138,33 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	});
 
 	function delSelected() {
-		var selectedKeys = grid.selModel.selections.keys;
-		if (selectedKeys.length > 0) {
-			Ext.MessageBox.confirm('Message',
-				'Do you really want to delete selection?', deleteRecord);
-		}
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
-			Ext.MessageBox.alert('Message',
-				'Please select at least one item to delete');
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
 		}
 	}
-	;
+
 
 	function deleteRecord(btn) {
 		if (btn == 'yes') {
 			var selectedKeys = grid.selModel.selections.keys;
 
 			Ext.Ajax.request({
-				url : "dvb/muxes/" + adapterId,
+				url : 'dvb/muxes/' + adapterId,
 				params : {
-					op : "delete",
+					op : 'delete',
 					entries : Ext.encode(selectedKeys)
 				},
 				failure : function(response, options) {
@@ -180,16 +188,16 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 				var mparams = {
 					entries : Ext.encode(selectedKeys),
 					satconf : satconf
-				};
+				}
 			}
 			else {
 				var mparams = {
 					entries : Ext.encode(selectedKeys)
-				};
+				}
 			}
 
 			Ext.Ajax.request({
-				url : "dvb/copymux/" + target,
+				url : 'dvb/copymux/' + target,
 				params : mparams,
 				failure : function(response, options) {
 					Ext.MessageBox.alert('Server Error', 'Unable to copy');
@@ -250,13 +258,13 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 			valueField : 'identifier',
 			emptyText : 'Select target adapter...',
 			listeners : {
-				'select' : function(combo, value) {
-					if (satConf) {
+				'select' : function(c, value) {
+					if (satConf && c.isDirty()) {
 						satConf.emptyText = 'Select satellite configuration...';
 						satConf.clearValue();
 						targetSatConfStore.baseParams = {
-							adapter : combo.value
-						};
+							adapter : c.value
+						}
 						targetSatConfStore.load();
 						satConf.focus();
 						satConf.expand();
@@ -296,16 +304,16 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 	function saveChanges() {
 		var mr = store.getModifiedRecords();
 		var out = new Array();
-		for ( var x = 0; x < mr.length; x++) {
+		for (var x in mr) {
 			v = mr[x].getChanges();
 			out[x] = v;
 			out[x].id = mr[x].id;
 		}
 
 		Ext.Ajax.request({
-			url : "dvb/muxes/" + adapterId,
+			url : 'dvb/muxes/' + adapterId,
 			params : {
-				op : "update",
+				op : 'update',
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
@@ -317,19 +325,15 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		});
 	}
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
-
-	var delBtn = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Button({
 		tooltip : 'Delete one or more selected muxes',
 		iconCls : 'remove',
-		text : 'Delete selected...',
+		text : 'Delete',
 		handler : delSelected,
 		disabled : true
 	});
 
-	var copyBtn = new Ext.Toolbar.Button({
+	var copyBtn = new Ext.Button({
 		tooltip : 'Copy selected multiplexes to other adapter',
 		iconCls : 'clone',
 		text : 'Copy to other adapter...',
@@ -337,47 +341,53 @@ tvheadend.dvb_muxes = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	selModel.on('selectionchange', function(s) {
+	sm.on('selectionchange', function(s) {
 		delBtn.setDisabled(s.getCount() == 0);
 		copyBtn.setDisabled(s.getCount() == 0);
 	});
 
-	var saveBtn = new Ext.Toolbar.Button({
+	var saveBtn = new Ext.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
 
-	var rejectBtn = new Ext.Toolbar.Button({
+	var rejectBtn = new Ext.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			store.rejectChanges();
 		},
 		disabled : true
 	});
 
-	var grid = new Ext.grid.EditorGridPanel({
-		stripeRows : true,
-		title : 'Multiplexes',
-		plugins : [ enabledColumn, qualityColumn ],
-		store : store,
-		clicksToEdit : 2,
-		cm : cm,
-		viewConfig : {
-			forceFit : true
-		},
-		selModel : selModel,
-		tbar : [ delBtn, copyBtn, '-', saveBtn, rejectBtn, '-', {
-			text : 'Add mux(es) manually...',
-			iconCls : 'add',
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ delBtn, copyBtn, '-', saveBtn, rejectBtn, '-', {
 			handler : function() {
 				tvheadend.addMuxManually(adapterData, satConfStore)
-			}
+			},
+			iconCls : 'add',
+			text : 'Add mux(es) manually...'
 		} ]
+	});
+	
+	var grid = new Ext.grid.EditorGridPanel({
+		id : 'multiplexesGrid',
+		stripeRows : true,
+		enableColumnMove : false,
+		title : 'Multiplexes',
+		plugins : [ enabledColumn, qualityColumn, search ],
+		store : store,
+		cm : cm,
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		tbar : tb,
+		view : new tvheadend.BufferView
 	});
 
 	return grid;
@@ -390,10 +400,10 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 
 	adapterId = adapterData.identifier;
  
-	var fm = Ext.form;
+	var search = new tvheadend.Search;
 
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
+		header : 'Enabled',
 		dataIndex : 'enabled',
 		width : 45
 	});
@@ -411,9 +421,9 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		actions : [ {
 			iconCls : 'info',
 			qtip : 'Detailed information about service',
-			cb : function(grid, record, action, row, col) {
+			cb : function(grid, rec, action, row, col) {
 				Ext.Ajax.request({
-					url : "servicedetails/" + record.id,
+					url : "servicedetails/" + rec.id,
 					success : function(response, options) {
 						r = Ext.util.JSON.decode(response.responseText);
 						tvheadend.showTransportDetails(r);
@@ -423,21 +433,21 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		} ]
 	});
 
-
+	var sm = new tvheadend.selection.CheckboxModel;
 	var cmlist = Array();
 
-	cmlist.push(enabledColumn,
+	cmlist.push(sm, enabledColumn,
 		{
 			header : "Service name",
 			dataIndex : 'svcname',
 			width : 150
 		},
 		{
-			header : "Play",
+			header : 'Play',
 			dataIndex : 'id',
 			width : 50,
-			renderer : function(value, metadata, record, row, col, store) {
-				url = 'stream/service/' + value
+			renderer : function(value, meta, rec, row, col, store) {
+				var url = 'stream/service/' + value
 				return '<a href="' + url + '">Play</a>'
 			}
 		},
@@ -445,12 +455,12 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header : "Channel name",
 			dataIndex : 'channelname',
 			width : 150,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-unset">Unmapped</span>';
 			},
-			editor : new fm.ComboBox({
-				store : tvheadend.channels,
+			editor : new Ext.form.ComboBox({
+				store : tvheadend.data.channels2,
 				allowBlank : true,
 				typeAhead : true,
 				minChars : 2,
@@ -464,33 +474,33 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header : "DVB charset",
 			dataIndex : 'dvb_charset',
 			width : 200,
-			renderer : function(value, metadata, record, row, col, store) {
+			renderer : function(value, meta, rec, row, col, store) {
 				return value ? value
 					: '<span class="tvh-grid-unset">auto</span>';
 			},
-			editor : new fm.ComboBox({
+			editor : new Ext.form.ComboBox({
 				mode : 'local',
 				store : new Ext.data.SimpleStore({
 					fields : [ 'key', 'value' ],
 					data : [ 
-            [ null, 'auto' ],
-            [ 'ISO6937', 'ISO6937' ],
+						[ null, 'auto' ],
+						[ 'ISO6937', 'ISO6937' ],
 						[ 'ISO8859-1', 'ISO8859-1' ],
-            [ 'ISO8859-2', 'ISO8859-2' ],
+						[ 'ISO8859-2', 'ISO8859-2' ],
 						[ 'ISO8859-3', 'ISO8859-3' ],
-            [ 'ISO8859-4', 'ISO8859-4' ],
+						[ 'ISO8859-4', 'ISO8859-4' ],
 						[ 'ISO8859-5', 'ISO8859-5' ],
-            [ 'ISO8859-6', 'ISO8859-6' ],
+						[ 'ISO8859-6', 'ISO8859-6' ],
 						[ 'ISO8859-7', 'ISO8859-7' ],
-            [ 'ISO8859-8', 'ISO8859-8' ],
+						[ 'ISO8859-8', 'ISO8859-8' ],
 						[ 'ISO8859-9', 'ISO8859-9' ],
-            [ 'ISO8859-10', 'ISO8859-10' ],
+						[ 'ISO8859-10', 'ISO8859-10' ],
 						[ 'ISO8859-11', 'ISO8859-11' ],
 						[ 'ISO8859-12', 'ISO8859-12' ],
 						[ 'ISO8859-13', 'ISO8859-13' ],
 						[ 'ISO8859-14', 'ISO8859-14' ],
 						[ 'ISO8859-15', 'ISO8859-15' ],
-            [ 'PL_AUTO', 'Polish Fixup' ] ]
+						[ 'PL_AUTO', 'Polish Fixup' ] ]
 				}),
 				typeAhead : true,
 				lazyRender : true,
@@ -540,7 +550,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 				header : "Satellite config",
 				dataIndex : 'satconf',
 				width : 100,
-				renderer : function(value, metadata, record, row, col, store) {
+				renderer : function(value, meta, rec, row, col, store) {
 					r = satConfStore.getById(value);
 					return typeof r === 'undefined' ? '<span class="tvh-grid-unset">Unset</span>'
 					  : r.data.name;
@@ -558,7 +568,7 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 			header: "Preferred CA pid",
 			dataIndex: 'prefcapid',
 			width: 50,
-			editor: new fm.TextField({allowBlank: true})
+			editor: new Ext.form.TextField({ allowBlank: true })
 		}, {
 			header : "PMT PID",
 			dataIndex : 'pmt',
@@ -580,11 +590,11 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		fields : Ext.data.Record.create([ 'id', 'enabled', 'type', 'sid', 'pmt',
 			'pcr', 'svcname', 'network', 'provider', 'encryption', 'mux', 'satconf',
 			'channelname', 'prefcapid', 'dvb_charset', 'dvb_eit_enable' ]),
-		url : "dvb/services/" + adapterId,
+		url : 'dvb/services/' + adapterId,
 		autoLoad : true,
 		id : 'id',
 		baseParams : {
-			op : "get"
+			op : 'get'
 		},
 		listeners : {
 			'update' : function(s, r, o) {
@@ -604,30 +614,37 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 	});
 
 	function delSelected() {
-		var selectedKeys = grid.selModel.selections.keys;
-		if (selectedKeys.length > 0) {
-			Ext.MessageBox.confirm('Message',
-				'Do you really want to delete selection?', deleteRecord);
-		}
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
-			Ext.MessageBox.alert('Message',
-				'Please select at least one item to delete');
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
 		}
 	}
 
 	function saveChanges() {
 		var mr = store.getModifiedRecords();
 		var out = new Array();
-		for ( var x = 0; x < mr.length; x++) {
+		for (var x in mr) {
 			v = mr[x].getChanges();
 			out[x] = v;
 			out[x].id = mr[x].id;
 		}
 
 		Ext.Ajax.request({
-			url : "dvb/services/" + adapterId,
+			url : 'dvb/services/' + adapterId,
 			params : {
-				op : "update",
+				op : 'update',
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
@@ -647,25 +664,25 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		});
 	}
 
-	var saveBtn = new Ext.Toolbar.Button({
+	var saveBtn = new Ext.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
 
-	var rejectBtn = new Ext.Toolbar.Button({
+	var rejectBtn = new Ext.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			store.rejectChanges();
 		},
 		disabled : true
 	});
 
-	var mapBtn = new Ext.Toolbar.Button({
+	var mapBtn = new Ext.Button({
 		tooltip : 'Map selected services to channels based on their name. Does nothing if selected item is already mapped.',
 		iconCls : 'clone',
 		text : "Map selected",
@@ -673,26 +690,28 @@ tvheadend.dvb_services = function(adapterData, satConfStore) {
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
-	});
-
-	selModel.on('selectionchange', function(s) {
+	sm.on('selectionchange', function(s) {
 		mapBtn.setDisabled(s.getCount() == 0);
 	});
 
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveBtn, rejectBtn, '-', mapBtn ]
+	});
+	
 	var grid = new Ext.grid.EditorGridPanel({
+		id : 'servicesGrid',
 		stripeRows : true,
+		enableColumnMove : false,
 		title : 'Services',
-		plugins : [ enabledColumn, eitColumn, actions ],
+		plugins : [ actions, eitColumn, enabledColumn, search ],
 		store : store,
-		clicksToEdit : 2,
 		cm : cm,
-		viewConfig : {
-			forceFit : true
-		},
-		selModel : selModel,
-		tbar : [ saveBtn, rejectBtn, '-', mapBtn ]
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		tbar : tb,
+		view : new tvheadend.BufferView
 	});
 	return grid;
 }
@@ -765,7 +784,7 @@ tvheadend.addMuxByLocation = function(adapterData, satConfStore) {
 	});
 
 	win = new Ext.Window({
-		title : 'Add muxes on ' + adapterData.name,
+		title : 'Add muxes on ' + '<span class="x-content-highlight">' + adapterData.name + '</span>',
 		layout : 'fit',
 		width : 500,
 		height : 500,
@@ -1381,7 +1400,7 @@ tvheadend.dvb_adapter_general = function(adapterData, satConfStore) {
 	/**
 	 * Subscribe and react on updates for this adapter
 	 */
-	tvheadend.tvAdapterStore.on('update', function(s, r, o) {
+	tvheadend.data.adapters.on('update', function(s, r, o) {
 		if (r.data.identifier != adapterId) return;
 		infoTemplate.overwrite(infoPanel.body, r.data);
 
@@ -1396,35 +1415,24 @@ tvheadend.dvb_adapter_general = function(adapterData, satConfStore) {
 /**
  *
  */
-tvheadend.dvb_dummy = function(title) {
-	return new Ext.Panel({
-		layout : 'fit',
-		items : [ {
-			border : false
-		} ],
-		title : title
-	});
-}
-
-/**
- *
- */
 tvheadend.dvb_satconf = function(adapterId, lnbStore) {
-	var fm = Ext.form;
-
+	
+	var search = new tvheadend.Search;
+	
+	var sm = new tvheadend.selection.CheckboxModel;
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
-  columns: [ {
-		header : "Name",
+  columns: [ sm, {
+		header : 'Name',
 		dataIndex : 'name',
 		width : 200,
-		editor : new fm.TextField({
+		editor : new Ext.form.TextField({
 			allowBlank : false
 		})
 	}, {
 		header : "Switchport",
 		dataIndex : 'port',
-		editor : new fm.NumberField({
+		editor : new Ext.form.NumberField({
 			minValue : 0,
 			maxValue : 63
 		})
@@ -1432,7 +1440,8 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 		header : "LNB type",
 		dataIndex : 'lnb',
 		width : 200,
-		editor : new fm.ComboBox({
+		editor : new Ext.form.ComboBox({
+			lazyRender : true,
 			store : lnbStore,
 			editable : false,
 			allowBlank : false,
@@ -1443,16 +1452,18 @@ tvheadend.dvb_satconf = function(adapterId, lnbStore) {
 			emptyText : 'Select LNB type...'
 		})
 	}, {
-		header : "Comment",
+		header : 'Comment',
 		dataIndex : 'comment',
 		width : 400,
-		editor : new fm.TextField()
+		editor : new Ext.form.TextField
 	} ]});
 
 	var rec = Ext.data.Record.create([ 'name', 'port', 'comment', 'lnb' ]);
 
-	return new tvheadend.tableEditor('Satellite config', 'dvbsatconf/'
-		+ adapterId, cm, rec, null, null, null);
+	var grid = new tvheadend.panel.table('dvbsatconf', 'Satellite config', 'dvbsatconf/'
+		+ adapterId, sm, cm, search, null, null, null);
+	
+	return grid;
 }
 
 /**
@@ -1488,9 +1499,8 @@ tvheadend.dvb_adapter = function(data) {
 		lnbStore));
 
 	var panel = new Ext.TabPanel({
-		border : false,
 		activeTab : 0,
-		autoScroll : true,
+		enableTabScroll : true,
 		items : items
 	});
 

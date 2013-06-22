@@ -1,14 +1,11 @@
-tvheadend.epggrabChannels = new Ext.data.JsonStore({
+tvheadend.data.epggrabChannels = new Ext.data.JsonStore({
 	root : 'entries',
 	url : 'epggrab',
-	baseParams : {
-		op : 'channelList'
-	},
-	fields : [ 'id', 'mod', 'name', 'icon', 'number', 'channel', 'mod-id',
-		'mod-name' ]
+	baseParams : { op : 'channelList' },
+	fields : [ 'id', 'mod', 'name', 'icon', 'number', 'channel', 'mod-id', 'mod-name' ]
 });
 
-tvheadend.epggrab = function() {
+tvheadend.panel.epggrab = function() {
 
 	/* ****************************************************************
 	 * Data
@@ -24,9 +21,7 @@ tvheadend.epggrab = function() {
 	var moduleStore = new Ext.data.JsonStore({
 		root : 'entries',
 		url : 'epggrab',
-		baseParams : {
-			op : 'moduleList'
-		},
+		baseParams : { op : 'moduleList' },
 		autoLoad : true,
 		fields : [ 'id', 'name', 'path', 'type', 'enabled' ]
 	});
@@ -100,6 +95,7 @@ tvheadend.epggrab = function() {
 		forceSelection : true,
 		editable : false,
 		mode : 'local',
+		lazyRender : true,
 		triggerAction : 'all',
 		store : internalModuleStore
 	});
@@ -130,6 +126,7 @@ tvheadend.epggrab = function() {
 		width : 300,
 		valueField : 'key',
 		displayField : 'value',
+		lazyRender : true,
 		value : 86400,
 		forceSelection : true,
 		editable : false,
@@ -152,7 +149,7 @@ tvheadend.epggrab = function() {
 		listeners : {
 			'enable' : function(e) {
 				v = e.getValue();
-				for (i = 0; i < intervalUnits.length; i++) {
+				for (var i in intervalUnits) {
 					u = intervalUnits[i][0];
 					if ((v % u) == 0) {
 						intervalUnit.setValue(u);
@@ -224,8 +221,7 @@ tvheadend.epggrab = function() {
 	/*
 	 * External modules
 	 */
-	var externalSelectionModel = new Ext.grid.CheckboxSelectionModel({
-		singleSelect : false,
+	var externalSm = new Ext.grid.CheckboxSelectionModel({
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
@@ -233,10 +229,11 @@ tvheadend.epggrab = function() {
 			'rowdeselect' : function(s, ri, r) {
 				moduleSelect(r, 0);
 			}
-		}
+		},
+		width : 21
 	});
 
-	var externalColumnModel = new Ext.grid.ColumnModel([ externalSelectionModel,
+	var externalCm = new Ext.grid.ColumnModel([ externalSm,
 		{
 			header : 'Module',
 			dataIndex : 'name',
@@ -250,12 +247,15 @@ tvheadend.epggrab = function() {
 		} ]);
 
 	var externalGrid = new Ext.grid.EditorGridPanel({
+		id : 'externalGrid',
 		store : externalModuleStore,
-		cm : externalColumnModel,
-		sm : externalSelectionModel,
+		cm : externalCm,
+		sm : externalSm,
 		width : 600,
 		height : 150,
 		frame : false,
+		stateful : true,
+		stateId : this.id,
 		viewConfig : {
 			forceFit : true
 		},
@@ -275,8 +275,7 @@ tvheadend.epggrab = function() {
 	 * OTA modules
 	 */
 
-	var otaSelectionModel = new Ext.grid.CheckboxSelectionModel({
-		singleSelect : false,
+	var otaSm = new Ext.grid.CheckboxSelectionModel({
 		listeners : {
 			'rowselect' : function(s, ri, r) {
 				moduleSelect(r, 1);
@@ -284,10 +283,11 @@ tvheadend.epggrab = function() {
 			'rowdeselect' : function(s, ri, r) {
 				moduleSelect(r, 0);
 			}
-		}
+		},
+		width : 21
 	});
 
-	var otaColumnModel = new Ext.grid.ColumnModel([ otaSelectionModel, {
+	var otaCm = new Ext.grid.ColumnModel([ otaSm, {
 		header : 'Module',
 		dataIndex : 'name',
 		width : 200,
@@ -295,12 +295,15 @@ tvheadend.epggrab = function() {
 	} ]);
 
 	var otaGrid = new Ext.grid.EditorGridPanel({
+		id : 'otaGrid',
 		store : otaModuleStore,
-		cm : otaColumnModel,
-		sm : otaSelectionModel,
+		cm : otaCm,
+		sm : otaSm,
 		width : 600,
 		height : 150,
 		frame : false,
+		stateful : true,
+		stateId : this.id,
 		viewConfig : {
 			forceFit : true
 		},
@@ -320,24 +323,24 @@ tvheadend.epggrab = function() {
 	 * Form
 	 * ***************************************************************/
 
-	var saveButton = new Ext.Button({
-		text : "Save configuration",
+	var saveBtn = new Ext.Button({
+		text : 'Save configuration',
 		tooltip : 'Save changes made to configuration below',
 		iconCls : 'save',
 		handler : saveChanges
 	});
 
-	var helpButton = new Ext.Button({
-		text : 'Help',
-		handler : function() {
-			new tvheadend.help('EPG Grab Configuration', 'config_epggrab.html');
-		}
-	});
+	var helpBtn = new tvheadend.button.help('EPG Grab Configuration', 'config_epggrab.html');
 
-	var confpanel = new Ext.FormPanel({
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ saveBtn, '->', helpBtn ]
+	});
+	
+	var panel = new Ext.form.FormPanel({
+		autoScroll : true,
 		title : 'EPG Grabber',
 		iconCls : 'xml',
-		border : false,
 		bodyStyle : 'padding:15px',
 		labelAlign : 'left',
 		labelWidth : 150,
@@ -347,7 +350,7 @@ tvheadend.epggrab = function() {
 		defaultType : 'textfield',
 		autoHeight : true,
 		items : [ simplePanel, internalPanel, otaPanel, externalPanel ],
-		tbar : [ saveButton, '->', helpButton ]
+		tbar : tb
 	});
 
 	/* ****************************************************************
@@ -361,7 +364,7 @@ tvheadend.epggrab = function() {
 			externalModuleStore.each(function(r) {
 				if (r.get('enabled')) rows.push(r);
 			});
-			externalSelectionModel.selectRecords(rows);
+			externalSm.selectRecords(rows);
 		});
 		delay.delay(100);
 	});
@@ -371,12 +374,12 @@ tvheadend.epggrab = function() {
 			otaModuleStore.each(function(r) {
 				if (r.get('enabled')) rows.push(r);
 			});
-			otaSelectionModel.selectRecords(rows);
+			otaSm.selectRecords(rows);
 		});
 		delay.delay(100);
 	});
 
-	confpanel.on('render', function() {
+	panel.on('render', function() {
 
 		/* Hack to get display working */
 		delay = new Ext.util.DelayedTask(function() {
@@ -387,13 +390,13 @@ tvheadend.epggrab = function() {
 		});
 		delay.delay(100);
 
-		confpanel.getForm().load({
+		panel.getForm().load({
 			url : 'epggrab',
 			params : {
 				op : 'loadSettings'
 			},
 			success : function(form, action) {
-				confpanel.enable();
+				panel.enable();
 			}
 		});
 	});
@@ -407,7 +410,7 @@ tvheadend.epggrab = function() {
 			});
 		});
 		mods = Ext.util.JSON.encode(mods);
-		confpanel.getForm().submit({
+		panel.getForm().submit({
 			url : 'epggrab',
 			params : {
 				op : 'saveSettings',
@@ -423,5 +426,5 @@ tvheadend.epggrab = function() {
 		});
 	}
 
-	return confpanel;
+	return panel;
 }

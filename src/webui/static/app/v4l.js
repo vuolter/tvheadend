@@ -30,7 +30,7 @@ tvheadend.v4l_adapter_general = function(adapterData) {
 		name : 'logging'
 	}) ];
 
-	var confform = new Ext.FormPanel({
+	var confform = new Ext.form.FormPanel({
 		title : 'Adapter configuration',
 		columnWidth : .40,
 		frame : true,
@@ -84,6 +84,7 @@ tvheadend.v4l_adapter_general = function(adapterData) {
 	 * Main adapter panel
 	 */
 	var panel = new Ext.Panel({
+		autoScroll : true,
 		title : 'General',
 		layout : 'column',
 		items : [ confform, infoPanel ]
@@ -92,7 +93,7 @@ tvheadend.v4l_adapter_general = function(adapterData) {
 	/**
 	 * Subscribe and react on updates for this adapter
 	 */
-	tvheadend.tvAdapterStore.on('update', function(s, r, o) {
+	tvheadend.data.adapters.on('update', function(s, r, o) {
 		if (r.data.identifier != adapterId) return;
 		infoTemplate.overwrite(infoPanel.body, r.data);
 	});
@@ -105,26 +106,26 @@ tvheadend.v4l_adapter_general = function(adapterData) {
  */
 tvheadend.v4l_services = function(adapterId) {
 
-	var fm = Ext.form;
-
 	var enabledColumn = new Ext.grid.CheckColumn({
-		header : "Enabled",
+		header : 'Enabled',
 		dataIndex : 'enabled',
 		width : 45
 	});
 
+	var sm = new tvheadend.selection.CheckboxModel;
+	
 	var cm = new Ext.grid.ColumnModel({
   defaultSortable: true,
   columns : [
-    enabledColumn, {
-		header : "Channel name",
+    sm, enabledColumn, {
+		header : 'Channel name',
 		dataIndex : 'channelname',
 		width : 150,
-		renderer : function(value, metadata, record, row, col, store) {
+		renderer : function(value, meta, rec, row, col, store) {
 			return value ? value : '<span class="tvh-grid-unset">Unmapped</span>';
 		},
-		editor : new fm.ComboBox({
-			store : tvheadend.channels,
+		editor : new Ext.form.ComboBox({
+			store : tvheadend.data.channels2,
 			allowBlank : true,
 			typeAhead : true,
 			minChars : 2,
@@ -134,27 +135,24 @@ tvheadend.v4l_services = function(adapterId) {
 			displayField : 'name'
 		})
 	}, {
-		header : "Frequency",
+		header : 'Frequency',
 		dataIndex : 'frequency',
 		width : 60,
-		editor : new fm.NumberField({
+		editor : new Ext.form.NumberField({
 			minValue : 10000,
 			maxValue : 1000000000
 		})
 	} ]});
 
-	var rec = Ext.data.Record.create([ 'id', 'enabled', 'channelname',
-		'frequency' ]);
+	var rec = Ext.data.Record.create([ 'id', 'enabled', 'channelname', 'frequency' ]);
 
 	var store = new Ext.data.JsonStore({
 		root : 'entries',
 		fields : rec,
-		url : "v4l/services/" + adapterId,
+		url : 'v4l/services/' + adapterId,
 		autoLoad : true,
 		id : 'id',
-		baseParams : {
-			op : "get"
-		},
+		baseParams : { op : 'get' },
 		listeners : {
 			'update' : function(s, r, o) {
 				d = s.getModifiedRecords().length == 0
@@ -166,9 +164,9 @@ tvheadend.v4l_services = function(adapterId) {
 
 	function addRecord() {
 		Ext.Ajax.request({
-			url : "v4l/services/" + adapterId,
+			url : 'v4l/services/' + adapterId,
 			params : {
-				op : "create"
+				op : 'create'
 			},
 			failure : function(response, options) {
 				Ext.MessageBox.alert('Server Error',
@@ -183,29 +181,36 @@ tvheadend.v4l_services = function(adapterId) {
 			}
 		})
 	}
-	;
+
 
 	function delSelected() {
-		var selectedKeys = grid.selModel.selections.keys;
-		if (selectedKeys.length > 0) {
-			Ext.MessageBox.confirm('Message',
-				'Do you really want to delete selection?', deleteRecord);
-		}
+		var keys = grid.selModel.selections.keys.length;
+		
+		if(!keys)
+			Ext.MessageBox.alert('Message', 'Please select at least one entry to delete');
 		else {
-			Ext.MessageBox.alert('Message',
-				'Please select at least one item to delete');
+			var msg = 'Do you really want to delete this entry?';
+			
+			if(keys > 1) {
+				if(keys == grid.store.getTotalCount())
+					msg = 'Do you really want to delete all entries?';
+				else
+					msg = 'Do you really want to delete selected ' + keys + ' entries?';
+			}
+			
+			Ext.MessageBox.confirm('Message', msg, deleteRecord);
 		}
 	}
-	;
+
 
 	function deleteRecord(btn) {
 		if (btn == 'yes') {
 			var selectedKeys = grid.selModel.selections.keys;
 
 			Ext.Ajax.request({
-				url : "v4l/services/" + adapterId,
+				url : 'v4l/services/' + adapterId,
 				params : {
-					op : "delete",
+					op : 'delete',
 					entries : Ext.encode(selectedKeys)
 				},
 				failure : function(response, options) {
@@ -220,17 +225,17 @@ tvheadend.v4l_services = function(adapterId) {
 
 	function saveChanges() {
 		var mr = store.getModifiedRecords();
-		var out = new Array();
-		for ( var x = 0; x < mr.length; x++) {
+		var out = [];
+		for (var x in mr) {
 			v = mr[x].getChanges();
 			out[x] = v;
 			out[x].id = mr[x].id;
 		}
 
 		Ext.Ajax.request({
-			url : "v4l/services/" + adapterId,
+			url : 'v4l/services/' + adapterId,
 			params : {
-				op : "update",
+				op : 'update',
 				entries : Ext.encode(out)
 			},
 			success : function(response, options) {
@@ -242,56 +247,57 @@ tvheadend.v4l_services = function(adapterId) {
 		});
 	}
 
-	var delButton = new Ext.Toolbar.Button({
+	var delBtn = new Ext.Button({
 		tooltip : 'Delete one or more selected rows',
 		iconCls : 'remove',
-		text : 'Delete selected services',
+		text : 'Delete',
 		handler : delSelected,
 		disabled : true
 	});
 
-	var saveBtn = new Ext.Toolbar.Button({
+	var saveBtn = new Ext.Button({
 		tooltip : 'Save any changes made (Changed cells have red borders).',
 		iconCls : 'save',
-		text : "Save changes",
+		text : 'Save changes',
 		handler : saveChanges,
 		disabled : true
 	});
 
-	var rejectBtn = new Ext.Toolbar.Button({
+	var rejectBtn = new Ext.Button({
 		tooltip : 'Revert any changes made (Changed cells have red borders).',
 		iconCls : 'undo',
-		text : "Revert changes",
+		text : 'Revert changes',
 		handler : function() {
 			store.rejectChanges();
 		},
 		disabled : true
 	});
 
-	var selModel = new Ext.grid.RowSelectionModel({
-		singleSelect : false
+	var tb = new Ext.Toolbar({
+		enableOverflow : true,
+		items : [ {
+			handler : addRecord,
+			iconCls : 'add',
+			text : 'Add service',
+			tooltip : 'Create a new entry on the server. '
+				+ 'The new entry is initially disabled so it must be enabled '
+				+ 'before it start taking effect.'
+		}, '-', delBtn, '-', saveBtn, rejectBtn ]
 	});
-
+	
 	var grid = new Ext.grid.EditorGridPanel({
+		id : 'v4lGrid',
 		stripeRows : true,
+		enableColumnMove : false,
 		title : 'Services',
 		plugins : [ enabledColumn ],
 		store : store,
-		clicksToEdit : 2,
 		cm : cm,
-		viewConfig : {
-			forceFit : true
-		},
-		selModel : selModel,
-		tbar : [
-			{
-				tooltip : 'Create a new entry on the server. '
-					+ 'The new entry is initially disabled so it must be enabled '
-					+ 'before it start taking effect.',
-				iconCls : 'add',
-				text : 'Add service',
-				handler : addRecord
-			}, '-', delButton, '-', saveBtn, rejectBtn ]
+		sm : sm,
+		stateful : true,
+		stateId : this.id,
+		tbar : tb,
+		view : new tvheadend.BufferView
 	});
 
 	store.on('update', function(s, r, o) {
@@ -300,8 +306,8 @@ tvheadend.v4l_services = function(adapterId) {
 		rejectBtn.setDisabled(d);
 	});
 
-	selModel.on('selectionchange', function(self) {
-		delButton.setDisabled(self.getCount() == 0);
+	sm.on('selectionchange', function(self) {
+		delBtn.setDisabled(self.getCount() == 0);
 	});
 
 	return grid;
@@ -312,9 +318,8 @@ tvheadend.v4l_services = function(adapterId) {
  */
 tvheadend.v4l_adapter = function(data) {
 	var panel = new Ext.TabPanel({
-		border : false,
 		activeTab : 0,
-		autoScroll : true,
+		enableTabScroll : true,
 		items : [ new tvheadend.v4l_adapter_general(data),
 			new tvheadend.v4l_services(data.identifier) ]
 	});
